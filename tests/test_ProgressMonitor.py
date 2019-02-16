@@ -8,7 +8,7 @@ try:
 except ImportError:
     import mock
 
-from atpbar import Queue, ProgressMonitor
+from atpbar.ProgressMonitor import Queue, ProgressMonitor
 import atpbar
 
 ##__________________________________________________________________||

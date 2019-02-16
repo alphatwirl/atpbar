@@ -11,9 +11,15 @@ import atpbar
 
 ##__________________________________________________________________||
 @pytest.fixture()
-def mock_report_progress(monkeypatch):
+def mock_reporter(monkeypatch):
     ret = mock.Mock()
-    monkeypatch.setattr(atpbar, 'report_progress', ret)
+    return ret
+
+@pytest.fixture(autouse=True)
+def mock_find_reporter(monkeypatch, mock_reporter):
+    ret = mock.Mock()
+    ret.return_value = mock_reporter
+    monkeypatch.setattr(atpbar.main, 'find_reporter', ret)
     return ret
 
 ##__________________________________________________________________||
@@ -57,7 +63,7 @@ def test_iterable(iterable_class, content):
 ##__________________________________________________________________||
 @pytest.mark.parametrize('content', contents, ids=contents_ids)
 @pytest.mark.parametrize('iterable_class', iterable_classes)
-def test_atpbar_iterables(mock_report_progress, iterable_class, content):
+def test_atpbar_iterables(mock_reporter, iterable_class, content):
     iterable = iterable_class(content)
 
     ##
@@ -69,8 +75,8 @@ def test_atpbar_iterables(mock_report_progress, iterable_class, content):
     assert content == returned
 
     ##
-    assert len(content) + 1 == len(mock_report_progress.call_args_list)
-    for i, c in enumerate(mock_report_progress.call_args_list):
+    assert len(content) + 1 == len(mock_reporter.report.call_args_list)
+    for i, c in enumerate(mock_reporter.report.call_args_list):
         args, kwargs = c
         report = args[0]
         assert i == report.done
@@ -79,7 +85,7 @@ def test_atpbar_iterables(mock_report_progress, iterable_class, content):
 ##__________________________________________________________________||
 @pytest.mark.parametrize('content', contents, ids=contents_ids)
 @pytest.mark.parametrize('iterable_class', iterable_classes)
-def test_atpbar_enumerate(mock_report_progress, iterable_class, content):
+def test_atpbar_enumerate(mock_reporter, iterable_class, content):
     iterable = iterable_class(content)
 
     ##
@@ -91,8 +97,8 @@ def test_atpbar_enumerate(mock_report_progress, iterable_class, content):
     assert content == returned
 
     ##
-    assert len(content) + 1 == len(mock_report_progress.call_args_list)
-    for i, c in enumerate(mock_report_progress.call_args_list):
+    assert len(content) + 1 == len(mock_reporter.report.call_args_list)
+    for i, c in enumerate(mock_reporter.report.call_args_list):
         args, kwargs = c
         report = args[0]
         assert i == report.done

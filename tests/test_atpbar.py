@@ -11,16 +11,23 @@ except ImportError:
 
 ##__________________________________________________________________||
 @pytest.fixture()
-def mock_report_progress(monkeypatch):
+def mock_reporter(monkeypatch):
     ret = mock.Mock()
-    monkeypatch.setattr(atpbar, 'report_progress', ret)
     return ret
 
 @pytest.fixture()
-def mock_report_progress_raise(monkeypatch):
+def mock_find_reporter(monkeypatch, mock_reporter):
     ret = mock.Mock()
-    ret.side_effect = Exception
-    monkeypatch.setattr(atpbar, 'report_progress', ret)
+    ret.return_value = mock_reporter
+    monkeypatch.setattr(atpbar.main, 'find_reporter', ret)
+    return ret
+
+@pytest.fixture()
+def mock_find_reporter_raise(monkeypatch, mock_reporter):
+    ret = mock.Mock()
+    mock_reporter.report.side_effect = Exception
+    ret.return_value = mock_reporter
+    monkeypatch.setattr(atpbar.main, 'find_reporter', ret)
     return ret
 
 ##__________________________________________________________________||
@@ -42,7 +49,7 @@ class Iter(object):
 content = [mock.sentinel.item1, mock.sentinel.item2, mock.sentinel.item3]
 
 ##__________________________________________________________________||
-def test_atpbar_name_repr(mock_report_progress, caplog):
+def test_atpbar_name_repr(mock_find_reporter, mock_reporter, caplog):
 
     iterable = Iter(content)
     returned = [e for e in atpbar.atpbar(iterable)]
@@ -51,17 +58,16 @@ def test_atpbar_name_repr(mock_report_progress, caplog):
     assert content == returned
 
     ##
-    assert len(content) + 1 == len(mock_report_progress.call_args_list)
-    for i, c in enumerate(mock_report_progress.call_args_list):
+    assert len(content) + 1 == len(mock_reporter.report.call_args_list)
+    for i, c in enumerate(mock_reporter.report.call_args_list):
         args, kwargs = c
         report = args[0]
         assert i == report.done
         assert len(content) == report.total
         assert 'Iter' == report.name # repr(iterable)
-        print(report)
 
 ##__________________________________________________________________||
-def test_atpbar_name_given(mock_report_progress, caplog):
+def test_atpbar_name_given(mock_find_reporter, mock_reporter, caplog):
 
     iterable = Iter(content)
     returned = [e for e in atpbar.atpbar(iterable, name='given')]
@@ -70,17 +76,16 @@ def test_atpbar_name_given(mock_report_progress, caplog):
     assert content == returned
 
     ##
-    assert len(content) + 1 == len(mock_report_progress.call_args_list)
-    for i, c in enumerate(mock_report_progress.call_args_list):
+    assert len(content) + 1 == len(mock_reporter.report.call_args_list)
+    for i, c in enumerate(mock_reporter.report.call_args_list):
         args, kwargs = c
         report = args[0]
         assert i == report.done
         assert len(content) == report.total
         assert 'given' == report.name
-        print(report)
 
 ##__________________________________________________________________||
-def test_atpbar_raise(mock_report_progress_raise, caplog):
+def test_atpbar_raise(mock_find_reporter_raise, mock_reporter, caplog):
 
     iterable = Iter(content)
     returned = [e for e in atpbar.atpbar(iterable, name='given')]

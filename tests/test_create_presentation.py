@@ -15,7 +15,7 @@ try:
 except ImportError:
     pass
 
-from atpbar import _create_presentation
+from atpbar.funcs import _create_presentation
 
 ##__________________________________________________________________||
 @pytest.fixture(
@@ -28,7 +28,7 @@ def isatty(request, monkeypatch):
         'stdout.isatty.return_value': ret,
         'stdout.write.side_effect': lambda x : org_stdout.write(x)
     })
-    module = sys.modules['atpbar']
+    module = sys.modules['atpbar.funcs']
     monkeypatch.setattr(module, 'sys', f)
     return ret
 
@@ -43,7 +43,7 @@ def is_jupyter_notebook(request, monkeypatch):
     ret = request.param
     f = mock.Mock()
     f.return_value = ret
-    module = sys.modules['atpbar']
+    module = sys.modules['atpbar.funcs']
     monkeypatch.setattr(module, 'is_jupyter_notebook', f)
     return ret
 

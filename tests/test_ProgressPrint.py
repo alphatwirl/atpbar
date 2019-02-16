@@ -7,7 +7,8 @@ try:
 except ImportError:
     import mock
 
-from atpbar import ProgressPrint, ProgressReport
+from atpbar.ProgressPrint import ProgressPrint
+from atpbar.ProgressReport import ProgressReport
 
 ##__________________________________________________________________||
 @pytest.fixture()

@@ -11,9 +11,15 @@ import atpbar
 
 ##__________________________________________________________________||
 @pytest.fixture()
-def mock_report_progress(monkeypatch):
+def mock_reporter(monkeypatch):
     ret = mock.Mock()
-    monkeypatch.setattr(atpbar, 'report_progress', ret)
+    return ret
+
+@pytest.fixture(autouse=True)
+def mock_find_reporter(monkeypatch, mock_reporter):
+    ret = mock.Mock()
+    ret.return_value = mock_reporter
+    monkeypatch.setattr(atpbar.main, 'find_reporter', ret)
     return ret
 
 ##__________________________________________________________________||
@@ -29,7 +35,7 @@ class Iter(object):
 content = [mock.sentinel.item1, mock.sentinel.item2, mock.sentinel.item3]
 
 ##__________________________________________________________________||
-def test_atpbar_no_len(mock_report_progress, caplog):
+def test_atpbar_no_len(mock_reporter, caplog):
     iterable = Iter(content)
 
     ##
@@ -42,7 +48,7 @@ def test_atpbar_no_len(mock_report_progress, caplog):
     assert content == returned
 
     ##
-    assert not mock_report_progress.call_args_list
+    assert not mock_reporter.report.call_args_list
 
     ##
     assert 2 == len(caplog.records)

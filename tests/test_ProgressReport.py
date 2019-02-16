@@ -1,6 +1,6 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 
-from atpbar import ProgressReport
+from atpbar.ProgressReport import ProgressReport
 
 ##__________________________________________________________________||
 def test_repr():
