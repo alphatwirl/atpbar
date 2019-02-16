@@ -8,7 +8,7 @@ from .bartty import ProgressBar
 from .ProgressPrint import ProgressPrint
 
 try:
-    from .ProgressBarJupyter import ProgressBarJupyter
+    from .barjupyter import ProgressBarJupyter
 except ImportError:
     pass
 

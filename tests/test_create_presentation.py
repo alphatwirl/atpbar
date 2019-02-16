@@ -10,7 +10,7 @@ except ImportError:
 
 has_jupyter_notebook = False
 try:
-    from atpbar import ProgressBarJupyter
+    from atpbar.barjupyter import ProgressBarJupyter
     has_jupyter_notebook = True
 except ImportError:
     pass
