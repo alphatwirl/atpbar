@@ -2,8 +2,8 @@
 import uuid
 import logging
 
-import atpbar as atpbar_
 from .ProgressReport import ProgressReport
+from .funcs import find_reporter
 
 ##__________________________________________________________________||
 def atpbar(iterable, name=None):
@@ -32,18 +32,20 @@ class Atpbar(object):
         self.id_ = uuid.uuid4()
 
     def __iter__(self):
-        atpbar_._start_monitor_if_necessary()
+        self.reporter = find_reporter()
         self._report_progress(-1)
         for i, e in enumerate(self. iterable):
             yield e
             self._report_progress(i)
 
     def _report_progress(self, i):
+        if self.reporter is None:
+            return
         try:
             report = ProgressReport(
                 name=self.name, done=(i+1),
                 total=self.len_, taskid=self.id_)
-            atpbar_.report_progress(report)
+            self.reporter.report(report)
         except:
             pass
 
