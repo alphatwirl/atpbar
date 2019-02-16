@@ -2,7 +2,7 @@
 import uuid
 import logging
 
-from .ProgressReport import ProgressReport
+from .report import ProgressReport
 from .funcs import find_reporter
 
 ##__________________________________________________________________||

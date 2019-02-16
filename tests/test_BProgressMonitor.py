@@ -10,7 +10,7 @@ except ImportError:
 
 from atpbar.monitor import BProgressMonitor
 from atpbar.ProgressReporter import ProgressReporter
-from atpbar.ProgressReport import ProgressReport
+from atpbar.report import ProgressReport
 
 ##__________________________________________________________________||
 @pytest.fixture()
