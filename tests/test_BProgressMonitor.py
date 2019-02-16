@@ -9,7 +9,7 @@ except ImportError:
     import mock
 
 from atpbar.monitor import BProgressMonitor
-from atpbar.ProgressReporter import ProgressReporter
+from atpbar.reporter import ProgressReporter
 from atpbar.report import ProgressReport
 
 ##__________________________________________________________________||

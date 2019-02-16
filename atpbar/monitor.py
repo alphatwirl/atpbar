@@ -1,7 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import multiprocessing
 
-from .ProgressReporter import ProgressReporter
+from .reporter import ProgressReporter
 from .ProgressReportPickup import ProgressReportPickup
 
 ##__________________________________________________________________||
