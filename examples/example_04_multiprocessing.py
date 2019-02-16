@@ -15,7 +15,6 @@ class Task(multiprocessing.Process):
         atpbar.register_reporter(self.reporter)
 
         n = random.randint(5, 100000)
-        time.sleep(random.randint(0, 3))
         for i in atpbar.atpbar(range(n), name=self.name):
             time.sleep(0.0001)
         return None
