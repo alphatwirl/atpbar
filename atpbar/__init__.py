@@ -31,6 +31,15 @@ import atexit
 import threading
 _lock = threading.Lock()
 
+def reporter():
+    global _reporter
+    _start_monitor_if_necessary()
+    return _reporter
+
+def register_reporter(reporter):
+    global _reporter
+    _reporter = reporter
+
 def _start_monitor_if_necessary():
     global _lock
     _lock.acquire()
