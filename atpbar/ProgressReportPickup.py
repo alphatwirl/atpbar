@@ -4,6 +4,11 @@ import time
 
 ##__________________________________________________________________||
 class ProgressReportPickup(threading.Thread):
+    """A pickup of progress reports.
+
+    This class picks up progress reports and presents them.
+
+    """
     def __init__(self, queue, presentation):
         threading.Thread.__init__(self)
         self.queue = queue
