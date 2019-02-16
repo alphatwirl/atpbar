@@ -3,7 +3,6 @@ import logging
 import pytest
 
 from atpbar.BProgressMonitor import BProgressMonitor
-from atpbar.NullProgressMonitor import NullProgressMonitor
 from atpbar.ProgressMonitor import ProgressMonitor
 from atpbar.presentation import Presentation
 
@@ -19,11 +18,8 @@ def build_BProgressMonitor():
 def build_ProgressMonitor():
     return ProgressMonitor(presentation=MockProgressBar)
 
-def build_NullProgressMonitor():
-    return NullProgressMonitor()
-
-builds = [build_BProgressMonitor, build_ProgressMonitor, build_NullProgressMonitor]
-build_ids = ['BProgressMonitor', 'ProgressMonitor', 'NullProgressMonitor']
+builds = [build_BProgressMonitor, build_ProgressMonitor]
+build_ids = ['BProgressMonitor', 'ProgressMonitor']
 
 ##__________________________________________________________________||
 @pytest.mark.parametrize('build', builds, ids=build_ids)
