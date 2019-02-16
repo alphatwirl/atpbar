@@ -2,7 +2,7 @@
 import multiprocessing
 
 from .reporter import ProgressReporter
-from .ProgressReportPickup import ProgressReportPickup
+from .pickup import ProgressReportPickup
 
 ##__________________________________________________________________||
 class BProgressMonitor(object):
