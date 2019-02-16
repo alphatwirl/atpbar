@@ -2,7 +2,7 @@
 import logging
 import pytest
 
-from atpbar.BProgressMonitor import BProgressMonitor
+from atpbar.monitor import BProgressMonitor
 from atpbar.presentation import Presentation
 
 ##__________________________________________________________________||

@@ -8,7 +8,7 @@ try:
 except ImportError:
     import mock
 
-from atpbar.BProgressMonitor import BProgressMonitor
+from atpbar.monitor import BProgressMonitor
 from atpbar.ProgressReporter import ProgressReporter
 from atpbar.ProgressReport import ProgressReport
 

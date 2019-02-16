@@ -3,7 +3,7 @@ import sys
 import atexit
 import threading
 
-from .BProgressMonitor import BProgressMonitor
+from .monitor import BProgressMonitor
 from .ProgressBar import ProgressBar
 from .ProgressPrint import ProgressPrint
 
