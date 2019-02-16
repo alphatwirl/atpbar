@@ -13,8 +13,8 @@ class BProgressMonitor(object):
     Tasks can be concurrently executed. The progress can be presented
     in an arbitrary way specified at the initialization.
 
-    This class monitors the progress and present it in the background
-    by using `ProgressReportPickup`.
+    This class monitors the progress and present it by using
+    `ProgressReportPickup`.
 
     In order for a progress to be monitored by this class, an object
     that executes a task needs to send the `ProgressReport` through
@@ -40,8 +40,9 @@ class BProgressMonitor(object):
         reporter3 = monitor.create_reporter()
 
       These reporters can be given to objects which execute the tasks.
-      These objects can be in other processes as long as the reporters
-      are properly passed to them.
+      These objects can be in other threads. The objects can also be
+      in other processes as long as the reporters are properly passed
+      to them.
 
       If a `ProgressReport` is given to these reporters::
 
@@ -56,7 +57,7 @@ class BProgressMonitor(object):
         monitor.end()
 
       This will ends `ProgressReportPickup`, which is running in a
-      different process.
+      different thread.
 
     """
 
