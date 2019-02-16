@@ -31,7 +31,7 @@ import atexit
 import threading
 _lock = threading.Lock()
 
-def reporter():
+def find_reporter():
     global _reporter
     _start_monitor_if_necessary()
     return _reporter
