@@ -28,13 +28,6 @@ def register_reporter(reporter):
     _reporter = reporter
 
 ##__________________________________________________________________||
-def report_progress(report):
-    if _reporter is None:
-        return
-    _reporter.report(report)
-
-
-##__________________________________________________________________||
 _lock = threading.Lock()
 
 def _start_monitor_if_necessary():
