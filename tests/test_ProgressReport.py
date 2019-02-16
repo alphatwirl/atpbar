@@ -1,6 +1,6 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 
-from alphatwirl.progressbar import ProgressReport
+from atpbar import ProgressReport
 
 ##__________________________________________________________________||
 def test_repr():

@@ -1,8 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 from .ProgressReporter import ProgressReporter
 
-import alphatwirl
-from alphatwirl.misc.deprecation import _deprecated
+import atpbar
 
 ##__________________________________________________________________||
 class Queue(object):
@@ -20,18 +19,14 @@ class ProgressMonitor(object):
         self.queue = Queue(presentation=presentation)
 
     def begin(self):
-        reporter = self.createReporter()
-        alphatwirl.progressbar._progress_reporter = reporter
+        reporter = self.create_reporter()
+        atpbar._progress_reporter = reporter
 
     def end(self):
-        alphatwirl.progressbar._progress_reporter = None
+        atpbar._progress_reporter = None
 
     def create_reporter(self):
         reporter = ProgressReporter(queue=self.queue)
         return reporter
-
-    @_deprecated(msg='use create_reporter() instead')
-    def createReporter(self):
-        return self.create_reporter()
 
 ##__________________________________________________________________||

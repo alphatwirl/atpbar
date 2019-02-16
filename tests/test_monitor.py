@@ -2,8 +2,8 @@
 import logging
 import pytest
 
-from alphatwirl.progressbar import BProgressMonitor, NullProgressMonitor, ProgressMonitor
-from alphatwirl.progressbar.presentation import Presentation
+from atpbar import BProgressMonitor, NullProgressMonitor, ProgressMonitor
+from atpbar.presentation import Presentation
 
 ##__________________________________________________________________||
 class MockProgressBar(Presentation):
@@ -30,17 +30,5 @@ def test_monitor(build):
     obj.begin()
     obj.create_reporter()
     obj.end()
-
-##__________________________________________________________________||
-@pytest.mark.parametrize('build', builds, ids=build_ids)
-def test_deprecated_createReporter(caplog, build):
-    obj = build()
-    with caplog.at_level(logging.WARNING):
-        obj.createReporter()
-
-    assert len(caplog.records) == 1
-    assert caplog.records[0].levelname == 'WARNING'
-    assert 'progressbar' in caplog.records[0].name
-    assert 'deprecated. use create_reporter() instead' in caplog.records[0].msg
 
 ##__________________________________________________________________||

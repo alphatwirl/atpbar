@@ -2,7 +2,7 @@
 import uuid
 import logging
 
-import alphatwirl
+import atpbar as atpbar_
 from .ProgressReport import ProgressReport
 
 ##__________________________________________________________________||
@@ -32,7 +32,7 @@ class Atpbar(object):
         self.id_ = uuid.uuid4()
 
     def __iter__(self):
-        alphatwirl.progressbar._start_monitor_if_necessary()
+        atpbar_._start_monitor_if_necessary()
         self._report_progress(-1)
         for i, e in enumerate(self. iterable):
             yield e
@@ -43,7 +43,7 @@ class Atpbar(object):
             report = ProgressReport(
                 name=self.name, done=(i+1),
                 total=self.len_, taskid=self.id_)
-            alphatwirl.progressbar.report_progress(report)
+            atpbar_.report_progress(report)
         except:
             pass
 

@@ -2,8 +2,7 @@
 import logging
 import pytest
 
-import alphatwirl
-from alphatwirl.progressbar import atpbar
+import atpbar
 
 try:
     import unittest.mock as mock
@@ -14,14 +13,14 @@ except ImportError:
 @pytest.fixture()
 def mock_report_progress(monkeypatch):
     ret = mock.Mock()
-    monkeypatch.setattr(alphatwirl.progressbar, 'report_progress', ret)
+    monkeypatch.setattr(atpbar, 'report_progress', ret)
     return ret
 
 @pytest.fixture()
 def mock_report_progress_raise(monkeypatch):
     ret = mock.Mock()
     ret.side_effect = Exception
-    monkeypatch.setattr(alphatwirl.progressbar, 'report_progress', ret)
+    monkeypatch.setattr(atpbar, 'report_progress', ret)
     return ret
 
 ##__________________________________________________________________||
@@ -46,7 +45,7 @@ content = [mock.sentinel.item1, mock.sentinel.item2, mock.sentinel.item3]
 def test_atpbar_name_repr(mock_report_progress, caplog):
 
     iterable = Iter(content)
-    returned = [e for e in atpbar(iterable)]
+    returned = [e for e in atpbar.atpbar(iterable)]
 
     ##
     assert content == returned
@@ -65,7 +64,7 @@ def test_atpbar_name_repr(mock_report_progress, caplog):
 def test_atpbar_name_given(mock_report_progress, caplog):
 
     iterable = Iter(content)
-    returned = [e for e in atpbar(iterable, name='given')]
+    returned = [e for e in atpbar.atpbar(iterable, name='given')]
 
     ##
     assert content == returned
@@ -84,7 +83,7 @@ def test_atpbar_name_given(mock_report_progress, caplog):
 def test_atpbar_raise(mock_report_progress_raise, caplog):
 
     iterable = Iter(content)
-    returned = [e for e in atpbar(iterable, name='given')]
+    returned = [e for e in atpbar.atpbar(iterable, name='given')]
 
     ##
     assert content == returned

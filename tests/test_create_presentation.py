@@ -10,13 +10,12 @@ except ImportError:
 
 has_jupyter_notebook = False
 try:
-    from alphatwirl.progressbar import ProgressBarJupyter
+    from atpbar import ProgressBarJupyter
     has_jupyter_notebook = True
 except ImportError:
     pass
 
-from alphatwirl.progressbar import _create_presentation
-import alphatwirl
+from atpbar import _create_presentation
 
 ##__________________________________________________________________||
 @pytest.fixture(
@@ -29,7 +28,7 @@ def isatty(request, monkeypatch):
         'stdout.isatty.return_value': ret,
         'stdout.write.side_effect': lambda x : org_stdout.write(x)
     })
-    module = sys.modules['alphatwirl.progressbar']
+    module = sys.modules['atpbar']
     monkeypatch.setattr(module, 'sys', f)
     return ret
 
@@ -44,7 +43,7 @@ def is_jupyter_notebook(request, monkeypatch):
     ret = request.param
     f = mock.Mock()
     f.return_value = ret
-    module = sys.modules['alphatwirl.progressbar']
+    module = sys.modules['atpbar']
     monkeypatch.setattr(module, 'is_jupyter_notebook', f)
     return ret
 

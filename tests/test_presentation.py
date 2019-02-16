@@ -7,8 +7,8 @@ try:
 except ImportError:
     import mock
 
-from alphatwirl.progressbar import ProgressReport
-from alphatwirl.progressbar.presentation import Presentation
+from atpbar import ProgressReport
+from atpbar.presentation import Presentation
 
 ##__________________________________________________________________||
 class MockProgressBar(Presentation):

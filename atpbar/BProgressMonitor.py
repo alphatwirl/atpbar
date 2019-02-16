@@ -4,9 +4,6 @@ import multiprocessing
 from .ProgressReporter import ProgressReporter
 from .ProgressReportPickup import ProgressReportPickup
 
-import alphatwirl
-from alphatwirl.misc.deprecation import _deprecated
-
 ##__________________________________________________________________||
 class BProgressMonitor(object):
     """A progress monitor of tasks.
@@ -86,9 +83,5 @@ class BProgressMonitor(object):
 
     def create_reporter(self):
         return ProgressReporter(queue=self.queue)
-
-    @_deprecated(msg='use create_reporter() instead')
-    def createReporter(self):
-        return self.create_reporter()
 
 ##__________________________________________________________________||

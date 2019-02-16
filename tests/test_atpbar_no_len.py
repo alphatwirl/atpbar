@@ -2,19 +2,18 @@
 import logging
 import pytest
 
-import alphatwirl
-from alphatwirl.progressbar import atpbar
-
 try:
     import unittest.mock as mock
 except ImportError:
     import mock
 
+import atpbar
+
 ##__________________________________________________________________||
 @pytest.fixture()
 def mock_report_progress(monkeypatch):
     ret = mock.Mock()
-    monkeypatch.setattr(alphatwirl.progressbar, 'report_progress', ret)
+    monkeypatch.setattr(atpbar, 'report_progress', ret)
     return ret
 
 ##__________________________________________________________________||
@@ -36,7 +35,7 @@ def test_atpbar_no_len(mock_report_progress, caplog):
     ##
     returned = [ ]
     with caplog.at_level(logging.WARNING):
-        for e in atpbar(iterable):
+        for e in atpbar.atpbar(iterable):
             returned.append(e)
 
     ##

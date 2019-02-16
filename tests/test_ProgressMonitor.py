@@ -8,8 +8,8 @@ try:
 except ImportError:
     import mock
 
-from alphatwirl.progressbar import Queue, ProgressMonitor
-from alphatwirl import progressbar
+from atpbar import Queue, ProgressMonitor
+import atpbar
 
 ##__________________________________________________________________||
 @pytest.fixture()
@@ -36,7 +36,7 @@ def mock_queue():
 
 @pytest.fixture()
 def MockQueue(monkeypatch, mock_queue):
-    module = sys.modules['alphatwirl.progressbar.ProgressMonitor']
+    module = sys.modules['atpbar.ProgressMonitor']
     ret = mock.MagicMock()
     monkeypatch.setattr(module, 'Queue', ret)
     ret.return_value = mock_queue
@@ -48,7 +48,7 @@ def mock_reporter():
 
 @pytest.fixture()
 def MockReporter(monkeypatch, mock_reporter):
-    module = sys.modules['alphatwirl.progressbar.ProgressMonitor']
+    module = sys.modules['atpbar.ProgressMonitor']
     ret = mock.MagicMock()
     monkeypatch.setattr(module, 'ProgressReporter', ret)
     ret.return_value = mock_reporter
@@ -65,9 +65,9 @@ def test_init(monitor, mock_queue, MockQueue, presentation):
 
 def test_begin_end(monitor, MockReporter):
     monitor.begin()
-    assert progressbar._progress_reporter is MockReporter()
+    assert atpbar._progress_reporter is MockReporter()
     monitor.end()
-    assert progressbar._progress_reporter is None
+    assert atpbar._progress_reporter is None
 
 def test_create_reporter(monitor, mock_reporter, MockReporter, presentation):
     reporter = monitor.create_reporter()
