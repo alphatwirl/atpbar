@@ -3,7 +3,7 @@ import sys
 import atexit
 import threading
 
-from .monitor import BProgressMonitor
+from .monitor import ProgressMonitor
 from .bartty import ProgressBar
 from .txtprint import ProgressPrint
 
@@ -52,7 +52,7 @@ def _start_monitor_if_necessary_():
         _end_monitor()
 
     presentation = _create_presentation()
-    monitor = BProgressMonitor(presentation=presentation)
+    monitor = ProgressMonitor(presentation=presentation)
     monitor.begin()
     _reporter = monitor.create_reporter()
     _monitor = monitor

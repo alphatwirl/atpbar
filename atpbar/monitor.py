@@ -5,7 +5,7 @@ from .reporter import ProgressReporter
 from .pickup import ProgressReportPickup
 
 ##__________________________________________________________________||
-class BProgressMonitor(object):
+class ProgressMonitor(object):
     """A progress monitor of tasks.
 
     This class monitors the progress of tasks and present it.
@@ -26,7 +26,7 @@ class BProgressMonitor(object):
       initialization. For example, to use `ProgressBar`::
 
         presentation = ProgressBar()
-        monitor = BProgressMonitor(presentation)
+        monitor = ProgressMonitor(presentation)
 
       After the initialization, start monitoring::
 

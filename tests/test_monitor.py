@@ -2,7 +2,7 @@
 import logging
 import pytest
 
-from atpbar.monitor import BProgressMonitor
+from atpbar.monitor import ProgressMonitor
 from atpbar.presentation import Presentation
 
 ##__________________________________________________________________||
@@ -11,11 +11,11 @@ class MockProgressBar(Presentation):
         pass
 
 ##__________________________________________________________________||
-def build_BProgressMonitor():
-    return BProgressMonitor(presentation=MockProgressBar())
+def build_ProgressMonitor():
+    return ProgressMonitor(presentation=MockProgressBar())
 
-builds = [build_BProgressMonitor]
-build_ids = ['BProgressMonitor']
+builds = [build_ProgressMonitor]
+build_ids = ['ProgressMonitor']
 
 ##__________________________________________________________________||
 @pytest.mark.parametrize('build', builds, ids=build_ids)

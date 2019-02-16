@@ -6,7 +6,7 @@ class ProgressReporter(object):
     """A progress reporter
 
     This class sends a `ProgressReport` to a progress monitor, e.g.,
-    `ProgressMonitor` or `BProgressMonitor`, which, for example, uses
+    `ProgressMonitor` or `ProgressMonitor`, which, for example, uses
     the reports to update `ProgressBar` on the screen.
 
     An instance of this class is initialized with a message queue::
@@ -15,7 +15,7 @@ class ProgressReporter(object):
 
     A reporter, an instance of this class, is typically created and
     initialized by a progress monitor (`ProgressMonitor` or
-    `BProgressMonitor`), which keeps the other end of the message
+    `ProgressMonitor`), which keeps the other end of the message
     queue. A reporter and a monitor might be running in different
     processes.
 

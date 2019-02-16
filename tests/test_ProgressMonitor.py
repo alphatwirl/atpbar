@@ -8,7 +8,7 @@ try:
 except ImportError:
     import mock
 
-from atpbar.monitor import BProgressMonitor
+from atpbar.monitor import ProgressMonitor
 from atpbar.reporter import ProgressReporter
 from atpbar.report import ProgressReport
 
@@ -20,7 +20,7 @@ def presentation():
 
 @pytest.fixture()
 def obj(presentation):
-    return BProgressMonitor(presentation)
+    return ProgressMonitor(presentation)
 
 ##__________________________________________________________________||
 def test_repr(obj):

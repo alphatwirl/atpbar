@@ -37,9 +37,9 @@ def mock_create_presentation(monkeypatch, mock_presentation):
     return ret
 
 @pytest.fixture()
-def MockBProgressMonitor(monkeypatch):
+def MockProgressMonitor(monkeypatch):
     ret = mock.Mock()
-    monkeypatch.setattr(atpbar.funcs, 'BProgressMonitor', ret)
+    monkeypatch.setattr(atpbar.funcs, 'ProgressMonitor', ret)
     return ret
 
 @pytest.fixture(
@@ -63,7 +63,7 @@ def global_variables(monkeypatch, request):
     monkeypatch.setattr(atpbar.funcs, '_monitor', mock_monitor)
     monkeypatch.setattr(atpbar.funcs, 'do_not_start_monitor', do_not_start_monitor)
 
-def test_start_monitor_if_necessary(mock_atexit, mock_lock, MockBProgressMonitor, mock_presentation):
+def test_start_monitor_if_necessary(mock_atexit, mock_lock, MockProgressMonitor, mock_presentation):
 
     org_reporter = atpbar.funcs._reporter
     org_monitor = atpbar.funcs._monitor
@@ -90,11 +90,11 @@ def test_start_monitor_if_necessary(mock_atexit, mock_lock, MockBProgressMonitor
     if org_monitor:
         assert [mock.call()] == org_monitor.end.call_args_list
 
-    assert [mock.call(presentation=mock_presentation)] == MockBProgressMonitor.call_args_list
-    assert [mock.call()] == MockBProgressMonitor().begin.call_args_list
+    assert [mock.call(presentation=mock_presentation)] == MockProgressMonitor.call_args_list
+    assert [mock.call()] == MockProgressMonitor().begin.call_args_list
 
-    assert atpbar.funcs._monitor is MockBProgressMonitor()
-    assert atpbar.funcs._reporter is MockBProgressMonitor().create_reporter()
+    assert atpbar.funcs._monitor is MockProgressMonitor()
+    assert atpbar.funcs._reporter is MockProgressMonitor().create_reporter()
 
     assert 1 == (len(mock_atexit.register.call_args_list))
 
