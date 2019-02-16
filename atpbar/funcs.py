@@ -5,7 +5,7 @@ import threading
 
 from .monitor import BProgressMonitor
 from .bartty import ProgressBar
-from .ProgressPrint import ProgressPrint
+from .txtprint import ProgressPrint
 
 try:
     from .barjupyter import ProgressBarJupyter

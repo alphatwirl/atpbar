@@ -7,7 +7,7 @@ try:
 except ImportError:
     import mock
 
-from atpbar.ProgressPrint import ProgressPrint
+from atpbar.txtprint import ProgressPrint
 from atpbar.report import ProgressReport
 
 ##__________________________________________________________________||
