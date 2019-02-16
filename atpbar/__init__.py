@@ -28,7 +28,16 @@ _monitor = None
 import sys
 import atexit
 
+import threading
+_lock = threading.Lock()
+
 def _start_monitor_if_necessary():
+    global _lock
+    _lock.acquire()
+    _start_monitor_if_necessary_()
+    _lock.release()
+
+def _start_monitor_if_necessary_():
     global _reporter
     global _monitor
 

@@ -19,6 +19,12 @@ def mock_atexit(monkeypatch):
     return ret
 
 @pytest.fixture()
+def mock_lock(monkeypatch):
+    ret = mock.Mock()
+    monkeypatch.setattr(atpbar, '_lock', ret)
+    return ret
+
+@pytest.fixture()
 def mock_presentation(monkeypatch):
     ret = mock.Mock()
     return ret
@@ -57,13 +63,15 @@ def global_variables(monkeypatch, request):
     monkeypatch.setattr(atpbar, '_monitor', mock_monitor)
     monkeypatch.setattr(atpbar, 'do_not_start_monitor', do_not_start_monitor)
 
-def test_start_monitor_if_necessary(mock_atexit, MockBProgressMonitor, mock_presentation):
+def test_start_monitor_if_necessary(mock_atexit, mock_lock, MockBProgressMonitor, mock_presentation):
 
     org_reporter = atpbar._reporter
     org_monitor = atpbar._monitor
     org_do_not_start_monitor = atpbar.do_not_start_monitor
 
     _start_monitor_if_necessary()
+
+    assert [mock.call.acquire(), mock.call.release()] == mock_lock.method_calls
 
     assert org_do_not_start_monitor == atpbar.do_not_start_monitor
 
