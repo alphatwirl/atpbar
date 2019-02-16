@@ -1,32 +1,27 @@
 #!/usr/bin/env python
 # Tai Sakuma <tai.sakuma@gmail.com>
-import threading
 import time, random
-import atpbar
+import threading
+
+from atpbar import atpbar
 
 ##__________________________________________________________________||
-class Task(threading.Thread):
-    def __init__(self, name):
-        super(Task, self).__init__()
-        self.name = name
-
-    def run(self):
-        n = random.randint(5, 100000)
-        for i in atpbar.atpbar(range(n), name=self.name):
-            time.sleep(0.0001)
-        return None
+def task(n, name):
+    for i in atpbar(range(n), name=name):
+        time.sleep(0.0001)
 
 ##__________________________________________________________________||
-ntasks = 5
-tasks = [ ]
+nthreads = 5
+threads = [ ]
 
-for i in range(ntasks):
-    task_name = 'task {}'.format(i)
-    task = Task(name=task_name)
-    task.start()
-    tasks.append(task)
+for i in range(nthreads):
+    name = 'thread {}'.format(i)
+    n = random.randint(5, 100000)
+    t = threading.Thread(target=task, args=(n, name))
+    t.start()
+    threads.append(t)
 
-for task in tasks:
-    task.join()
+for t in threads:
+    t.join()
 
 ##__________________________________________________________________||
