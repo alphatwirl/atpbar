@@ -4,7 +4,7 @@ import atexit
 import threading
 
 from .monitor import BProgressMonitor
-from .ProgressBar import ProgressBar
+from .bartty import ProgressBar
 from .ProgressPrint import ProgressPrint
 
 try:
