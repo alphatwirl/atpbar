@@ -159,6 +159,7 @@ need to be added.
 
 ```python
 import multiprocessing
+from atpbar import register_reporter, find_reporter
 
 def task(n, name):
     register_reporter(reporter)
