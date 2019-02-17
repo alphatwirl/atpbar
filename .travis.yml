@@ -1,0 +1,36 @@
+#sudo: false
+# travis-ci.org build & test configuration
+language: python
+
+matrix:
+    include:
+        - python: 2.7
+        - python: 3.6
+        - python: 3.7
+    allow_failures:
+
+install:
+  - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then curl --silent http://repo.continuum.io/miniconda/Miniconda-latest-MacOSX-x86_64.sh -o miniconda.sh; fi
+  - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then wget -nv http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi
+
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - conda config --set show_channel_urls yes
+  - conda create -q -n testenv python=${TRAVIS_PYTHON_VERSION}
+  - export CONDA_ENV_PATH=$HOME/miniconda/envs/testenv
+  - source activate testenv
+  - pip install jupyter
+  - pip install -r requirements/test.txt
+
+script:
+  - pytest --cov
+
+after_success:
+  - coverage combine
+  - codecov
+
+cache: apt
