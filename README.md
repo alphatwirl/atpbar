@@ -17,6 +17,19 @@ Notebook](https://jupyter.org/).
 
 *****
 
+- [**Requirement**](#requirement)
+- [**Install**](#install)
+- [**How to use**](#how-to-use)
+    - [Import libraries](#import-libraries)
+    - [One loop](#one-loop)
+    - [Nested loops](#nested-loops)
+    - [Threading](#threading)
+    - [Multiprocessing](#multiprocessing)
+- [**License**](#license)
+- [**Contact**](#contact)
+
+*****
+
 ## Requirement
 
 - Python 2.7, 3.6, 3.7
