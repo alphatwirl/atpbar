@@ -168,8 +168,8 @@ def task(n, name):
 
 reporter = find_reporter()
 
-nthreads = 5
-threads = [ ]
+nprocesses = 5
+processes = [ ]
 
 for i in range(nprocesses):
     name = 'process {}'.format(i)
