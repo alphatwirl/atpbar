@@ -2,7 +2,7 @@
 import ipywidgets as widgets
 from IPython.display import display
 
-from .presentation import Presentation
+from .base import Presentation
 
 ##__________________________________________________________________||
 class ProgressBarJupyter(Presentation):

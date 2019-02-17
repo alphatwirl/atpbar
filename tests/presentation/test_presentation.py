@@ -8,7 +8,7 @@ except ImportError:
     import mock
 
 from atpbar.report import ProgressReport
-from atpbar.presentation import Presentation
+from atpbar.presentation.base import Presentation
 
 ##__________________________________________________________________||
 class MockProgressBar(Presentation):

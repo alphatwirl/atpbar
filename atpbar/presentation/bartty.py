@@ -1,7 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import sys
 
-from .presentation import Presentation
+from .base import Presentation
 
 ##__________________________________________________________________||
 class ProgressBar(Presentation):

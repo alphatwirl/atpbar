@@ -1,7 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import sys, time
 
-from .presentation import Presentation
+from .base import Presentation
 
 ##__________________________________________________________________||
 class ProgressPrint(Presentation):

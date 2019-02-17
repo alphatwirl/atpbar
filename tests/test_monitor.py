@@ -3,7 +3,7 @@ import logging
 import pytest
 
 from atpbar.monitor import ProgressMonitor
-from atpbar.presentation import Presentation
+from atpbar.presentation.base import Presentation
 
 ##__________________________________________________________________||
 class MockProgressBar(Presentation):

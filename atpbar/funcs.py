@@ -4,11 +4,11 @@ import atexit
 import threading
 
 from .monitor import ProgressMonitor
-from .bartty import ProgressBar
-from .txtprint import ProgressPrint
+from .presentation.bartty import ProgressBar
+from .presentation.txtprint import ProgressPrint
 
 try:
-    from .barjupyter import ProgressBarJupyter
+    from .presentation.barjupyter import ProgressBarJupyter
 except ImportError:
     pass
 
