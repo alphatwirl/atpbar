@@ -39,12 +39,17 @@ class ProgressBar(Presentation):
             self.last.append(line)
 
     def _create_line(self, report):
-        nameFieldLength = 32
+        name_field_length = 32
         percent = float(report.done)/report.total if report.total > 0 else 1
         bar = (':' * int(percent * 40)).ljust(40, " ")
         percent = round(percent * 100, 2)
-        name = report.name[0:nameFieldLength]
-        return " {3:6.2f}% {2:s} | {4:8d} / {5:8d} |:  {0:<{1}s} ".format(name, nameFieldLength, bar, percent, report.done, report.total)
+        name = report.name[0:name_field_length]
+        format = ' {percent:6.2f}% {bar:s} | {done:8d} / {total:8d} |:  {name:<{name_field_length}s} '
+        ret = format.format(
+            percent=percent, bar=bar,
+            done=report.done, total=report.total,
+            name=name, name_field_length=name_field_length)
+        return ret
 
     def _print_lines(self):
         if len(self.last) > 0: sys.stdout.write("\n".join(self.last) + "\n")
