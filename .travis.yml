@@ -8,6 +8,7 @@ matrix:
         - python: 3.6
         - python: 3.7
     allow_failures:
+        - python: 3.7
 
 install:
   - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then curl --silent http://repo.continuum.io/miniconda/Miniconda-latest-MacOSX-x86_64.sh -o miniconda.sh; fi
