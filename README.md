@@ -50,6 +50,10 @@ $ pip install -U atpbar
 
 I will show here how to use atpbar by simple examples.
 
+These examples can be also run on Jupyter Notebook:
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/alphatwirl/notebook-atpbar-001/master?filepath=atpbar.ipynb)
+
+
 ### Import libraries
 
 To create simple loops in the examples, we use two python standard
