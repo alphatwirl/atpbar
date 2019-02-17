@@ -55,6 +55,12 @@ class ProgressBarJupyter(Presentation):
 
         self._reorder_widgets(report)
 
+        if not self._new_taskids and not self._active_taskids:
+            self.container_widget = None
+            self.active_box_list.clear()
+            self.complete_box_list.clear()
+            self.widget_dict.clear()
+
     def _update_widget(self, report):
 
         percent = float(report.done)/report.total if report.total > 0 else 1
