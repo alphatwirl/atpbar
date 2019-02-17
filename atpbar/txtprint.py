@@ -7,41 +7,59 @@ from .presentation import Presentation
 class ProgressPrint(Presentation):
     def __init__(self):
         super(ProgressPrint, self).__init__()
-        self.lines = [ ]
-        self.last = [ ]
         self.interval = 60.0 # [second]
+        self.last_time = { } # key: taskid
 
     def __repr__(self):
         return '{}()'.format(
             self.__class__.__name__
         )
 
-    def _present(self):
-        self._create_lines()
-        self._print_lines()
+    def present(self, report):
 
-    def _create_lines(self):
-        self.lines = [ ]
-        for taskid in self._active_taskids + self._new_taskids:
-            report = self._report_dict[taskid]
-            line = self._create_line(report)
-            self.lines.append(line)
-        for taskid in self._finishing_taskids:
-            report = self._report_dict[taskid]
-            line = self._create_line(report)
-            self.last.append(line)
+        if not self._register_report(report):
+            return
 
-    def _print_lines(self):
-        sys.stdout.write("\n")
-        sys.stdout.write(time.asctime(time.localtime(time.time())))
-        sys.stdout.write("\n")
-        if len(self.last) > 0: sys.stdout.write("\n".join(self.last) + "\n")
-        sys.stdout.write("\n".join(self.lines) + "\n")
-        sys.stdout.flush()
+        if not self._need_to_present(report):
+            return
 
-    def _create_line(self, report):
+        self._present(report)
+
+        self.last_time[report.taskid] = self._time()
+
+    def _present(self, report):
+        pass
+
+    def _present(self, report):
+        time_ = time.strftime('%m/%d %H:%M', time.localtime(time.time()))
         percent = float(report.done)/report.total if report.total > 0 else 1
         percent = round(percent * 100, 2)
-        return " {1:8d} / {2:8d} ({0:6.2f}%) {3} ".format(percent, report.done, report.total, report.name)
+        line = "{time} : {done:8d} / {total:8d} ({percent:6.2f}%): {name} ".format(
+            time=time_,
+            done=report.done, total=report.total,
+            percent=percent, name=report.name
+        )
+        line = '{}\n'.format(line)
+        sys.stdout.write(line)
+        sys.stdout.flush()
+
+    def _need_to_present(self, report):
+
+        if report.first():
+            return True
+
+        if report.last():
+            return True
+
+        if report.taskid not in self.last_time:
+            return True
+
+        if self._time() - self.last_time[report.taskid] > self.interval:
+            return True
+
+        return False
+
+    def _time(self):
+        return time.time()
 
 ##__________________________________________________________________||

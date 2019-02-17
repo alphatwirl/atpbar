@@ -31,7 +31,7 @@ def test_report(obj, capsys):
     obj.present(report)
     captured = capsys.readouterr()
     stdout_lines = captured.out.strip().split('\n')
-    assert 2 == len(stdout_lines)
-    assert '        0 /       10 (  0.00%) task1' == stdout_lines[1]
+    assert 1 == len(stdout_lines)
+    assert (' :        0 /       10 (  0.00%): task1' in stdout_lines[0])
 
 ##__________________________________________________________________||
