@@ -161,7 +161,7 @@ need to be added.
 import multiprocessing
 from atpbar import register_reporter, find_reporter
 
-def task(n, name):
+def task(n, name, reporter):
     register_reporter(reporter)
     for i in atpbar(range(n), name=name):
         time.sleep(0.0001)
