@@ -10,12 +10,13 @@ except ImportError:
 
 has_jupyter_notebook = False
 try:
-    from atpbar.barjupyter import ProgressBarJupyter
+    import ipywidgets as widgets
+    from IPython.display import display
     has_jupyter_notebook = True
 except ImportError:
     pass
 
-from atpbar.funcs import _create_presentation
+from atpbar.presentation.create import create_presentation
 
 ##__________________________________________________________________||
 @pytest.fixture(
@@ -28,7 +29,7 @@ def isatty(request, monkeypatch):
         'stdout.isatty.return_value': ret,
         'stdout.write.side_effect': lambda x : org_stdout.write(x)
     })
-    module = sys.modules['atpbar.funcs']
+    module = sys.modules['atpbar.presentation.create']
     monkeypatch.setattr(module, 'sys', f)
     return ret
 
@@ -43,13 +44,13 @@ def is_jupyter_notebook(request, monkeypatch):
     ret = request.param
     f = mock.Mock()
     f.return_value = ret
-    module = sys.modules['atpbar.funcs']
+    module = sys.modules['atpbar.presentation.create']
     monkeypatch.setattr(module, 'is_jupyter_notebook', f)
     return ret
 
 ##__________________________________________________________________||
 def test_create_presentation(isatty, is_jupyter_notebook):
-    actual = _create_presentation()
+    actual = create_presentation()
 
     if isatty:
         assert 'ProgressBar' == actual.__class__.__name__

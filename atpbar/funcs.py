@@ -4,13 +4,7 @@ import atexit
 import threading
 
 from .monitor import ProgressMonitor
-from .presentation.bartty import ProgressBar
-from .presentation.txtprint import ProgressPrint
-
-try:
-    from .presentation.barjupyter import ProgressBarJupyter
-except ImportError:
-    pass
+from .presentation.create import create_presentation
 
 ##__________________________________________________________________||
 do_not_start_monitor = False
@@ -51,7 +45,7 @@ def _start_monitor_if_necessary_():
         # But if it does, end the old monitor.
         _end_monitor()
 
-    presentation = _create_presentation()
+    presentation = create_presentation()
     monitor = ProgressMonitor(presentation=presentation)
     monitor.begin()
     _reporter = monitor.create_reporter()
@@ -66,21 +60,5 @@ def _end_monitor():
         _monitor.end()
         _monitor = None
     _reporter = None
-
-def _create_presentation():
-    if sys.stdout.isatty():
-        return ProgressBar()
-    if is_jupyter_notebook():
-        return ProgressBarJupyter()
-    return ProgressPrint()
-
-def is_jupyter_notebook():
-    try:
-        from IPython import get_ipython
-        if 'IPKernelApp' in get_ipython().config:
-            return True
-    except:
-        pass
-    return False
 
 ##__________________________________________________________________||

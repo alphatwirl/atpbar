@@ -33,7 +33,7 @@ def mock_presentation(monkeypatch):
 def mock_create_presentation(monkeypatch, mock_presentation):
     ret = mock.Mock()
     ret.return_value = mock_presentation
-    monkeypatch.setattr(atpbar.funcs, '_create_presentation', ret)
+    monkeypatch.setattr(atpbar.funcs, 'create_presentation', ret)
     return ret
 
 @pytest.fixture()
