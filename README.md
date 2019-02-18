@@ -131,32 +131,37 @@ bars for the active tasks are growing at the bottom.
 `atpbar` can show multiple progress bars for loops concurrently
 iterating in different threads.
 
+The function `run_with_threading()` in the following code shows an
+example.
 
 ```python
+from atpbar import flush
 import threading
 
-def task(n, name):
-    for i in atpbar(range(n), name=name):
-        time.sleep(0.0001)
+def run_with_threading():
+    def task(n, name):
+        for i in atpbar(range(n), name=name):
+            time.sleep(0.0001)
+    nthreads = 5
+    threads = [ ]
+    for i in range(nthreads):
+        name = 'thread {}'.format(i)
+        n = random.randint(5, 100000)
+        t = threading.Thread(target=task, args=(n, name))
+        t.start()
+        threads.append(t)
+    for t in threads:
+        t.join()
+    flush()
 
-nthreads = 5
-threads = [ ]
-
-for i in range(nthreads):
-    name = 'thread {}'.format(i)
-    n = random.randint(5, 100000)
-    t = threading.Thread(target=task, args=(n, name))
-    t.start()
-    threads.append(t)
-
-for t in threads:
-    t.join()
+run_with_threading()
 ```
 
 The task to sleep for `0.0001` seconds is defined as the function
 `task`. The `task` is concurrently run 5 times with `threading`.
 `atpbar` can be used in any threads. Five progress bars growing
-simultaneously will be shown.
+simultaneously will be shown. The function `flush()` returns when the
+progress bars have finished updating.
 
 ```
  100.00% :::::::::::::::::::::::::::::::::::::::: |     8042 /     8042 |:  thread 3 
@@ -174,30 +179,49 @@ progress bars for active tasks are at the bottom.
 `atpbar` can be used with `multiprocessing`. A few extra lines of code
 need to be added.
 
+The function `run_with_multiprocessing()` in the following code shows
+an example.
+
 ```python
 import multiprocessing
-from atpbar import register_reporter, find_reporter
+from atpbar import register_reporter, find_reporter, flush
 
-def task(n, name, reporter):
-    register_reporter(reporter)
-    for i in atpbar(range(n), name=name):
-        time.sleep(0.0001)
+def run_with_multiprocessing():
+    def task(n, name):
+        for i in atpbar(range(n), name=name):
+            time.sleep(0.0001)
+    def worker(reporter, task, queue):
+        register_reporter(reporter)
+        while True:
+            args = queue.get()
+            if args is None:
+                queue.task_done()
+                break
+            task(*args)
+            queue.task_done()
+    nprocesses = 4
+    processes = [ ]
+    reporter = find_reporter()
+    queue = multiprocessing.JoinableQueue()
+    for i in range(nprocesses):
+        p = multiprocessing.Process(target=worker, args=(reporter, task, queue))
+        p.start()
+        processes.append(p)
+    ntasks = 10
+    for i in range(ntasks):
+        name = 'task {}'.format(i)
+        n = random.randint(5, 100000)
+        queue.put((n, name))
+    for i in range(nprocesses):
+        queue.put(None)
+        queue.join()
+    flush()
 
-reporter = find_reporter()
-
-nprocesses = 5
-processes = [ ]
-
-for i in range(nprocesses):
-    name = 'process {}'.format(i)
-    n = random.randint(5, 100000)
-    p = multiprocessing.Process(target=task, args=(n, name, reporter))
-    p.start()
-    processes.append(p)
-
-for p in processes:
-    p.join()
+run_with_multiprocessing()
 ```
+
+It starts four workers in subprocesses with `multiprocessing` and have
+them run ten tasks.
 
 In order to use `atpbar` in a subprocess, the `reporter`, which can be
 found in the main process by the function `find_reporter()`, needs to
@@ -207,18 +231,23 @@ be brought to the subprocess and registered there by the function
 Simultaneously growing progress bars will be shown.
 
 ```
- 100.00% :::::::::::::::::::::::::::::::::::::::: |    13110 /    13110 |:  process 1 
-  61.88% ::::::::::::::::::::::::                 |    17957 /    29020 |:  process 0 
-  19.37% :::::::                                  |    17982 /    92831 |:  process 2 
-  21.49% ::::::::                                 |    17178 /    79939 |:  process 3 
-  80.11% ::::::::::::::::::::::::::::::::         |    17187 /    21453 |:  process 4 
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |    44714 /    44714 |:  task 3
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |    47951 /    47951 |:  task 2
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |    21461 /    21461 |:  task 5
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |    73721 /    73721 |:  task 1
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |    31976 /    31976 |:  task 4
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |    80765 /    80765 |:  task 0
+  58.12% :::::::::::::::::::::::                  |    20133 /    34641 |:  task 6
+  20.47% ::::::::                                 |    16194 /    79126 |:  task 7
+  47.71% :::::::::::::::::::                      |    13072 /    27397 |:  task 8
+  76.09% ::::::::::::::::::::::::::::::           |     9266 /    12177 |:  task 9
 ```
 
 *****
 
 ## License
 
-atpbar is licensed under the BSD license.
+- atpbar is licensed under the BSD license.
 
 *****
 
