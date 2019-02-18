@@ -1,6 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 from .main import atpbar
-from .funcs import find_reporter, register_reporter
+# from .funcs import find_reporter, register_reporter
+from .funcs2 import find_reporter, register_reporter, flush
 
 ##__________________________________________________________________||
 from ._version import get_versions
