@@ -3,16 +3,19 @@
 ## [Unreleased]
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.3...master))
+- fixed the problem whereby the pickup doesn't end if the loop ends
+  with `break`.
+- made a presentation every time a pickup is created.
 
 ## [0.9.3] - 2019-02-18
 
 **PyPI**: https://pypi.org/project/atpbar/0.9.3/
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.2...v0.9.3))
-- fixed the problem of returning from the outermost `atpbar` in the
-  single thread. This problem was causing, for example, the command
-  prompt to already have appeared while the progress bars were still
-  growing in the interactive mode.
+- fixed the problem of returning from the outermost `atpbar` too early
+  in the single thread. This problem was causing, for example, the
+  command prompt to already have appeared while the progress bars were
+  still growing in the interactive mode.
 - added a new function `flush()`, which returns after the progress
   bars finished updating -- useful for threading and multiprocessing
 
