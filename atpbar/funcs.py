@@ -11,7 +11,7 @@ from .pickup import ProgressReportPickup
 from .presentation.create import create_presentation
 
 ##__________________________________________________________________||
-_presentation = create_presentation()
+_presentation = None
 _reporter = None
 _pickup = None
 _queue = None
@@ -74,6 +74,7 @@ def _start_pickup_if_necessary():
     if _queue is None:
         _queue = multiprocessing.Queue()
     _reporter = ProgressReporter(queue=_queue)
+    _presentation = create_presentation()
     _pickup = ProgressReportPickup(_queue, _presentation)
     _pickup.daemon = True # this makes the functions
                           # registered at atexit called even
@@ -87,6 +88,7 @@ def _start_pickup_if_necessary():
 def _end_pickup():
     global _lock
     global _queue
+    global _presentation
     global _pickup
     global _reporter
     _lock.acquire()
@@ -94,6 +96,7 @@ def _end_pickup():
         _queue.put(None)
         _pickup.join()
         _pickup = None
+        _presentation = None
     _reporter = None
     _lock.release()
 
