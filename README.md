@@ -2,15 +2,24 @@
 
 # atpbar
 
-Progress bars for threading and multiprocessing tasks on terminal and
-Jupyter Notebook.
+_Progress bars_ for threading and multiprocessing tasks on terminal
+and Jupyter Notebook.
 
+```
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     7811 /     7811 |:  task 1
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |    23258 /    23258 |:  task 0
+  65.62% ::::::::::::::::::::::::::               |     8018 /    12219 |:  task 4
+  60.89% ::::::::::::::::::::::::                 |    31083 /    51048 |:  task 2
+  25.03% ::::::::::                               |    23884 /    95421 |:  task 3
+```
+  
 The code in _atpbar_ started its development in 2015 as part of
-[alphatwirl](https://github.com/alphatwirl/alphatwirl). It has been a
-sub-package, _progressbar_, of alphatwirl. It became an independent
-package in February 2019. _atpbar_ can display multiple progress bars
-simultaneously growing to show the progresses of iterations of loops
-in [threading](https://docs.python.org/3/library/threading.html) or
+[alphatwirl](https://github.com/alphatwirl/alphatwirl). It had been a
+sub-package, _progressbar_, of alphatwirl until it became an
+independent package in February 2019. _atpbar_ can display multiple
+progress bars simultaneously growing to show the progresses of
+iterations of loops in
+[threading](https://docs.python.org/3/library/threading.html) or
 [multiprocessing](https://docs.python.org/3/library/multiprocessing.html)
 tasks. _atpbar_ can display progress bars on terminal and [Jupyter
 Notebook](https://jupyter.org/).
