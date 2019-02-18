@@ -21,21 +21,9 @@ _lock = threading.Lock()
 def find_reporter():
     global _lock
     global _reporter
-    global _queue
-    global _presentation
-    global _pickup
 
     _lock.acquire()
-    if _reporter is None:
-        if _queue is None:
-            _queue = multiprocessing.Queue()
-        _reporter = ProgressReporter(queue=_queue)
-        _pickup = ProgressReportPickup(_queue, _presentation)
-        _pickup.daemon = True # this makes the functions
-                              # registered at atexit called even
-                              # if the pickup is still running
-        _pickup.start()
-        atexit.register(_end_pickup)
+    _start_pickup_if_necessary()
     _lock.release()
 
     return _reporter
@@ -54,24 +42,9 @@ def flush():
 def fetch_reporter():
     global _lock
     global _reporter
-    global _queue
-    global _presentation
-    global _pickup
 
     _lock.acquire()
-    if _reporter is None:
-        _need_end_pickup = True
-        if _queue is None:
-            _queue = multiprocessing.Queue()
-        _reporter = ProgressReporter(queue=_queue)
-        _pickup = ProgressReportPickup(_queue, _presentation)
-        _pickup.daemon = True # this makes the functions
-                              # registered at atexit called even
-                              # if the pickup is still running
-        _pickup.start()
-        atexit.register(_end_pickup)
-    else:
-        _need_end_pickup = False
+    _need_end_pickup = _start_pickup_if_necessary()
     _lock.release()
 
     yield _reporter
@@ -79,6 +52,28 @@ def fetch_reporter():
     if _need_end_pickup:
         _end_pickup()
         _reporter = None
+
+##__________________________________________________________________||
+def _start_pickup_if_necessary():
+    global _reporter
+    global _queue
+    global _presentation
+    global _pickup
+
+    if _reporter is not None:
+        return False
+
+    if _queue is None:
+        _queue = multiprocessing.Queue()
+    _reporter = ProgressReporter(queue=_queue)
+    _pickup = ProgressReportPickup(_queue, _presentation)
+    _pickup.daemon = True # this makes the functions
+                          # registered at atexit called even
+                          # if the pickup is still running
+    _pickup.start()
+    atexit.register(_end_pickup)
+
+    return True
 
 ##__________________________________________________________________||
 def _end_pickup():
