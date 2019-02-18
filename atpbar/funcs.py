@@ -28,10 +28,7 @@ def find_reporter():
     _lock.acquire()
     if _reporter is None:
         if _queue is None:
-            # mananger = multiprocessing.Manager()
-            # _queue = mananger.Queue()
             _queue = multiprocessing.Queue()
-            # _queue.cancel_join_thread()
         _reporter = ProgressReporter(queue=_queue)
         _pickup = ProgressReportPickup(_queue, _presentation)
         _pickup.daemon = True # this makes the functions
@@ -65,10 +62,7 @@ def fetch_reporter():
     if _reporter is None:
         _need_end_pickup = True
         if _queue is None:
-            # mananger = multiprocessing.Manager()
-            # _queue = mananger.Queue()
             _queue = multiprocessing.Queue()
-            # _queue.cancel_join_thread()
         _reporter = ProgressReporter(queue=_queue)
         _pickup = ProgressReportPickup(_queue, _presentation)
         _pickup.daemon = True # this makes the functions
