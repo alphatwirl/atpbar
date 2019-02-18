@@ -15,19 +15,23 @@ def mock_reporter(monkeypatch):
     ret = mock.Mock()
     return ret
 
-@pytest.fixture()
-def mock_find_reporter(monkeypatch, mock_reporter):
+@pytest.fixture(autouse=True)
+def mock_fetch_reporter(monkeypatch, mock_reporter):
     ret = mock.Mock()
-    ret.return_value = mock_reporter
-    monkeypatch.setattr(atpbar.main, 'find_reporter', ret)
+    ret.return_value.__enter__ = mock.Mock()
+    ret.return_value.__enter__.return_value = mock_reporter
+    ret.return_value.__exit__ = mock.Mock()
+    monkeypatch.setattr(atpbar.main, 'fetch_reporter', ret)
     return ret
 
-@pytest.fixture()
-def mock_find_reporter_raise(monkeypatch, mock_reporter):
-    ret = mock.Mock()
+@pytest.fixture(autouse=True)
+def mock_fetch_reporter_raise(monkeypatch, mock_reporter):
     mock_reporter.report.side_effect = Exception
-    ret.return_value = mock_reporter
-    monkeypatch.setattr(atpbar.main, 'find_reporter', ret)
+    ret = mock.Mock()
+    ret.return_value.__enter__ = mock.Mock()
+    ret.return_value.__enter__.return_value = mock_reporter
+    ret.return_value.__exit__ = mock.Mock()
+    monkeypatch.setattr(atpbar.main, 'fetch_reporter', ret)
     return ret
 
 ##__________________________________________________________________||
@@ -49,7 +53,7 @@ class Iter(object):
 content = [mock.sentinel.item1, mock.sentinel.item2, mock.sentinel.item3]
 
 ##__________________________________________________________________||
-def test_atpbar_name_repr(mock_find_reporter, mock_reporter, caplog):
+def test_atpbar_name_repr(mock_fetch_reporter, mock_reporter, caplog):
 
     iterable = Iter(content)
     returned = [e for e in atpbar.atpbar(iterable)]
@@ -67,7 +71,7 @@ def test_atpbar_name_repr(mock_find_reporter, mock_reporter, caplog):
         assert 'Iter' == report.name # repr(iterable)
 
 ##__________________________________________________________________||
-def test_atpbar_name_given(mock_find_reporter, mock_reporter, caplog):
+def test_atpbar_name_given(mock_fetch_reporter, mock_reporter, caplog):
 
     iterable = Iter(content)
     returned = [e for e in atpbar.atpbar(iterable, name='given')]
@@ -85,7 +89,7 @@ def test_atpbar_name_given(mock_find_reporter, mock_reporter, caplog):
         assert 'given' == report.name
 
 ##__________________________________________________________________||
-def test_atpbar_raise(mock_find_reporter_raise, mock_reporter, caplog):
+def test_atpbar_raise(mock_fetch_reporter_raise, mock_reporter, caplog):
 
     iterable = Iter(content)
     returned = [e for e in atpbar.atpbar(iterable, name='given')]

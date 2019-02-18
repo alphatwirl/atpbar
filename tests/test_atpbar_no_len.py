@@ -16,11 +16,17 @@ def mock_reporter(monkeypatch):
     return ret
 
 @pytest.fixture(autouse=True)
-def mock_find_reporter(monkeypatch, mock_reporter):
+def mock_fetch_reporter(monkeypatch, mock_reporter):
     ret = mock.Mock()
-    ret.return_value = mock_reporter
-    monkeypatch.setattr(atpbar.main, 'find_reporter', ret)
+    ret.return_value.__enter__ = mock.Mock()
+    ret.return_value.__enter__.return_value = mock_reporter
+    ret.return_value.__exit__ = mock.Mock()
+    monkeypatch.setattr(atpbar.main, 'fetch_reporter', ret)
     return ret
+
+def test_mock_fetch_reporter(mock_fetch_reporter, mock_reporter):
+    with mock_fetch_reporter() as reporter:
+        assert reporter is mock_reporter
 
 ##__________________________________________________________________||
 class Iter(object):

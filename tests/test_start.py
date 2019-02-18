@@ -9,19 +9,19 @@ except ImportError:
     import mock
 
 import atpbar
-from atpbar.funcs import _start_monitor_if_necessary
+from atpbar.funcs_obsolete import _start_monitor_if_necessary
 
 ##__________________________________________________________________||
 @pytest.fixture()
 def mock_atexit(monkeypatch):
     ret = mock.Mock()
-    monkeypatch.setattr(atpbar.funcs, 'atexit', ret)
+    monkeypatch.setattr(atpbar.funcs_obsolete, 'atexit', ret)
     return ret
 
 @pytest.fixture()
 def mock_lock(monkeypatch):
     ret = mock.Mock()
-    monkeypatch.setattr(atpbar.funcs, '_lock', ret)
+    monkeypatch.setattr(atpbar.funcs_obsolete, '_lock', ret)
     return ret
 
 @pytest.fixture()
@@ -33,13 +33,13 @@ def mock_presentation(monkeypatch):
 def mock_create_presentation(monkeypatch, mock_presentation):
     ret = mock.Mock()
     ret.return_value = mock_presentation
-    monkeypatch.setattr(atpbar.funcs, 'create_presentation', ret)
+    monkeypatch.setattr(atpbar.funcs_obsolete, 'create_presentation', ret)
     return ret
 
 @pytest.fixture()
 def MockProgressMonitor(monkeypatch):
     ret = mock.Mock()
-    monkeypatch.setattr(atpbar.funcs, 'ProgressMonitor', ret)
+    monkeypatch.setattr(atpbar.funcs_obsolete, 'ProgressMonitor', ret)
     return ret
 
 @pytest.fixture(
@@ -59,31 +59,31 @@ def global_variables(monkeypatch, request):
     else:
         mock_monitor = None
 
-    monkeypatch.setattr(atpbar.funcs, '_reporter', mock_reporter)
-    monkeypatch.setattr(atpbar.funcs, '_monitor', mock_monitor)
-    monkeypatch.setattr(atpbar.funcs, 'do_not_start_monitor', do_not_start_monitor)
+    monkeypatch.setattr(atpbar.funcs_obsolete, '_reporter', mock_reporter)
+    monkeypatch.setattr(atpbar.funcs_obsolete, '_monitor', mock_monitor)
+    monkeypatch.setattr(atpbar.funcs_obsolete, 'do_not_start_monitor', do_not_start_monitor)
 
 def test_start_monitor_if_necessary(mock_atexit, mock_lock, MockProgressMonitor, mock_presentation):
 
-    org_reporter = atpbar.funcs._reporter
-    org_monitor = atpbar.funcs._monitor
-    org_do_not_start_monitor = atpbar.funcs.do_not_start_monitor
+    org_reporter = atpbar.funcs_obsolete._reporter
+    org_monitor = atpbar.funcs_obsolete._monitor
+    org_do_not_start_monitor = atpbar.funcs_obsolete.do_not_start_monitor
 
     _start_monitor_if_necessary()
 
     assert [mock.call.acquire(), mock.call.release()] == mock_lock.method_calls
 
-    assert org_do_not_start_monitor == atpbar.funcs.do_not_start_monitor
+    assert org_do_not_start_monitor == atpbar.funcs_obsolete.do_not_start_monitor
 
     if org_do_not_start_monitor:
-        assert atpbar.funcs._reporter is org_reporter
-        assert atpbar.funcs._monitor is org_monitor
+        assert atpbar.funcs_obsolete._reporter is org_reporter
+        assert atpbar.funcs_obsolete._monitor is org_monitor
         assert not mock_atexit.register.call_args_list
         return
 
     if org_reporter:
-        assert atpbar.funcs._reporter is org_reporter
-        assert atpbar.funcs._monitor is org_monitor
+        assert atpbar.funcs_obsolete._reporter is org_reporter
+        assert atpbar.funcs_obsolete._monitor is org_monitor
         assert not mock_atexit.register.call_args_list
         return
 
@@ -93,8 +93,8 @@ def test_start_monitor_if_necessary(mock_atexit, mock_lock, MockProgressMonitor,
     assert [mock.call(presentation=mock_presentation)] == MockProgressMonitor.call_args_list
     assert [mock.call()] == MockProgressMonitor().begin.call_args_list
 
-    assert atpbar.funcs._monitor is MockProgressMonitor()
-    assert atpbar.funcs._reporter is MockProgressMonitor().create_reporter()
+    assert atpbar.funcs_obsolete._monitor is MockProgressMonitor()
+    assert atpbar.funcs_obsolete._reporter is MockProgressMonitor().create_reporter()
 
     assert 1 == (len(mock_atexit.register.call_args_list))
 
