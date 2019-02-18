@@ -9,8 +9,8 @@ Progress bars for threading and multiprocessing tasks on terminal and
 Jupyter Notebook.
 
 The code in *atpbar* started its development in 2015 as part of
-`alphatwirl <https://github.com/alphatwirl/alphatwirl>`__. It has been a
-sub-package, *progressbar*, of alphatwirl. It became an independent
+`alphatwirl <https://github.com/alphatwirl/alphatwirl>`__. It had been a
+sub-package, *progressbar*, of alphatwirl until it became an independent
 package in February 2019. *atpbar* can display multiple progress bars
 simultaneously growing to show the progresses of iterations of loops
 in `threading <https://docs.python.org/3/library/threading.html>`__ or
