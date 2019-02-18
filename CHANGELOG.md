@@ -3,6 +3,12 @@
 ## [Unreleased]
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.2...master))
+- fixed the problem of returning from the outermost `atpbar` in the
+  single thread. This problem was causing, for example, the command
+  prompt to already have appeared while the progress bars were still
+  growing in the interactive mode.
+- added a new function `flush()`, which returns after the progress
+  bars finished updating -- useful for threading and multiprocessing
 
 ## [0.9.2] - 2019-02-17
 
