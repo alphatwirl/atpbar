@@ -2,10 +2,17 @@
 
 ## [Unreleased]
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.3...master))
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.4...master))
+
+## [0.9.4] - 2019-02-18
+
+**PyPI**: https://pypi.org/project/atpbar/0.9.4/
+
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.3...v0.9.4))
 - fixed the problem whereby the pickup doesn't end if the loop ends
   with `break`.
 - made a presentation every time a pickup is created.
+- updated tests
 
 ## [0.9.3] - 2019-02-18
 
