@@ -47,12 +47,13 @@ def fetch_reporter():
     started = _start_pickup_if_necessary()
     _lock.release()
 
-    yield _reporter
-
     need_end_pickup = started and in_main_thread()
 
-    if need_end_pickup:
-        _end_pickup()
+    try:
+        yield _reporter
+    finally:
+        if need_end_pickup:
+            _end_pickup()
 
 def in_main_thread():
     try:
