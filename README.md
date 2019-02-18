@@ -176,8 +176,7 @@ progress bars for active tasks are at the bottom.
 
 ### Multiprocessing
 
-`atpbar` can be used with `multiprocessing`. A few extra lines of code
-need to be added.
+`atpbar` can be used with `multiprocessing`.
 
 The function `run_with_multiprocessing()` in the following code shows
 an example.
