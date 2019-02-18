@@ -41,7 +41,7 @@ Notebook](https://jupyter.org/).
 
 ## Requirement
 
-- Python 2.7, 3.6, 3.7
+- Python 2.7, 3.6, or 3.7
 
 *****
 
@@ -59,7 +59,7 @@ $ pip install -U atpbar
 
 I will show here how to use atpbar by simple examples.
 
-These examples can be also run on Jupyter Notebook:
+These examples can be also run on Jupyter Notebook. <br />
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/alphatwirl/notebook-atpbar-001/master?filepath=atpbar.ipynb)
 
 
