@@ -44,14 +44,22 @@ def fetch_reporter():
     global _reporter
 
     _lock.acquire()
-    _need_end_pickup = _start_pickup_if_necessary()
+    started = _start_pickup_if_necessary()
     _lock.release()
 
     yield _reporter
 
-    if _need_end_pickup:
+    need_end_pickup = started and in_main_thread()
+
+    if need_end_pickup:
         _end_pickup()
-        _reporter = None
+
+def in_main_thread():
+    try:
+        return threading.current_thread() == threading.main_thread()
+    except:
+        # python 2
+        return isinstance(threading.current_thread(), threading._MainThread)
 
 ##__________________________________________________________________||
 def _start_pickup_if_necessary():
@@ -77,11 +85,16 @@ def _start_pickup_if_necessary():
 
 ##__________________________________________________________________||
 def _end_pickup():
+    global _lock
     global _queue
     global _pickup
+    global _reporter
+    _lock.acquire()
     if _pickup:
         _queue.put(None)
         _pickup.join()
         _pickup = None
+    _reporter = None
+    _lock.release()
 
 ##__________________________________________________________________||
