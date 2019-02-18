@@ -3,7 +3,7 @@
 import time, random
 import threading
 
-from atpbar import atpbar
+from atpbar import atpbar, flush
 
 ##__________________________________________________________________||
 def task(n, name):
@@ -23,5 +23,7 @@ for i in range(nthreads):
 
 for t in threads:
     t.join()
+
+flush()
 
 ##__________________________________________________________________||
