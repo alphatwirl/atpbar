@@ -3,8 +3,7 @@ import uuid
 import logging
 
 from .report import ProgressReport
-from .funcs2 import fetch_reporter
-# from .funcs import find_reporter
+from .funcs import fetch_reporter
 
 ##__________________________________________________________________||
 def atpbar(iterable, name=None):
