@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.5...master))
+- updated .travis.yml, adding a test without jupyter
+- updated tests
 
 ## [0.9.5] - 2019-02-18
 
