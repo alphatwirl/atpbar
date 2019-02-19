@@ -5,10 +5,16 @@ language: python
 matrix:
     include:
         - python: 2.7
+          env: JUPYTER=true
         - python: 3.6
+          env: JUPYTER=true
+        - python: 3.6
+          env: JUPYTER=false
         - python: 3.7
+          env: JUPYTER=true
     allow_failures:
         - python: 3.7
+          env: JUPYTER=true
 
 install:
   - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then curl --silent http://repo.continuum.io/miniconda/Miniconda-latest-MacOSX-x86_64.sh -o miniconda.sh; fi
@@ -24,7 +30,9 @@ install:
   - conda create -q -n testenv python=${TRAVIS_PYTHON_VERSION}
   - export CONDA_ENV_PATH=$HOME/miniconda/envs/testenv
   - source activate testenv
-  - pip install jupyter
+  - if "$JUPYTER"; then
+        pip install jupyter;
+    fi
   - pip install -r requirements/test.txt
 
 script:
@@ -45,3 +53,4 @@ deploy:
   on:
     tags: true
     python: 3.6
+    condition: $JUPYTER == true && $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+$
