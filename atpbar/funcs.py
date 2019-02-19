@@ -5,7 +5,6 @@ import threading
 import multiprocessing
 import contextlib
 
-from .monitor import ProgressMonitor
 from .reporter import ProgressReporter
 from .pickup import ProgressReportPickup
 from .presentation.create import create_presentation
