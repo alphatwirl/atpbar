@@ -44,7 +44,7 @@ independent package in February 2019.
 - On terminal
     - Python 2.7, 3.6, or 3.7
 - On Jupyter Notebook
-    - Python 3.6, or 3.7
+    - Python 3.6 or 3.7
 
 *****
 
