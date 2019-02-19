@@ -14,6 +14,7 @@ _presentation = None
 _reporter = None
 _pickup = None
 _queue = None
+_detach_pickup = False
 _lock = threading.Lock()
 
 ##__________________________________________________________________||
@@ -46,9 +47,12 @@ atexit.register(flush)
 def fetch_reporter():
     global _lock
     global _reporter
+    global _detach_pickup
 
     _lock.acquire()
     started = _start_pickup_if_necessary()
+    if not in_main_thread():
+        _detach_pickup = True
     _lock.release()
 
     own_pickup = started and in_main_thread()
@@ -57,6 +61,8 @@ def fetch_reporter():
         yield _reporter
     finally:
         _lock.acquire()
+        if _detach_pickup:
+            own_pickup = False
         if own_pickup:
             _end_pickup()
         _lock.release()
@@ -101,6 +107,7 @@ def _end_pickup():
         _pickup.join()
         _pickup = None
         _presentation = None
+        _detach_pickup = False
     _reporter = None
 
 ##__________________________________________________________________||

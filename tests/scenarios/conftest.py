@@ -36,6 +36,7 @@ def global_variables(monkeypatch):
     monkeypatch.setattr(module, '_reporter', None)
     monkeypatch.setattr(module, '_pickup', None)
     monkeypatch.setattr(module, '_queue', None)
+    monkeypatch.setattr(module, '_detach_pickup', None)
     monkeypatch.setattr(module, '_lock', threading.Lock())
     yield
     flush()
