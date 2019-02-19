@@ -1,25 +1,11 @@
 from setuptools import setup, find_packages
 import versioneer
 
-long_description = """
-atpbar
-------
+import os
 
-Progress bars for threading and multiprocessing tasks on terminal and
-Jupyter Notebook.
-
-The code in *atpbar* started its development in 2015 as part of
-`alphatwirl <https://github.com/alphatwirl/alphatwirl>`__. It had been a
-sub-package, *progressbar*, of alphatwirl until it became an independent
-package in February 2019. *atpbar* can display multiple progress bars
-simultaneously growing to show the progresses of iterations of loops
-in `threading <https://docs.python.org/3/library/threading.html>`__ or
-`multiprocessing <https://docs.python.org/3/library/multiprocessing.html>`__
-tasks. *atpbar* can display progress bars on terminal and `Jupyter
-Notebook <https://jupyter.org/>`__.
-
-- How to use atpbar is explained at https://github.com/alphatwirl/atpbar.
-"""
+here = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name='atpbar',
@@ -27,6 +13,7 @@ setup(
     cmdclass=versioneer.get_cmdclass(),
     description='Progress bars for threading and multiprocessing tasks',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     author='Tai Sakuma',
     author_email='tai.sakuma@gmail.com',
     url='https://github.com/alphatwirl/atpbar',
