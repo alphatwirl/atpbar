@@ -6,14 +6,8 @@ import multiprocessing
 
 import pytest
 
-try:
-    import unittest.mock as mock
-except ImportError:
-    import mock
-
 from atpbar import atpbar
 from atpbar import register_reporter, find_reporter, flush
-from atpbar.presentation.base import Presentation
 
 ##__________________________________________________________________||
 def test_one_loop(mock_progressbar):
