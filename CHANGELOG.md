@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.5...master))
+- stopped `atpbar` waiting for all progress bars to finish updating if
+  another `atpbar` starts in another thread.
 - updated .travis.yml, adding a test without jupyter
 - updated tests
 - cleaned code
