@@ -28,9 +28,6 @@ class ProgressPrint(Presentation):
         self.last_time[report.taskid] = self._time()
 
     def _present(self, report):
-        pass
-
-    def _present(self, report):
         time_ = time.strftime('%m/%d %H:%M', time.localtime(time.time()))
         percent = float(report.done)/report.total if report.total > 0 else 1
         percent = round(percent * 100, 2)
