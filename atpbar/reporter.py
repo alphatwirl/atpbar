@@ -5,21 +5,19 @@ import time
 class ProgressReporter(object):
     """A progress reporter
 
-    This class sends a `ProgressReport` to a progress monitor, e.g.,
-    `ProgressMonitor` or `ProgressMonitor`, which, for example, uses
-    the reports to update `ProgressBar` on the screen.
+    This class sends progress reports (`ProgressReport`). The reports
+    will be picked up by the pickup (`ProgressReportPickup`), which
+    uses the reports, for example, to update `ProgressBar` on the
+    screen.
 
     An instance of this class is initialized with a message queue::
 
         reporter = ProgressReporter(queue)
 
-    A reporter, an instance of this class, is typically created and
-    initialized by a progress monitor (`ProgressMonitor` or
-    `ProgressMonitor`), which keeps the other end of the message
-    queue. A reporter and a monitor might be running in different
-    processes.
+    The pickup, which is running in a sub-thread of the main process,
+    needs to have the same queue.
 
-    A report, an instance of `ProgressReport`, can be sent as::
+    A report (`ProgressReport`), can be sent as::
 
         reporter.report(report)
 
