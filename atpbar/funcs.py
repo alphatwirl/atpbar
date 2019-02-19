@@ -34,7 +34,10 @@ def register_reporter(reporter):
 
 ##__________________________________________________________________||
 def flush():
+    global _lock
+    _lock.acquire()
     _end_pickup()
+    _lock.release()
 
 atexit.register(flush)
 
@@ -87,18 +90,15 @@ def _start_pickup_if_necessary():
 
 ##__________________________________________________________________||
 def _end_pickup():
-    global _lock
     global _queue
     global _presentation
     global _pickup
     global _reporter
-    _lock.acquire()
     if _pickup:
         _queue.put(None)
         _pickup.join()
         _pickup = None
         _presentation = None
     _reporter = None
-    _lock.release()
 
 ##__________________________________________________________________||
