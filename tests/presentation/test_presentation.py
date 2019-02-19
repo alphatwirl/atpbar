@@ -32,8 +32,15 @@ def test_presentation(Class):
     obj.present(ProgressReport('task1', 0, 10, 1))
     obj.present(ProgressReport('task1', 2, 10, 1))
     obj.active()
+    obj.present(ProgressReport('task1', 0, 5, 2))
+    obj.present(ProgressReport('task1', 3, 5, 2))
+    obj.active()
     obj.present(ProgressReport('task1', 10, 10, 1))
     obj.active()
+    obj.present(ProgressReport('task1', 5, 5, 2))
+    obj.active()
+    obj.active()
+    obj.present(ProgressReport('task1', 10, 10, 1))
     obj.active()
 
 ##__________________________________________________________________||
