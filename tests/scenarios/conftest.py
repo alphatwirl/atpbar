@@ -12,6 +12,8 @@ except ImportError:
 from atpbar import flush
 from atpbar.presentation.base import Presentation
 
+from atpbar.funcs import _end_pickup
+
 ##__________________________________________________________________||
 @pytest.fixture()
 def mock_progressbar():
@@ -36,5 +38,13 @@ def global_variables(monkeypatch):
     monkeypatch.setattr(module, '_lock', threading.Lock())
     yield
     flush()
+
+##__________________________________________________________________||
+@pytest.fixture(autouse=True)
+def wrap_end_pickup(monkeypatch):
+    ret = mock.Mock(wraps=_end_pickup)
+    module = sys.modules['atpbar.funcs']
+    monkeypatch.setattr(module, '_end_pickup', ret)
+    yield ret
 
 ##__________________________________________________________________||
