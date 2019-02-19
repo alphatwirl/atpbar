@@ -57,8 +57,8 @@ class ProgressBarJupyter(Presentation):
 
         if not self._new_taskids and not self._active_taskids:
             self.container_widget = None
-            self.active_box_list.clear()
-            self.complete_box_list.clear()
+            self.active_box_list[:] = [ ]
+            self.complete_box_list[:] = [ ]
             self.widget_dict.clear()
 
     def _update_widget(self, report):
