@@ -36,6 +36,8 @@ def register_reporter(reporter):
 def flush():
     _end_pickup()
 
+atexit.register(flush)
+
 ##__________________________________________________________________||
 @contextlib.contextmanager
 def fetch_reporter():
@@ -98,7 +100,5 @@ def _end_pickup():
         _presentation = None
     _reporter = None
     _lock.release()
-
-atexit.register(_end_pickup)
 
 ##__________________________________________________________________||
