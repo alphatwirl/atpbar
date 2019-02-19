@@ -80,7 +80,6 @@ def _start_pickup_if_necessary():
                           # registered at atexit called even
                           # if the pickup is still running
     _pickup.start()
-    atexit.register(_end_pickup)
 
     return True
 
@@ -99,5 +98,7 @@ def _end_pickup():
         _presentation = None
     _reporter = None
     _lock.release()
+
+atexit.register(_end_pickup)
 
 ##__________________________________________________________________||
