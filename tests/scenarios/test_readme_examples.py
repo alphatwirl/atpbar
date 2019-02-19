@@ -10,15 +10,17 @@ from atpbar import atpbar
 from atpbar import register_reporter, find_reporter, flush
 
 ##__________________________________________________________________||
-def test_one_loop(mock_progressbar):
+def test_one_loop(mock_progressbar, wrap_end_pickup):
     for i in atpbar(range(4)):
         pass
+    assert 1 == wrap_end_pickup.call_count
     assert len(mock_progressbar.present.call_args_list) >= 2
 
-def test_nested_loops(mock_progressbar):
+def test_nested_loops(mock_progressbar, wrap_end_pickup):
     for i in atpbar(range(4)):
         for j in atpbar(range(3)):
             pass
+    assert 1 == wrap_end_pickup.call_count
     assert len(mock_progressbar.present.call_args_list) >= 2 + 2*3
 
 ##__________________________________________________________________||
@@ -38,8 +40,9 @@ def run_with_threading():
         t.join()
     flush()
 
-def test_threading(mock_progressbar):
+def test_threading(mock_progressbar, wrap_end_pickup):
     run_with_threading()
+    assert 1 == wrap_end_pickup.call_count
     assert len(mock_progressbar.present.call_args_list) >= 3*2
 
 ##__________________________________________________________________||
@@ -74,8 +77,9 @@ def run_with_multiprocessing():
         queue.join()
     flush()
 
-def test_multiprocessing(mock_progressbar):
+def test_multiprocessing(mock_progressbar, wrap_end_pickup):
     run_with_multiprocessing()
+    assert 1 == wrap_end_pickup.call_count
     assert len(mock_progressbar.present.call_args_list) >= 6*2
 
 ##__________________________________________________________________||
