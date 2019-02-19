@@ -102,6 +102,7 @@ def _end_pickup():
     global _presentation
     global _pickup
     global _reporter
+    global _detach_pickup
     if _pickup:
         _queue.put(None)
         _pickup.join()
