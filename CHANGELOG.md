@@ -2,7 +2,14 @@
 
 ## [Unreleased]
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.4...master))
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.5...master))
+
+## [0.9.5] - 2019-02-18
+
+**PyPI**: https://pypi.org/project/atpbar/0.9.5/
+
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.4...v0.9.5))
+- made the long description in `setup.py` load from `README.md`
 - updated tests
 
 ## [0.9.4] - 2019-02-18
