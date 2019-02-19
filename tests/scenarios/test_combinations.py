@@ -26,6 +26,11 @@ def test_launching_threads_in_monitored_loop(mock_progressbar, wrap_end_pickup):
         nthreads = 3
         threads = [ ]
         for i in atpbar(range(nthreads)):
+            # `atpbar` is used to show a progress bar for the progress
+            # of launching threads in which `atpbar` is also used.
+            # This loop should ends without waiting for all progress
+            # bars to finish updating.
+
             name = 'thread {}'.format(i)
             n = random.randint(5, 10)
             t = threading.Thread(target=task, args=(n, name))
@@ -38,5 +43,9 @@ def test_launching_threads_in_monitored_loop(mock_progressbar, wrap_end_pickup):
     run_with_threading()
     assert 1 == wrap_end_pickup.call_count
     assert len(mock_progressbar.present.call_args_list) >= 3*2
+
+    for i in atpbar(range(4)):
+        pass
+    assert 2 == wrap_end_pickup.call_count
 
 ##__________________________________________________________________||
