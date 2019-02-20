@@ -50,3 +50,10 @@ def wrap_end_pickup(monkeypatch):
     yield ret
 
 ##__________________________________________________________________||
+@pytest.fixture(autouse=True)
+def reporter_interval(monkeypatch):
+    module = sys.modules['atpbar.reporter']
+    monkeypatch.setattr(module, 'DEFAULT_INTERVAL', 0)
+    yield
+
+##__________________________________________________________________||
