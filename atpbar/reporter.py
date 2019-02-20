@@ -2,6 +2,9 @@
 import time
 
 ##__________________________________________________________________||
+DEFAULT_INTERVAL = 0.1 # [second]
+
+##__________________________________________________________________||
 class ProgressReporter(object):
     """A progress reporter
 
@@ -33,7 +36,7 @@ class ProgressReporter(object):
     """
     def __init__(self, queue):
         self.queue = queue
-        self.interval = 0.1 # [second]
+        self.interval = DEFAULT_INTERVAL # [second]
         self.last_time = { } # key: taskid
 
     def __repr__(self):
