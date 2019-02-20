@@ -19,6 +19,19 @@ _lock = threading.Lock()
 
 ##__________________________________________________________________||
 def find_reporter():
+    """returns the progress reporter
+
+    This function is to be called in the main process of a
+    multiprocessing program. The reporter should be registered in
+    sub-processes with the function `register_reporter()`
+
+    Returns
+    -------
+    object
+        The progress reporter
+
+    """
+
     global _lock
     global _reporter
 
@@ -30,11 +43,39 @@ def find_reporter():
 
 ##__________________________________________________________________||
 def register_reporter(reporter):
+    """registers a reporter
+
+    This function is to be called in sub-processes of a
+    multiprocessing program.
+
+    Parameters
+    ----------
+    reporter : object
+        The reporter obtained in the main process by the function
+        `find_reporter()`
+
+
+    Returns
+    -------
+    None
+
+    """
+
     global _reporter
     _reporter = reporter
 
 ##__________________________________________________________________||
 def flush():
+    """flushes progress bars
+
+    This function flushes all active progress bars. It returns when
+    the progress bars finish updating.
+
+    Returns
+    -------
+    None
+
+    """
     global _lock
     _lock.acquire()
     _end_pickup()
