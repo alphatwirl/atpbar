@@ -6,6 +6,7 @@
 - stopped `atpbar` waiting for all progress bars to finish updating if
   another `atpbar` starts in another thread.
 - updated .travis.yml, adding a test without jupyter
+- updated docstrings
 - updated tests
 - cleaned code
 
