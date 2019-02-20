@@ -8,22 +8,21 @@ class ProgressReport(object):
     ----------
     name : str
         A name of the task. It will be use as the label on the
-        progress bars. If ``taskid`` is ``None``, it will be used to
-        identify the task as well
+        progress bars.
     done : int
         The number of the iterations done so far
     total : int
         The total iterations to be done
-    taskid : immutable, optional
-        The task ID. If not given `name` will be used.
+    taskid : immutable
+        The unique task ID.
 
     """
 
-    def __init__(self, name, done, total, taskid=None):
-        self.taskid = taskid if taskid is not None else name
+    def __init__(self, name, done, total, taskid):
         self.name = name
         self.done = done
         self.total = total
+        self.taskid = taskid
 
     def __repr__(self):
         name_value_pairs = (
