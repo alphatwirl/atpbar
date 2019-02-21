@@ -29,9 +29,7 @@ class ProgressReportPickup(threading.Thread):
                 report = self.queue.get()
                 if report is None: # the end order
                     end_order_arrived = True
-                    print('end_order_arrived')
                     continue
-                print(report)
                 self._process_report(report)
 
     def _run_until_reports_stop_coming(self):
