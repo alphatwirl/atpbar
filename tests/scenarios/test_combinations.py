@@ -28,7 +28,7 @@ def test_one_loop_raise(mock_progressbar, wrap_end_pickup):
 
 
 ##__________________________________________________________________||
-def test_launching_threads_in_monitored_loop(mock_progressbar, wrap_end_pickup):
+def test_nested_threading_from_loop(mock_progressbar, wrap_end_pickup):
     def run_with_threading():
 
         def task(n, name):
@@ -50,7 +50,7 @@ def test_launching_threads_in_monitored_loop(mock_progressbar, wrap_end_pickup):
             t.start()
             threads.append(t)
 
-            time.sleep(0.0001)
+            time.sleep(0.01)
             # sleep sometime so this loop doesn't end too quickly. If
             # the loop ends before `atpbar()` is called in any of the
             # threads, `_end_pickup()` will be called twice and the
