@@ -16,11 +16,8 @@ class ProgressReportPickup(threading.Thread):
         self.last_wait_time = 1.0 # [second]
 
     def run(self):
-        try:
-            self._run_until_the_end_order_arrives()
-            self._run_until_reports_stop_coming()
-        except KeyboardInterrupt:
-            pass
+        self._run_until_the_end_order_arrives()
+        self._run_until_reports_stop_coming()
 
     def _run_until_the_end_order_arrives(self):
         end_order_arrived = False
