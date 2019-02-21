@@ -2,6 +2,8 @@
 import time, random
 import threading
 
+import pytest
+
 from atpbar import atpbar
 from atpbar import register_reporter, find_reporter, flush
 
@@ -13,9 +15,17 @@ def test_one_loop_break(mock_progressbar, wrap_end_pickup):
     assert 1 == wrap_end_pickup.call_count
 
     # assert len(mock_progressbar.present.call_args_list) >= 2
-
     # FIXME: when the loop breaks, the progress bar should be updated
     # with the last complete loop
+
+def test_one_loop_raise(mock_progressbar, wrap_end_pickup):
+    with pytest.raises(Exception):
+        for i in atpbar(range(4)):
+            if i == 2:
+                raise Exception()
+    assert 1 == wrap_end_pickup.call_count
+    # assert len(mock_progressbar.present.call_args_list) >= 2
+
 
 ##__________________________________________________________________||
 def test_launching_threads_in_monitored_loop(mock_progressbar, wrap_end_pickup):
