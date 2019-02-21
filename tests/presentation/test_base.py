@@ -33,17 +33,17 @@ def test_repr(obj):
 
 ##__________________________________________________________________||
 def test_present(obj):
-    obj.present(ProgressReport('task1', 0, 10, 1))
+    obj.present(ProgressReport('task1', 0, 10, 1, 2342, True))
     assert obj.active()
-    obj.present(ProgressReport('task1', 2, 10, 1))
+    obj.present(ProgressReport('task1', 2, 10, 1, 2342, True))
     assert obj.active()
-    obj.present(ProgressReport('task1', 0, 10, 2))
+    obj.present(ProgressReport('task1', 0, 10, 2, 2342, True))
     assert obj.active()
-    obj.present(ProgressReport('task1', 2, 10, 2))
+    obj.present(ProgressReport('task1', 2, 10, 2, 2342, True))
     assert obj.active()
-    obj.present(ProgressReport('task1', 10, 10, 1))
+    obj.present(ProgressReport('task1', 10, 10, 1, 2342, True))
     assert obj.active()
-    obj.present(ProgressReport('task1', 10, 10, 2))
+    obj.present(ProgressReport('task1', 10, 10, 2, 2342, True))
     assert not obj.active()
 
 ##__________________________________________________________________||
@@ -51,31 +51,31 @@ params = [
 
     ##
     pytest.param(
-        ProgressReport('task1', 0, 10, 1),
+        ProgressReport('task1', 0, 10, 1, 2342, True),
         [ ], [ ], [ ], [ ],
         [1], [ ], [ ], [ ],
         True
     ),
     pytest.param(
-        ProgressReport('task1', 0, 10, 1),
+        ProgressReport('task1', 0, 10, 1, 2342, True),
         [1], [ ], [ ], [ ],
         [1], [ ], [ ], [ ],
         True
     ),
     pytest.param(
-        ProgressReport('task1', 0, 10, 1),
+        ProgressReport('task1', 0, 10, 1, 2342, True),
         [ ], [1], [ ], [ ],
         [ ], [1], [ ], [ ],
         True
     ),
     pytest.param(
-        ProgressReport('task1', 0, 10, 1),
+        ProgressReport('task1', 0, 10, 1, 2342, True),
         [ ], [ ], [1], [ ],
         [ ], [ ], [1], [ ],
         True
     ),
     pytest.param(
-        ProgressReport('task1', 0, 10, 1),
+        ProgressReport('task1', 0, 10, 1, 2342, True),
         [ ], [ ], [ ], [1],
         [ ], [ ], [ ], [1],
         False
@@ -83,31 +83,31 @@ params = [
 
     ##
     pytest.param(
-        ProgressReport('task1', 2, 10, 1),
+        ProgressReport('task1', 2, 10, 1, 2342, True),
         [ ], [ ], [ ], [ ],
         [1], [ ], [ ], [ ],
         True
     ),
     pytest.param(
-        ProgressReport('task1', 2, 10, 1),
+        ProgressReport('task1', 2, 10, 1, 2342, True),
         [1], [ ], [ ], [ ],
         [1], [ ], [ ], [ ],
         True
     ),
     pytest.param(
-        ProgressReport('task1', 2, 10, 1),
+        ProgressReport('task1', 2, 10, 1, 2342, True),
         [ ], [1], [ ], [ ],
         [ ], [1], [ ], [ ],
         True
     ),
     pytest.param(
-        ProgressReport('task1', 2, 10, 1),
+        ProgressReport('task1', 2, 10, 1, 2342, True),
         [ ], [ ], [1], [ ],
         [ ], [ ], [1], [ ],
         True
     ),
     pytest.param(
-        ProgressReport('task1', 2, 10, 1),
+        ProgressReport('task1', 2, 10, 1, 2342, True),
         [ ], [ ], [ ], [1],
         [ ], [ ], [ ], [1],
         False
@@ -115,31 +115,31 @@ params = [
 
     ##
     pytest.param(
-        ProgressReport('task1', 10, 10, 1),
+        ProgressReport('task1', 10, 10, 1, 2342, True),
         [ ], [ ], [ ], [ ],
         [ ], [ ], [1], [ ],
         True
     ),
     pytest.param(
-        ProgressReport('task1', 10, 10, 1),
+        ProgressReport('task1', 10, 10, 1, 2342, True),
         [1], [ ], [ ], [ ],
         [ ], [ ], [1], [ ],
         True
     ),
     pytest.param(
-        ProgressReport('task1', 10, 10, 1),
+        ProgressReport('task1', 10, 10, 1, 2342, True),
         [ ], [1], [ ], [ ],
         [ ], [ ], [1], [ ],
         True
     ),
     pytest.param(
-        ProgressReport('task1', 10, 10, 1),
+        ProgressReport('task1', 10, 10, 1, 2342, True),
         [ ], [ ], [1], [ ],
         [ ], [ ], [1], [ ],
         True
     ),
     pytest.param(
-        ProgressReport('task1', 10, 10, 1),
+        ProgressReport('task1', 10, 10, 1, 2342, True),
         [ ], [ ], [ ], [1],
         [ ], [ ], [ ], [1],
         False

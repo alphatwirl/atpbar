@@ -1,9 +1,9 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-import uuid
+import os, uuid
 import logging
 
 from .report import ProgressReport
-from .funcs import fetch_reporter
+from .funcs import fetch_reporter, in_main_thread
 
 ##__________________________________________________________________||
 def atpbar(iterable, name=None):
@@ -60,6 +60,8 @@ class Atpbar(object):
         self.name = name
         self.len_ = len_
         self.id_ = uuid.uuid4()
+        self.pid = os.getpid()
+        self.in_main_thread = in_main_thread()
 
     def __iter__(self):
         with fetch_reporter() as reporter:
@@ -75,7 +77,8 @@ class Atpbar(object):
         try:
             report = ProgressReport(
                 name=self.name, done=(i+1),
-                total=self.len_, taskid=self.id_)
+                total=self.len_, taskid=self.id_,
+                pid=self.pid, in_main_thread=self.in_main_thread)
             self.reporter.report(report)
         except:
             pass
