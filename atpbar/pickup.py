@@ -1,6 +1,8 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
+import os, time
 import threading
-import time
+
+from . import funcs
 
 ##__________________________________________________________________||
 class ProgressReportPickup(threading.Thread):
@@ -14,6 +16,7 @@ class ProgressReportPickup(threading.Thread):
         self.queue = queue
         self.presentation = presentation
         self.last_wait_time = 1.0 # [second]
+        self.taskids = set()
 
     def run(self):
         self._run_until_the_end_order_arrives()
@@ -26,7 +29,9 @@ class ProgressReportPickup(threading.Thread):
                 report = self.queue.get()
                 if report is None: # the end order
                     end_order_arrived = True
+                    print('end_order_arrived')
                     continue
+                print(report)
                 self._process_report(report)
 
     def _run_until_reports_stop_coming(self):
@@ -42,7 +47,16 @@ class ProgressReportPickup(threading.Thread):
                 self._process_report(report)
 
     def _process_report(self, report):
+        self._detach_self_if_necessary(report)
         self.presentation.present(report)
+
+    def _detach_self_if_necessary(self, report):
+        if report.taskid in self.taskids:
+            return
+        self.taskids.add(report.taskid)
+        if os.getpid() == report.pid and report.in_main_thread:
+            return
+        funcs.detach_pickup()
 
     def _time(self):
         return time.time()

@@ -104,8 +104,6 @@ def fetch_reporter():
 
     _lock.acquire()
     started = _start_pickup_if_necessary()
-    if not in_main_thread():
-        _detach_pickup = True
     _lock.release()
 
     own_pickup = started and in_main_thread()
