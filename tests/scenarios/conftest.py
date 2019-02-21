@@ -36,9 +36,13 @@ def global_variables(monkeypatch):
     monkeypatch.setattr(module, '_reporter', None)
     monkeypatch.setattr(module, '_pickup', None)
     monkeypatch.setattr(module, '_queue', None)
-    monkeypatch.setattr(module, '_detach_pickup', False)
     monkeypatch.setattr(module, '_lock', threading.Lock())
+
+    module = sys.modules['atpbar.detach']
+    monkeypatch.setattr(module, 'to_detach_pickup', False)
+
     yield
+
     flush()
 
 ##__________________________________________________________________||

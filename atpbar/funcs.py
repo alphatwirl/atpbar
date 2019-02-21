@@ -6,15 +6,15 @@ import multiprocessing
 import contextlib
 
 from .reporter import ProgressReporter
-from . import pickup
+from .pickup import ProgressReportPickup
 from .presentation.create import create_presentation
+from . import detach
 
 ##__________________________________________________________________||
 _presentation = None
 _reporter = None
 _pickup = None
 _queue = None
-_detach_pickup = False
 _lock = threading.Lock()
 
 ##__________________________________________________________________||
@@ -84,23 +84,10 @@ def flush():
 atexit.register(flush)
 
 ##__________________________________________________________________||
-def detach_pickup():
-    global _lock
-    global _detach_pickup
-    # _lock.acquire() # This lock causes a deadlock. `flush()` locks while
-                      # ending the pickup. Before receiving the end order, the
-                      # pickup might still receives a report with a new task ID
-                      # from a sub-thread or sub-process, it will call this
-                      # function and will cause a deadlock.
-    _detach_pickup = True
-    # _lock.release()
-
-##__________________________________________________________________||
 @contextlib.contextmanager
 def fetch_reporter():
     global _lock
     global _reporter
-    global _detach_pickup
 
     _lock.acquire()
     started = _start_pickup_if_necessary()
@@ -112,7 +99,8 @@ def fetch_reporter():
         yield _reporter
     finally:
         _lock.acquire()
-        if _detach_pickup:
+        ## print('fetch_reporter _lock.acquire() 2')
+        if detach.to_detach_pickup:
             own_pickup = False
         if own_pickup:
             _end_pickup()
@@ -140,7 +128,7 @@ def _start_pickup_if_necessary():
 
     _reporter = ProgressReporter(queue=_queue)
     _presentation = create_presentation()
-    _pickup = pickup.ProgressReportPickup(_queue, _presentation)
+    _pickup = ProgressReportPickup(_queue, _presentation)
     _pickup.daemon = True # this makes the functions
                           # registered at atexit called even
                           # if the pickup is still running
@@ -155,13 +143,12 @@ def _end_pickup():
     global _presentation
     global _pickup
     global _reporter
-    global _detach_pickup
     if _pickup:
         _queue.put(None)
         _pickup.join()
         _pickup = None
         _presentation = None
-        _detach_pickup = False
+        detach.to_detach_pickup = False
     _reporter = None
 
 ##__________________________________________________________________||

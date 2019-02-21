@@ -2,7 +2,7 @@
 import os, time
 import threading
 
-from . import funcs
+from .detach import detach_pickup
 
 ##__________________________________________________________________||
 class ProgressReportPickup(threading.Thread):
@@ -56,7 +56,7 @@ class ProgressReportPickup(threading.Thread):
         self.taskids.add(report.taskid)
         if os.getpid() == report.pid and report.in_main_thread:
             return
-        funcs.detach_pickup()
+        detach_pickup()
 
     def _time(self):
         return time.time()
