@@ -3,8 +3,9 @@
 ## [Unreleased]
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.5...master))
+- fixed the problem of a pickup not running after `flush()`.
 - stopped `atpbar` waiting for all progress bars to finish updating if
-  another `atpbar` starts in another thread.
+  another `atpbar` starts in a sub-thread or sub-process.
 - updated .travis.yml, adding a test without jupyter
 - updated docstrings
 - updated tests
