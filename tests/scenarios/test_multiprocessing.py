@@ -11,7 +11,7 @@ from atpbar import register_reporter, find_reporter, flush
 @pytest.mark.skip() # This test sometime doesn't end. It is not because of a
                     # deadlock of atpbar.funcs._lock. It is because `queue` in
                     # this function doesn't join sometime for an unknown reason
-def test_nested_multiprocessing_from_loop(mock_progressbar, wrap_end_pickup):
+def test_multiprocessing_from_loop(mock_progressbar, wrap_end_pickup):
 
     def task(n, name):
         for i in atpbar(range(n), name=name):
@@ -21,8 +21,6 @@ def test_nested_multiprocessing_from_loop(mock_progressbar, wrap_end_pickup):
         register_reporter(reporter)
         while True:
             args = queue.get()
-            print(args)
-            print(queue.empty())
             if args is None:
                 queue.task_done()
                 break
@@ -52,16 +50,61 @@ def test_nested_multiprocessing_from_loop(mock_progressbar, wrap_end_pickup):
 
     for i in range(nprocesses):
         queue.put(None)
-        print('queue.put(None)')
-        print(reporter.queue.empty())
         queue.join() # This doesn't join sometime
-        print('queue.join()')
 
-    print(wrap_end_pickup.call_count)
     flush()
-    print(wrap_end_pickup.call_count)
 
     assert 1 == wrap_end_pickup.call_count
     assert len(mock_progressbar.present.call_args_list) >= 2 + 6*2
+
+##__________________________________________________________________||
+def test_flush(mock_progressbar, wrap_end_pickup):
+
+    def task(n, name):
+        for i in atpbar(range(n), name=name):
+            time.sleep(0.0001)
+
+    def worker(reporter, task, queue):
+        register_reporter(reporter)
+        while True:
+            args = queue.get()
+            if args is None:
+                queue.task_done()
+                break
+            task(*args)
+            queue.task_done()
+
+    nprocesses = 4
+    processes = [ ]
+
+    reporter = find_reporter()
+    queue = multiprocessing.JoinableQueue()
+
+    for i in atpbar(range(nprocesses)):
+        p = multiprocessing.Process(target=worker, args=(reporter, task, queue))
+        p.start()
+        processes.append(p)
+
+    ntasks = 3
+    for i in atpbar(range(ntasks)):
+        name = 'task {}'.format(i)
+        n = random.randint(5, 10000)
+        queue.put((n, name))
+        time.sleep(0.1)
+
+    flush()
+
+    ntasks = 7
+    for i in range(ntasks):
+        name = 'task {}'.format(i)
+        n = random.randint(5, 10000)
+        queue.put((n, name))
+        time.sleep(0.1)
+
+    for i in range(nprocesses):
+        queue.put(None)
+        queue.join()
+
+    flush()
 
 ##__________________________________________________________________||

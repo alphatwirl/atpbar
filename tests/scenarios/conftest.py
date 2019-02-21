@@ -9,10 +9,9 @@ try:
 except ImportError:
     import mock
 
-from atpbar import flush
 from atpbar.presentation.base import Presentation
 
-from atpbar.funcs import _end_pickup
+from atpbar.funcs import end_pickup, _end_pickup
 
 ##__________________________________________________________________||
 @pytest.fixture()
@@ -32,18 +31,19 @@ def mock_create_presentation(monkeypatch, mock_progressbar):
 @pytest.fixture(autouse=True)
 def global_variables(monkeypatch):
     module = sys.modules['atpbar.funcs']
-    monkeypatch.setattr(module, '_presentation', None)
+    monkeypatch.setattr(module, '_lock', threading.Lock())
+    monkeypatch.setattr(module, '_queue', None)
     monkeypatch.setattr(module, '_reporter', None)
     monkeypatch.setattr(module, '_pickup', None)
-    monkeypatch.setattr(module, '_queue', None)
-    monkeypatch.setattr(module, '_lock', threading.Lock())
+    monkeypatch.setattr(module, '_pickup_owned', False)
+    monkeypatch.setattr(module, '_do_not_start_pickup', False)
 
     module = sys.modules['atpbar.detach']
     monkeypatch.setattr(module, 'to_detach_pickup', False)
 
     yield
 
-    flush()
+    end_pickup()
 
 ##__________________________________________________________________||
 @pytest.fixture(autouse=True)

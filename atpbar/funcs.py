@@ -11,11 +11,12 @@ from .presentation.create import create_presentation
 from . import detach
 
 ##__________________________________________________________________||
-_presentation = None
+_lock = threading.Lock()
+_queue = None
 _reporter = None
 _pickup = None
-_queue = None
-_lock = threading.Lock()
+_pickup_owned = False
+_do_not_start_pickup = False
 
 ##__________________________________________________________________||
 def find_reporter():
@@ -62,7 +63,9 @@ def register_reporter(reporter):
     """
 
     global _reporter
+    global _do_not_start_pickup
     _reporter = reporter
+    _do_not_start_pickup = True
 
 ##__________________________________________________________________||
 def flush():
@@ -79,31 +82,53 @@ def flush():
     global _lock
     _lock.acquire()
     _end_pickup()
+    _start_pickup_if_necessary()
     _lock.release()
 
-atexit.register(flush)
+##__________________________________________________________________||
+def end_pickup():
+    """ends the pickup
+
+    Returns
+    -------
+    None
+
+    """
+    global _lock
+    _lock.acquire()
+    _end_pickup()
+    _lock.release()
+
+atexit.register(end_pickup)
 
 ##__________________________________________________________________||
 @contextlib.contextmanager
 def fetch_reporter():
     global _lock
     global _reporter
+    global _pickup_owned
 
     _lock.acquire()
     started = _start_pickup_if_necessary()
     _lock.release()
 
-    own_pickup = started and in_main_thread()
+    own_pickup = False
+    if in_main_thread():
+        if not _pickup_owned:
+            own_pickup = True
+            _pickup_owned = True
 
     try:
         yield _reporter
     finally:
         _lock.acquire()
-        ## print('fetch_reporter _lock.acquire() 2')
         if detach.to_detach_pickup:
-            own_pickup = False
+            if own_pickup:
+                own_pickup = False
+                _pickup_owned = False
         if own_pickup:
             _end_pickup()
+            _start_pickup_if_necessary()
         _lock.release()
 
 def in_main_thread():
@@ -117,38 +142,40 @@ def in_main_thread():
 def _start_pickup_if_necessary():
     global _reporter
     global _queue
-    global _presentation
     global _pickup
+    global _pickup_owned
+    global _do_not_start_pickup
 
-    if _reporter is not None:
-        return False
+    if _do_not_start_pickup:
+        return
 
-    if _queue is None:
-        _queue = multiprocessing.Queue()
+    if _reporter is None:
+        if _queue is None:
+            _queue = multiprocessing.Queue()
+        _reporter = ProgressReporter(queue=_queue)
 
-    _reporter = ProgressReporter(queue=_queue)
-    _presentation = create_presentation()
-    _pickup = ProgressReportPickup(_queue, _presentation)
+    if _pickup is not None:
+        return
+
+    presentation = create_presentation()
+    _pickup = ProgressReportPickup(_queue, presentation)
     _pickup.daemon = True # this makes the functions
                           # registered at atexit called even
                           # if the pickup is still running
 
     _pickup.start()
+    _pickup_owned = False
 
-    return True
+    return
 
 ##__________________________________________________________________||
 def _end_pickup():
     global _queue
-    global _presentation
     global _pickup
-    global _reporter
     if _pickup:
         _queue.put(None)
         _pickup.join()
         _pickup = None
-        _presentation = None
         detach.to_detach_pickup = False
-    _reporter = None
 
 ##__________________________________________________________________||
