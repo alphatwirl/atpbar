@@ -84,6 +84,18 @@ def flush():
 atexit.register(flush)
 
 ##__________________________________________________________________||
+def detach_pickup():
+    global _lock
+    global _detach_pickup
+    # _lock.acquire() # This lock causes a deadlock. `flush()` locks while
+                      # ending the pickup. Before receiving the end order, the
+                      # pickup might still receives a report with a new task ID
+                      # from a sub-thread or sub-process, it will call this
+                      # function and will cause a deadlock.
+    _detach_pickup = True
+    # _lock.release()
+
+##__________________________________________________________________||
 @contextlib.contextmanager
 def fetch_reporter():
     global _lock
