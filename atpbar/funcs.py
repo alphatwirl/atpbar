@@ -6,7 +6,7 @@ import multiprocessing
 import contextlib
 
 from .reporter import ProgressReporter
-from .pickup import ProgressReportPickup
+from . import pickup
 from .presentation.create import create_presentation
 
 ##__________________________________________________________________||
@@ -142,7 +142,7 @@ def _start_pickup_if_necessary():
 
     _reporter = ProgressReporter(queue=_queue)
     _presentation = create_presentation()
-    _pickup = ProgressReportPickup(_queue, _presentation)
+    _pickup = pickup.ProgressReportPickup(_queue, _presentation)
     _pickup.daemon = True # this makes the functions
                           # registered at atexit called even
                           # if the pickup is still running
