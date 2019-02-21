@@ -127,12 +127,14 @@ def _start_pickup_if_necessary():
 
     if _queue is None:
         _queue = multiprocessing.Queue()
+
     _reporter = ProgressReporter(queue=_queue)
     _presentation = create_presentation()
     _pickup = ProgressReportPickup(_queue, _presentation)
     _pickup.daemon = True # this makes the functions
                           # registered at atexit called even
                           # if the pickup is still running
+
     _pickup.start()
 
     return True
