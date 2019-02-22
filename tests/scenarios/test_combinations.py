@@ -12,10 +12,7 @@ def test_one_loop_break(mock_progressbar, wrap_end_pickup):
         if i == 2:
             break
     assert 1 == wrap_end_pickup.call_count
-
-    # assert len(mock_progressbar.present.call_args_list) >= 2
-    # FIXME: when the loop breaks, the progress bar should be updated
-    # with the last complete loop
+    assert len(mock_progressbar.present.call_args_list) >= 2
 
 def test_one_loop_raise(mock_progressbar, wrap_end_pickup):
     with pytest.raises(Exception):
@@ -23,7 +20,7 @@ def test_one_loop_raise(mock_progressbar, wrap_end_pickup):
             if i == 2:
                 raise Exception()
     assert 1 == wrap_end_pickup.call_count
-    # assert len(mock_progressbar.present.call_args_list) >= 2
+    assert len(mock_progressbar.present.call_args_list) >= 2
 
 
 ##__________________________________________________________________||

@@ -62,13 +62,14 @@ def test_atpbar_name_repr(mock_fetch_reporter, mock_reporter, caplog):
     assert content == returned
 
     ##
-    assert len(content) + 1 == len(mock_reporter.report.call_args_list)
-    for i, c in enumerate(mock_reporter.report.call_args_list):
-        args, kwargs = c
-        report = args[0]
-        assert i == report['done']
-        assert len(content) == report['total']
-        assert 'Iter' == report['name'] # repr(iterable)
+    assert len(content) + 1 + 1 == len(mock_reporter.report.call_args_list)
+
+    # first report
+    args, _ = mock_reporter.report.call_args_list[0]
+    report = args[0]
+    assert 0 == report['done']
+    assert len(content) == report['total']
+    assert 'Iter' == report['name'] # repr(iterable)
 
 ##__________________________________________________________________||
 def test_atpbar_name_given(mock_fetch_reporter, mock_reporter, caplog):
@@ -80,13 +81,14 @@ def test_atpbar_name_given(mock_fetch_reporter, mock_reporter, caplog):
     assert content == returned
 
     ##
-    assert len(content) + 1 == len(mock_reporter.report.call_args_list)
-    for i, c in enumerate(mock_reporter.report.call_args_list):
-        args, kwargs = c
-        report = args[0]
-        assert i == report['done']
-        assert len(content) == report['total']
-        assert 'given' == report['name']
+    assert len(content) + 1 + 1 == len(mock_reporter.report.call_args_list)
+
+    # first report
+    args, _ = mock_reporter.report.call_args_list[0]
+    report = args[0]
+    assert 0 == report['done']
+    assert len(content) == report['total']
+    assert 'given' == report['name']
 
 ##__________________________________________________________________||
 def test_atpbar_raise(mock_fetch_reporter_raise, mock_reporter, caplog):
