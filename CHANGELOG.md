@@ -2,7 +2,13 @@
 
 ## [Unreleased]
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.5...master))
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.6...master))
+
+## [0.9.6] - 2019-02-22
+
+**PyPI**: https://pypi.org/project/atpbar/0.9.6/
+
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.5...v0.9.6))
 - updated the feature
     - The progress bars will be updated with the last complete
       iteration even if the loop ends with `break` or an exception
