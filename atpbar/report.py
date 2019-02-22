@@ -62,6 +62,38 @@ class ProgressReportComplementer(object):
     Complement a progress report with the previous report for the same
     task.
 
+    Parameters
+    ----------
+    report : dict
+        A progress report, a dict with the following entries. The
+        `taskid` must be always given. The first report for a task
+        must include `done`, `total`, 'name', 'pid', and
+        'in_main_thread`. The `first` and `last` will be automatically
+        determined if not given.
+
+        taskid : immutable
+            The unique task ID.
+        done : int, optional
+            The number of the iterations done so far
+        total : int
+            The total iterations to be done
+        name : str
+            A name of the task. It will be use as the label on the
+            progress bars.
+        pid : optional
+            The process ID, e.g., the value returned by `os.getpid()`
+        in_main_thread : bool
+            `True` if the task is running in the main thread of the
+            process. `False` otherwise
+        first : bool
+            `True` if the first report for the task. If not given,
+            automatically determined from `done`; `True` if `done` is
+            0, `False` otherwise
+        last : bool
+            `True` if the last report for the task. If not given,
+            automatically determined from `done` and `total`; `True`
+            if `done` equals `total`, `False` otherwise
+
     """
     def __init__(self):
         self.previous_reports = { }
