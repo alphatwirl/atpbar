@@ -379,8 +379,8 @@ run_with_threading()
 
 The `atpbar` properly works regardless of the order in which multiple
 instances of `atpbar` in multiple threads and multiple processes start
-and end. In the example above, `time.sleep(0.1)` is used in the
-loop in the main thread in order to prevent the loop ends so quickly
+and end. In the example above, `time.sleep(0.1)` is used in the loop
+in the main thread in order to prevent the loop from ending so quickly
 that any of `atpbar` in sub-threads starts.
 
 *****
