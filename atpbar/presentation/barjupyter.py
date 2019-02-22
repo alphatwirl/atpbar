@@ -73,7 +73,7 @@ class ProgressBarJupyter(Presentation):
         bar.value = report['done']
         bar.max = report['total']
         bar.description = percent
-        if report['done'] >= report['total']:
+        if report['last']:
             bar.bar_style = 'success'
 
         label = self.widget_dict[report['taskid']][2]
