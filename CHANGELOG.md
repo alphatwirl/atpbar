@@ -3,10 +3,14 @@
 ## [Unreleased]
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.5...master))
+- updated the feature
+    - The progress bars will be updated with the last complete
+      iteration even if the loop ends with `break` or an exception
 - fixed the problem of a pickup not running after `flush()`.
 - stopped `atpbar` waiting for all progress bars to finish updating if
   another `atpbar` starts in a sub-thread or sub-process.
 - updated .travis.yml, adding a test without jupyter
+- removed `ProgressReport`, replaced with `dict()`
 - updated docstrings
 - updated tests
 - cleaned code
