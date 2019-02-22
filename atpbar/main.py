@@ -59,25 +59,32 @@ class Atpbar(object):
         self.name = name
         self.len_ = len_
         self.id_ = uuid.uuid4()
-        self.pid = os.getpid()
-        self.in_main_thread = in_main_thread()
 
     def __iter__(self):
         with fetch_reporter() as reporter:
             self.reporter = reporter
-            self._report_progress(-1)
+            self._report_start()
             for i, e in enumerate(self. iterable):
                 yield e
                 self._report_progress(i)
+
+    def _report_start(self):
+        if self.reporter is None:
+            return
+        try:
+            report = dict(
+                taskid=self.id_, name=self.name,
+                done=0, total=self.len_,
+                pid=os.getpid(), in_main_thread=in_main_thread())
+            self.reporter.report(report)
+        except:
+            pass
 
     def _report_progress(self, i):
         if self.reporter is None:
             return
         try:
-            report = dict(
-                name=self.name, done=(i+1),
-                total=self.len_, taskid=self.id_,
-                pid=self.pid, in_main_thread=self.in_main_thread)
+            report = dict(taskid=self.id_, done=(i+1))
             self.reporter.report(report)
         except:
             pass
