@@ -27,7 +27,7 @@ def test_repr(obj):
     repr(obj)
 
 def test_report(obj, capsys):
-    report = ProgressReport('task1', 0, 10, 1, 2342, True)
+    report = ProgressReport(name='task1', done=0, total=10, taskid=1, pid=2342, in_main_thread=True)
     obj.present(report)
     captured = capsys.readouterr()
     stdout_lines = captured.out.strip().split('\n')
