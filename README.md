@@ -24,16 +24,24 @@ development in 2015 as part of
 sub-package, _progressbar_, of alphatwirl until it became an
 independent package in February 2019.
 
+
+The examples in this file can be also run on Jupyter Notebook. <br />
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/alphatwirl/notebook-atpbar-001/master?filepath=atpbar.ipynb)
+
+
 *****
 
 - [**Requirement**](#requirement)
 - [**Install**](#install)
-- [**How to use**](#how-to-use)
+- [**Quick start**](#quick-start)
     - [Import libraries](#import-libraries)
     - [One loop](#one-loop)
     - [Nested loops](#nested-loops)
     - [Threading](#threading)
     - [Multiprocessing](#multiprocessing)
+- [**Advanced features**](#advanced-features)
+    - [A `break` and an exception](#a-break-and-an-exception)
+    - [Progress of starting threads and processes with progress bars](#progress-of-starting-threads-and-processes-with-progress-bars)
 - [**License**](#license)
 - [**Contact**](#contact)
 
@@ -58,13 +66,9 @@ $ pip install -U atpbar
 
 *****
 
-## How to use
+## Quick start
 
 I will show here how to use atpbar by simple examples.
-
-These examples can be also run on Jupyter Notebook. <br />
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/alphatwirl/notebook-atpbar-001/master?filepath=atpbar.ipynb)
-
 
 ### Import libraries
 
@@ -253,6 +257,131 @@ Simultaneously growing progress bars will be shown.
   47.71% :::::::::::::::::::                      |    13072 /    27397 |:  task 8
   76.09% ::::::::::::::::::::::::::::::           |     9266 /    12177 |:  task 9
 ```
+
+
+*****
+
+## Advanced features
+
+### A `break` and an exception
+
+When the loop ends with a `break` or an exception, the progress bar stops with
+the last complete iteration.
+
+For example, the loop in the following code breaks during the 1235th iteration.
+```python
+for i in atpbar(range(2000)):
+    if i == 1234:
+        break
+    time.sleep(0.0001)
+```
+
+Since `i` starts with `0`, when `i` is `1234`, the loop is in its 1235th
+iteration. The last complete iteration is 1234. The progress bar stops at 1234.
+
+```
+  61.70% ::::::::::::::::::::::::                 |     1234 /     2000 |:  range(0, 2000)
+```
+
+As an example of an exception, in the following code, an exception is
+thrown during the 1235th iteration.
+```python
+for i in atpbar(range(2000)):
+    if i == 1234:
+        raise Exception
+    time.sleep(0.0001)
+```
+The progress bar stops at the last complete iteration, 1234.
+
+```
+  61.70% ::::::::::::::::::::::::                 |     1234 /     2000 |:  range(0, 2000)
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+Exception
+```
+
+This feature works as well with nested loops, threading, and
+multiprocessing. For example, in the following code, the loops in five
+threads break at 1235th iteration.
+
+```
+from atpbar import flush
+import threading
+
+def run_with_threading():
+    def task(n, name):
+        for i in atpbar(range(n), name=name):
+            if i == 1234:
+                break
+            time.sleep(0.0001)
+    nthreads = 5
+    threads = [ ]
+    for i in range(nthreads):
+        name = 'thread {}'.format(i)
+        n = random.randint(3000, 10000)
+        t = threading.Thread(target=task, args=(n, name))
+        t.start()
+        threads.append(t)
+    for t in threads:
+        t.join()
+    flush()
+
+run_with_threading()
+```
+
+All progress bars stop at 1234.
+
+```
+  18.21% :::::::                                  |     1234 /     6777 |:  thread 0
+  15.08% ::::::                                   |     1234 /     8183 |:  thread 2
+  15.25% ::::::                                   |     1234 /     8092 |:  thread 1
+  39.90% :::::::::::::::                          |     1234 /     3093 |:  thread 4
+  19.67% :::::::                                  |     1234 /     6274 |:  thread 3
+```
+
+### Progress of starting threads and processes with progress bars
+
+`atpbar` can be used for a loop that starts sub-threads or
+sub-processes in which `atpbar` is also used.
+
+```python
+from atpbar import flush
+import threading
+
+def run_with_threading():
+    def task(n, name):
+        for i in atpbar(range(n), name=name):
+            time.sleep(0.0001)
+    nthreads = 5
+    threads = [ ]
+    for i in atpbar(range(nthreads)):
+        name = 'thread {}'.format(i)
+        n = random.randint(200, 1000)
+        t = threading.Thread(target=task, args=(n, name))
+        t.start()
+        threads.append(t)
+        time.sleep(0.1)
+    for t in threads:
+        t.join()
+    flush()
+
+run_with_threading()
+```
+
+```
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |      209 /      209 |:  thread 1
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |      699 /      699 |:  thread 0
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |      775 /      775 |:  thread 2
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |      495 /      495 |:  thread 3
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |        5 /        5 |:  range(0, 5)
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |      647 /      647 |:  thread 4 
+```
+
+The `atpbar` properly works regardless of the order in which multiple
+instances of `atpbar` in multiple threads and multiple processes start
+and end. In the example above, `time.sleep(0.1)` is used in the
+loop in the main thread in order to prevent the loop ends so quickly
+that any of `atpbar` in sub-threads starts.
 
 *****
 
