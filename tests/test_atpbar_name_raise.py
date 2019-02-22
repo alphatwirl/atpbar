@@ -66,9 +66,9 @@ def test_atpbar_name_repr(mock_fetch_reporter, mock_reporter, caplog):
     for i, c in enumerate(mock_reporter.report.call_args_list):
         args, kwargs = c
         report = args[0]
-        assert i == report.done
-        assert len(content) == report.total
-        assert 'Iter' == report.name # repr(iterable)
+        assert i == report['done']
+        assert len(content) == report['total']
+        assert 'Iter' == report['name'] # repr(iterable)
 
 ##__________________________________________________________________||
 def test_atpbar_name_given(mock_fetch_reporter, mock_reporter, caplog):
@@ -84,9 +84,9 @@ def test_atpbar_name_given(mock_fetch_reporter, mock_reporter, caplog):
     for i, c in enumerate(mock_reporter.report.call_args_list):
         args, kwargs = c
         report = args[0]
-        assert i == report.done
-        assert len(content) == report.total
-        assert 'given' == report.name
+        assert i == report['done']
+        assert len(content) == report['total']
+        assert 'given' == report['name']
 
 ##__________________________________________________________________||
 def test_atpbar_raise(mock_fetch_reporter_raise, mock_reporter, caplog):

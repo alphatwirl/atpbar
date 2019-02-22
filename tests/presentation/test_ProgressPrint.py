@@ -8,7 +8,6 @@ except ImportError:
     import mock
 
 from atpbar.presentation.txtprint import ProgressPrint
-from atpbar.report import ProgressReport
 
 ##__________________________________________________________________||
 @pytest.fixture()
@@ -27,7 +26,7 @@ def test_repr(obj):
     repr(obj)
 
 def test_report(obj, capsys):
-    report = ProgressReport(name='task1', done=0, total=10, taskid=1, pid=2342, in_main_thread=True)
+    report = dict(taskid=1, name='task1', done=0, total=10, first=True, last=False)
     obj.present(report)
     captured = capsys.readouterr()
     stdout_lines = captured.out.strip().split('\n')

@@ -37,7 +37,7 @@ class ProgressBarJupyter(Presentation):
 
     def _create_widget(self, report):
         bar = widgets.IntProgress(
-            value=report.done, min=0, max=report.total,
+            value=report['done'], min=0, max=report['total'],
             description='',
             bar_style='', # 'success', 'info', 'warning', 'danger' or ''
             orientation='horizontal'
@@ -46,7 +46,7 @@ class ProgressBarJupyter(Presentation):
         box = widgets.HBox([bar, label])
         self.active_box_list.append(box)
         self.container_widget.children = self.complete_box_list + self.active_box_list
-        self.widget_dict[report.taskid] = [box, bar, label]
+        self.widget_dict[report['taskid']] = [box, bar, label]
 
     def _update_widgets(self):
         for taskid in self._finishing_taskids + self._active_taskids + self._new_taskids:
@@ -63,26 +63,26 @@ class ProgressBarJupyter(Presentation):
 
     def _update_widget(self, report):
 
-        percent = float(report.done)/report.total if report.total > 0 else 1
+        percent = float(report['done'])/report['total'] if report['total'] > 0 else 1
         percent = round(percent * 100, 2)
         percent = '<pre>{:6.2f}%</pre>'.format(percent)
 
-        box = self.widget_dict[report.taskid][0]
+        box = self.widget_dict[report['taskid']][0]
 
-        bar = self.widget_dict[report.taskid][1]
-        bar.value = report.done
-        bar.max = report.total
+        bar = self.widget_dict[report['taskid']][1]
+        bar.value = report['done']
+        bar.max = report['total']
         bar.description = percent
-        if report.done >= report.total:
+        if report['done'] >= report['total']:
             bar.bar_style = 'success'
 
-        label = self.widget_dict[report.taskid][2]
+        label = self.widget_dict[report['taskid']][2]
         name_field_length = 32
-        percent = float(report.done)/report.total if report.total > 0 else 1
+        percent = float(report['done'])/report['total'] if report['total'] > 0 else 1
         bar = (':' * int(percent * 40)).ljust(40, " ")
         percent = round(percent * 100, 2)
-        name = report.name[0:name_field_length]
-        label.value = '<pre> | {:8d} / {:8d} |:  {:<{}s}</pre>'.format(report.done, report.total, name, name_field_length)
+        name = report['name'][0:name_field_length]
+        label.value = '<pre> | {:8d} / {:8d} |:  {:<{}s}</pre>'.format(report['done'], report['total'], name, name_field_length)
 
     def _reorder_widgets(self, report):
         for taskid in self._finishing_taskids:

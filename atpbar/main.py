@@ -2,7 +2,6 @@
 import os, uuid
 import logging
 
-from .report import ProgressReport
 from .funcs import fetch_reporter, in_main_thread
 
 ##__________________________________________________________________||
@@ -75,7 +74,7 @@ class Atpbar(object):
         if self.reporter is None:
             return
         try:
-            report = ProgressReport(
+            report = dict(
                 name=self.name, done=(i+1),
                 total=self.len_, taskid=self.id_,
                 pid=self.pid, in_main_thread=self.in_main_thread)

@@ -1,5 +1,6 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import time
+from .report import ProgressReportComplementer
 
 ##__________________________________________________________________||
 DEFAULT_INTERVAL = 0.1 # [second]
@@ -8,10 +9,9 @@ DEFAULT_INTERVAL = 0.1 # [second]
 class ProgressReporter(object):
     """A progress reporter
 
-    This class sends progress reports (`ProgressReport`). The reports
-    will be picked up by the pickup (`ProgressReportPickup`), which
-    uses the reports, for example, to update `ProgressBar` on the
-    screen.
+    This class sends progress reports. The reports will be picked up
+    by the pickup (`ProgressReportPickup`), which uses the reports,
+    for example, to update `ProgressBar` on the screen.
 
     An instance of this class is initialized with a message queue::
 
@@ -20,7 +20,7 @@ class ProgressReporter(object):
     The pickup, which is running in a sub-thread of the main process,
     needs to have the same queue.
 
-    A report (`ProgressReport`), can be sent as::
+    A report can be sent as::
 
         reporter.report(report)
 
@@ -38,6 +38,7 @@ class ProgressReporter(object):
         self.queue = queue
         self.interval = DEFAULT_INTERVAL # [second]
         self.last_time = { } # key: taskid
+        self.complete_report = ProgressReportComplementer()
 
     def __repr__(self):
         return '{}(queue={!r}, interval={!r})'.format(
@@ -54,25 +55,27 @@ class ProgressReporter(object):
 
         """
 
+        self.complete_report(report)
+
         if not self._need_to_report(report):
             return
 
         self.queue.put(report)
 
-        self.last_time[report.taskid] = self._time()
+        self.last_time[report['taskid']] = self._time()
 
     def _need_to_report(self, report):
 
-        if report.first():
+        if report['first']:
             return True
 
-        if report.last():
+        if report['last']:
             return True
 
-        if report.taskid not in self.last_time:
+        if report['taskid'] not in self.last_time:
             return True
 
-        if self._time() - self.last_time[report.taskid] > self.interval:
+        if self._time() - self.last_time[report['taskid']] > self.interval:
             return True
 
         return False

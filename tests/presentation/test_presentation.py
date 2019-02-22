@@ -9,7 +9,6 @@ try:
 except ImportError:
     pass
 
-from atpbar.report import ProgressReport
 from atpbar.presentation.bartty import ProgressBar
 from atpbar.presentation.txtprint import ProgressPrint
 
@@ -29,18 +28,18 @@ def test_presentation(Class):
     obj = Class()
     repr(obj)
     obj.active()
-    obj.present(ProgressReport(name='task1', done=0, total=10, taskid=1, pid=2342, in_main_thread=True))
-    obj.present(ProgressReport(name='task1', done=2, total=10, taskid=1, pid=2342, in_main_thread=True))
+    obj.present(dict(name='task1', done=0, total=10, taskid=1, first=True, last=False))
+    obj.present(dict(name='task1', done=2, total=10, taskid=1, first=False, last=False))
     obj.active()
-    obj.present(ProgressReport(name='task1', done=0, total=5, taskid=2, pid=2342, in_main_thread=True))
-    obj.present(ProgressReport(name='task1', done=3, total=5, taskid=2, pid=2342, in_main_thread=True))
+    obj.present(dict(name='task1', done=0, total=5, taskid=2, first=True, last=False))
+    obj.present(dict(name='task1', done=3, total=5, taskid=2, first=False, last=False))
     obj.active()
-    obj.present(ProgressReport(name='task1', done=10, total=10, taskid=1, pid=2342, in_main_thread=True))
+    obj.present(dict(name='task1', done=10, total=10, taskid=1, first=False, last=True))
     obj.active()
-    obj.present(ProgressReport(name='task1', done=5, total=5, taskid=2, pid=2342, in_main_thread=True))
+    obj.present(dict(name='task1', done=5, total=5, taskid=2, first=False, last=True))
     obj.active()
     obj.active()
-    obj.present(ProgressReport(name='task1', done=10, total=10, taskid=1, pid=2342, in_main_thread=True))
+    obj.present(dict(name='task1', done=10, total=10, taskid=1, first=False, last=True))
     obj.active()
 
 ##__________________________________________________________________||

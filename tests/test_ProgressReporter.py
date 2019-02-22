@@ -7,7 +7,6 @@ try:
 except ImportError:
     import mock
 
-from atpbar.report import ProgressReport
 from atpbar.reporter import ProgressReporter
 
 ##__________________________________________________________________||
@@ -36,7 +35,7 @@ def test_report_need_to_report(obj, monkeypatch, mock_queue, mock_time):
     taskid = 234
     mock_time.return_value = current_time
     monkeypatch.setattr(obj, '_need_to_report', mock.Mock(return_value=True))
-    report = ProgressReport(name='task1', done=0, total=10, taskid=taskid, pid=2342, in_main_thread=True)
+    report = dict(taskid=taskid, done=0, total=10)
     obj.report(report)
     assert [mock.call(report)] == mock_queue.put.call_args_list
     assert {taskid: current_time} == obj.last_time
@@ -46,18 +45,18 @@ def test_report_no_need_to_report(obj, monkeypatch, mock_queue, mock_time):
     taskid = 234
     mock_time.return_value = current_time
     monkeypatch.setattr(obj, '_need_to_report', mock.Mock(return_value=False))
-    report = ProgressReport(name='task1', done=0, total=10, taskid=taskid, pid=2342, in_main_thread=True)
+    report = dict(taskid=taskid, done=0, total=10)
     obj.report(report)
     assert [ ] == mock_queue.put.call_args_list
     assert { } == obj.last_time
 
 ##__________________________________________________________________||
 params = [
-    pytest.param(ProgressReport(name='task1', done=0,  total=10, taskid=1, pid=2342, in_main_thread=True), {}, 10.0, True),
-    pytest.param(ProgressReport(name='task1', done=10, total=10, taskid=1, pid=2342, in_main_thread=True), {}, 10.0, True),
-    pytest.param(ProgressReport(name='task1', done=0,  total=10, taskid=1, pid=2342, in_main_thread=True), {1: 10.0}, 10.0, True),
-    pytest.param(ProgressReport(name='task1', done=1,  total=10, taskid=1, pid=2342, in_main_thread=True), {1: 10.0}, 30.0, True),
-    pytest.param(ProgressReport(name='task1', done=1,  total=10, taskid=1, pid=2342, in_main_thread=True), {1: 10.0}, 15.0, False),
+    pytest.param(dict(taskid=1, first=True, last=False), {}, 10.0, True),
+    pytest.param(dict(taskid=1, first=False, last=True), {}, 10.0, True),
+    pytest.param(dict(taskid=1, first=True, last=False), {1: 10.0}, 10.0, True),
+    pytest.param(dict(taskid=1, first=False, last=False), {1: 10.0}, 30.0, True),
+    pytest.param(dict(taskid=1, first=False, last=False), {1: 10.0}, 15.0, False),
 ]
 param_names = (
     'report, last_time, current_time, '

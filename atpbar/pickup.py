@@ -49,10 +49,10 @@ class ProgressReportPickup(threading.Thread):
         self.presentation.present(report)
 
     def _detach_self_if_necessary(self, report):
-        if report.taskid in self.taskids:
+        if report['taskid'] in self.taskids:
             return
-        self.taskids.add(report.taskid)
-        if os.getpid() == report.pid and report.in_main_thread:
+        self.taskids.add(report['taskid'])
+        if os.getpid() == report['pid'] and report['in_main_thread']:
             return
         detach_pickup()
 

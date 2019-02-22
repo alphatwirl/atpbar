@@ -85,8 +85,8 @@ def test_atpbar_iterables(mock_reporter, iterable_class, content):
     for i, c in enumerate(mock_reporter.report.call_args_list):
         args, kwargs = c
         report = args[0]
-        assert i == report.done
-        assert len(content) == report.total
+        assert i == report['done']
+        assert len(content) == report['total']
 
 ##__________________________________________________________________||
 @pytest.mark.parametrize('content', contents, ids=contents_ids)
@@ -107,8 +107,8 @@ def test_atpbar_enumerate(mock_reporter, iterable_class, content):
     for i, c in enumerate(mock_reporter.report.call_args_list):
         args, kwargs = c
         report = args[0]
-        assert i == report.done
-        assert len(content) == report.total
+        assert i == report['done']
+        assert len(content) == report['total']
 
 
 ##__________________________________________________________________||

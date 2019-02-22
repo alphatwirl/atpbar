@@ -7,7 +7,6 @@ try:
 except ImportError:
     import mock
 
-from atpbar.report import ProgressReport
 from atpbar.presentation.base import Presentation
 
 ##__________________________________________________________________||
@@ -33,17 +32,17 @@ def test_repr(obj):
 
 ##__________________________________________________________________||
 def test_present(obj):
-    obj.present(ProgressReport(name='task1', done=0, total=10, taskid=1, pid=2342, in_main_thread=True))
+    obj.present(dict(taskid=1, last=False))
     assert obj.active()
-    obj.present(ProgressReport(name='task1', done=2, total=10, taskid=1, pid=2342, in_main_thread=True))
+    obj.present(dict(taskid=1, last=False))
     assert obj.active()
-    obj.present(ProgressReport(name='task1', done=0, total=10, taskid=2, pid=2342, in_main_thread=True))
+    obj.present(dict(taskid=2, last=False))
     assert obj.active()
-    obj.present(ProgressReport(name='task1', done=2, total=10, taskid=2, pid=2342, in_main_thread=True))
+    obj.present(dict(taskid=2, last=False))
     assert obj.active()
-    obj.present(ProgressReport(name='task1', done=10, total=10, taskid=1, pid=2342, in_main_thread=True))
+    obj.present(dict(taskid=1, last=True))
     assert obj.active()
-    obj.present(ProgressReport(name='task1', done=10, total=10, taskid=2, pid=2342, in_main_thread=True))
+    obj.present(dict(taskid=2, last=True))
     assert not obj.active()
 
 ##__________________________________________________________________||
@@ -51,31 +50,31 @@ params = [
 
     ##
     pytest.param(
-        ProgressReport(name='task1', done=0, total=10, taskid=1, pid=2342, in_main_thread=True),
+        dict(taskid=1, last=False),
         [ ], [ ], [ ], [ ],
         [1], [ ], [ ], [ ],
         True
     ),
     pytest.param(
-        ProgressReport(name='task1', done=0, total=10, taskid=1, pid=2342, in_main_thread=True),
+        dict(taskid=1, last=False),
         [1], [ ], [ ], [ ],
         [1], [ ], [ ], [ ],
         True
     ),
     pytest.param(
-        ProgressReport(name='task1', done=0, total=10, taskid=1, pid=2342, in_main_thread=True),
+        dict(taskid=1, last=False),
         [ ], [1], [ ], [ ],
         [ ], [1], [ ], [ ],
         True
     ),
     pytest.param(
-        ProgressReport(name='task1', done=0, total=10, taskid=1, pid=2342, in_main_thread=True),
+        dict(taskid=1, last=False),
         [ ], [ ], [1], [ ],
         [ ], [ ], [1], [ ],
         True
     ),
     pytest.param(
-        ProgressReport(name='task1', done=0, total=10, taskid=1, pid=2342, in_main_thread=True),
+        dict(taskid=1, last=False),
         [ ], [ ], [ ], [1],
         [ ], [ ], [ ], [1],
         False
@@ -83,63 +82,31 @@ params = [
 
     ##
     pytest.param(
-        ProgressReport(name='task1', done=2, total=10, taskid=1, pid=2342, in_main_thread=True),
-        [ ], [ ], [ ], [ ],
-        [1], [ ], [ ], [ ],
-        True
-    ),
-    pytest.param(
-        ProgressReport(name='task1', done=2, total=10, taskid=1, pid=2342, in_main_thread=True),
-        [1], [ ], [ ], [ ],
-        [1], [ ], [ ], [ ],
-        True
-    ),
-    pytest.param(
-        ProgressReport(name='task1', done=2, total=10, taskid=1, pid=2342, in_main_thread=True),
-        [ ], [1], [ ], [ ],
-        [ ], [1], [ ], [ ],
-        True
-    ),
-    pytest.param(
-        ProgressReport(name='task1', done=2, total=10, taskid=1, pid=2342, in_main_thread=True),
-        [ ], [ ], [1], [ ],
-        [ ], [ ], [1], [ ],
-        True
-    ),
-    pytest.param(
-        ProgressReport(name='task1', done=2, total=10, taskid=1, pid=2342, in_main_thread=True),
-        [ ], [ ], [ ], [1],
-        [ ], [ ], [ ], [1],
-        False
-    ),
-
-    ##
-    pytest.param(
-        ProgressReport(name='task1', done=10, total=10, taskid=1, pid=2342, in_main_thread=True),
+        dict(taskid=1, last=True),
         [ ], [ ], [ ], [ ],
         [ ], [ ], [1], [ ],
         True
     ),
     pytest.param(
-        ProgressReport(name='task1', done=10, total=10, taskid=1, pid=2342, in_main_thread=True),
+        dict(taskid=1, last=True),
         [1], [ ], [ ], [ ],
         [ ], [ ], [1], [ ],
         True
     ),
     pytest.param(
-        ProgressReport(name='task1', done=10, total=10, taskid=1, pid=2342, in_main_thread=True),
+        dict(taskid=1, last=True),
         [ ], [1], [ ], [ ],
         [ ], [ ], [1], [ ],
         True
     ),
     pytest.param(
-        ProgressReport(name='task1', done=10, total=10, taskid=1, pid=2342, in_main_thread=True),
+        dict(taskid=1, last=True),
         [ ], [ ], [1], [ ],
         [ ], [ ], [1], [ ],
         True
     ),
     pytest.param(
-        ProgressReport(name='task1', done=10, total=10, taskid=1, pid=2342, in_main_thread=True),
+        dict(taskid=1, last=True),
         [ ], [ ], [ ], [1],
         [ ], [ ], [ ], [1],
         False
