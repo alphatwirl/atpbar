@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.6...master))
+- updated .travis.yml, using 3.7-dev for python 3.7
 
 ## [0.9.6] - 2019-02-22
 
