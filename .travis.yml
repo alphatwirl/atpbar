@@ -10,10 +10,10 @@ matrix:
           env: JUPYTER=true
         - python: 3.6
           env: JUPYTER=false
-        - python: 3.7
+        - python: 3.7-dev
           env: JUPYTER=true
     allow_failures:
-        - python: 3.7
+        - python: 3.7-dev
           env: JUPYTER=true
 
 install:
@@ -27,7 +27,7 @@ install:
   - conda update -q conda
   - conda info -a
   - conda config --set show_channel_urls yes
-  - conda create -q -n testenv python=${TRAVIS_PYTHON_VERSION}
+  - conda create -q -n testenv python=${TRAVIS_PYTHON_VERSION%-*}
   - export CONDA_ENV_PATH=$HOME/miniconda/envs/testenv
   - source activate testenv
   - if "$JUPYTER"; then
