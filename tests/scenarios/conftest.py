@@ -61,13 +61,8 @@ class MockCreatePresentation(object):
         self.presentations.append(ret)
         return ret
 
-@pytest.fixture()
-def mock_progressbar():
-    ret = mock.Mock(spec=Presentation)
-    return ret
-
 @pytest.fixture(autouse=True)
-def mock_create_presentation(monkeypatch, mock_progressbar):
+def mock_create_presentation(monkeypatch):
     ret = MockCreatePresentation()
     module = sys.modules['atpbar.funcs']
     monkeypatch.setattr(module, 'create_presentation', ret)
