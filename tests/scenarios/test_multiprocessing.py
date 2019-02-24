@@ -1,5 +1,4 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-import os
 import time, random
 import itertools
 import multiprocessing
@@ -46,6 +45,7 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task
 
     flush()
 
+@pytest.mark.xfail()
 @pytest.mark.parametrize('time_starting_task', [0, 0.01, 0.2])
 @pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
 @pytest.mark.parametrize('ntasks', [3, 1, 0])
@@ -53,9 +53,6 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task
 def test_multiprocessing_from_loop(
         mock_create_presentation, wrap_end_pickup,
         nprocesses, ntasks, niterations, time_starting_task):
-
-    if nprocesses == 1 and 'TRAVIS' in os.environ and os.environ["TRAVIS"]:
-        pytest.skip('skip nprocesses = 1 on Travis CI.')
 
     # make niterations as long as ntasks. repeat if necessary
     niterations = list(itertools.chain(*itertools.repeat(niterations, ntasks//len(niterations)+1)))[:ntasks]

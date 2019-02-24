@@ -142,6 +142,7 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations):
         queue.join()
     flush()
 
+@pytest.mark.xfail()
 @pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
 @pytest.mark.parametrize('ntasks', [6, 3, 1, 0])
 @pytest.mark.parametrize('nprocesses', [10, 6, 2, 1])
