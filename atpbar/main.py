@@ -66,8 +66,8 @@ class Atpbar(object):
         with fetch_reporter() as reporter:
             self.reporter = reporter
             self.loop_complete = False
+            self._report_start()
             with report_last(pbar=self):
-                self._report_start()
                 for i, e in enumerate(self. iterable):
                     yield e
                     self._report_progress(i)
@@ -110,7 +110,7 @@ def report_last(pbar):
         if not pbar.loop_complete:
             if pbar.reporter is not None:
                 try:
-                    report = dict(taskid=pbar.id_, last=True)
+                    report = dict(taskid=pbar.id_, first=False, last=True)
                     pbar.reporter.report(report)
                 except:
                     pass
