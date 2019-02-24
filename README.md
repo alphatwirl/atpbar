@@ -377,11 +377,11 @@ run_with_threading()
  100.00% :::::::::::::::::::::::::::::::::::::::: |      647 /      647 |:  thread 4 
 ```
 
-The `atpbar` properly works regardless of the order in which multiple
+The `atpbar` sensibly works regardless of the order in which multiple
 instances of `atpbar` in multiple threads and multiple processes start
-and end. In the example above, `time.sleep(0.1)` is used in the loop
-in the main thread in order to prevent the loop from ending so quickly
-that any of `atpbar` in sub-threads starts.
+and end. The progress bars in the example above indicates that the
+loops in four threads have already ended before the loop in the main
+threads ended; the loop in the last thread ended afterwards.
 
 *****
 
