@@ -62,7 +62,7 @@ def test_atpbar_name_repr(mock_fetch_reporter, mock_reporter, caplog):
     assert content == returned
 
     ##
-    assert len(content) + 1 + 1 == len(mock_reporter.report.call_args_list)
+    assert len(content) + 1 == len(mock_reporter.report.call_args_list)
 
     # first report
     args, _ = mock_reporter.report.call_args_list[0]
@@ -81,7 +81,7 @@ def test_atpbar_name_given(mock_fetch_reporter, mock_reporter, caplog):
     assert content == returned
 
     ##
-    assert len(content) + 1 + 1 == len(mock_reporter.report.call_args_list)
+    assert len(content) + 1 == len(mock_reporter.report.call_args_list)
 
     # first report
     args, _ = mock_reporter.report.call_args_list[0]

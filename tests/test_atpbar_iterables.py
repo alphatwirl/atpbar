@@ -81,7 +81,7 @@ def test_atpbar_iterables(mock_reporter, iterable_class, content):
     assert content == returned
 
     ##
-    assert len(content) + 1 + 1 == len(mock_reporter.report.call_args_list)
+    assert len(content) + 1 == len(mock_reporter.report.call_args_list)
 
     # first report
     args, _ = mock_reporter.report.call_args_list[0]
@@ -89,14 +89,9 @@ def test_atpbar_iterables(mock_reporter, iterable_class, content):
     assert 0 == report['done']
     assert len(content) == report['total']
 
-    # last report
-    args, _ = mock_reporter.report.call_args_list[len(content) + 1]
-    report = args[0]
-    assert report['last']
-
     #
     if content:
-        for i, c in enumerate(mock_reporter.report.call_args_list[1:-1]):
+        for i, c in enumerate(mock_reporter.report.call_args_list[1:]):
             args, kwargs = c
             report = args[0]
             assert i + 1 == report['done']
@@ -116,22 +111,16 @@ def test_atpbar_enumerate(mock_reporter, iterable_class, content):
     assert content == returned
 
     ##
-    assert len(content) + 1 + 1 == len(mock_reporter.report.call_args_list)
+    assert len(content) + 1 == len(mock_reporter.report.call_args_list)
 
     # first report
     args, _ = mock_reporter.report.call_args_list[0]
     report = args[0]
     assert 0 == report['done']
     assert len(content) == report['total']
-
-    # last report
-    args, _ = mock_reporter.report.call_args_list[len(content) + 1]
-    report = args[0]
-    assert report['last']
-
     #
     if content:
-        for i, c in enumerate(mock_reporter.report.call_args_list[1:-1]):
+        for i, c in enumerate(mock_reporter.report.call_args_list[1:]):
             args, kwargs = c
             report = args[0]
             assert i + 1 == report['done']
