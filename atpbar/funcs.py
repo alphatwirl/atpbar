@@ -106,17 +106,20 @@ atexit.register(end_pickup)
 def fetch_reporter():
     global _lock
     global _reporter
+    global _do_not_start_pickup
     global _pickup_owned
 
     _lock.acquire()
-    started = _start_pickup_if_necessary()
+    _start_pickup_if_necessary()
     _lock.release()
 
     own_pickup = False
-    if in_main_thread():
-        if not _pickup_owned:
-            own_pickup = True
-            _pickup_owned = True
+    if not _do_not_start_pickup:
+        if in_main_thread():
+            if not _pickup_owned:
+                own_pickup = True
+                _pickup_owned = True
+
 
     try:
         yield _reporter

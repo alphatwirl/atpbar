@@ -3,7 +3,15 @@
 ## [Unreleased]
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.6...master))
+- fixed the problem of progress bars stopping in multiprocessing.
+    - `atpbar` in sub-processes will not send the end order to the
+      pickup.
+- fixed the problem of duplicate progress bar for complete tasks.
+    - The last report will be sent only once for each task regardless
+      of whether the loop completes all iterations.
 - updated .travis.yml, using 3.7-dev for python 3.7
+- updated tests
+- cleaned code
 
 ## [0.9.6] - 2019-02-22
 

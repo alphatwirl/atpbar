@@ -64,12 +64,15 @@ class Atpbar(object):
 
     def __iter__(self):
         with fetch_reporter() as reporter:
-            with report_last(taskid=self.id_, reporter=reporter):
-                self.reporter = reporter
-                self._report_start()
+            self.reporter = reporter
+            self.loop_complete = False
+            self._report_start()
+            with report_last(pbar=self):
                 for i, e in enumerate(self. iterable):
                     yield e
                     self._report_progress(i)
+                else:
+                    self.loop_complete = True
 
     def _report_start(self):
         if self.reporter is None:
@@ -93,22 +96,23 @@ class Atpbar(object):
             pass
 
 @contextlib.contextmanager
-def report_last(taskid, reporter):
+def report_last(pbar):
     """send a last report
 
-    This function sends the last report of the task even if the loop
-    ends with `break` or an exception so that the progress bar will be
+    This function sends the last report of the task when the loop ends
+    with `break` or an exception so that the progress bar will be
     updated with the last complete iteration.
 
     """
     try:
         yield
     finally:
-        if reporter is not None:
-            try:
-                report = dict(taskid=taskid, last=True)
-                reporter.report(report)
-            except:
-                pass
+        if not pbar.loop_complete:
+            if pbar.reporter is not None:
+                try:
+                    report = dict(taskid=pbar.id_, first=False, last=True)
+                    pbar.reporter.report(report)
+                except:
+                    pass
 
 ##__________________________________________________________________||

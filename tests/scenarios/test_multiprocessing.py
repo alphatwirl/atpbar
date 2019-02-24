@@ -1,5 +1,6 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import time, random
+import itertools
 import multiprocessing
 
 import pytest
@@ -8,13 +9,11 @@ from atpbar import atpbar
 from atpbar import register_reporter, find_reporter, flush
 
 ##__________________________________________________________________||
-@pytest.mark.skip() # This test sometime doesn't end. It is not because of a
-                    # deadlock of atpbar.funcs._lock. It is because `queue` in
-                    # this function doesn't join sometime for an unknown reason
-def test_multiprocessing_from_loop(mock_progressbar, wrap_end_pickup):
+def run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task):
 
-    def task(n, name):
-        for i in atpbar(range(n), name=name):
+    def task(n, name, time_starting):
+        time.sleep(time_starting)
+        for i in atpbar(range(n), name=name):  # `atpbar` is used here
             time.sleep(0.0001)
 
     def worker(reporter, task, queue):
@@ -26,85 +25,97 @@ def test_multiprocessing_from_loop(mock_progressbar, wrap_end_pickup):
                 break
             task(*args)
             queue.task_done()
-
-    nprocesses = 3
-    processes = [ ]
-
-    queue = multiprocessing.JoinableQueue()
-
-    for i in atpbar(range(nprocesses)):
-        reporter = find_reporter() # reporter is created here so as to let
-                                   # atpbar own the pickup
-        p = multiprocessing.Process(target=worker, args=(reporter, task, queue))
-        p.start()
-        processes.append(p)
-
-        if i == nprocesses - 1:
-            ntasks = 6
-            for i in atpbar(range(ntasks)):
-                name = 'task {}'.format(i)
-                n = random.randint(5, 10)
-                queue.put((n, name))
-                time.sleep(0.01) # sleep to make sure atpbar in a
-                                 # subprocess starts before this loop ends
-
-    for i in range(nprocesses):
-        queue.put(None)
-        queue.join() # This doesn't join sometime
-
-    flush()
-
-    assert 1 == wrap_end_pickup.call_count
-    assert len(mock_progressbar.present.call_args_list) >= 2 + 6*2
-
-##__________________________________________________________________||
-def test_flush(mock_progressbar, wrap_end_pickup):
-
-    def task(n, name):
-        for i in atpbar(range(n), name=name):
-            time.sleep(0.0001)
-
-    def worker(reporter, task, queue):
-        register_reporter(reporter)
-        while True:
-            args = queue.get()
-            if args is None:
-                queue.task_done()
-                break
-            task(*args)
-            queue.task_done()
-
-    nprocesses = 4
-    processes = [ ]
 
     reporter = find_reporter()
     queue = multiprocessing.JoinableQueue()
 
-    for i in atpbar(range(nprocesses)):
+    for i in range(nprocesses):
         p = multiprocessing.Process(target=worker, args=(reporter, task, queue))
         p.start()
-        processes.append(p)
 
-    ntasks = 3
-    for i in atpbar(range(ntasks)):
+    for i in atpbar(range(ntasks)): # `atpbar` is used here
         name = 'task {}'.format(i)
-        n = random.randint(5, 10000)
-        queue.put((n, name))
-        time.sleep(0.1)
-
-    flush()
-
-    ntasks = 7
-    for i in range(ntasks):
-        name = 'task {}'.format(i)
-        n = random.randint(5, 10000)
-        queue.put((n, name))
-        time.sleep(0.1)
+        n = niterations[i]
+        queue.put((n, name, time_starting_task))
+        time.sleep(0.01)
 
     for i in range(nprocesses):
         queue.put(None)
         queue.join()
 
     flush()
+
+@pytest.mark.parametrize('time_starting_task', [0, 0.01, 0.2])
+@pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
+@pytest.mark.parametrize('ntasks', [3, 1, 0])
+@pytest.mark.parametrize('nprocesses', [6, 2, 1])
+def test_multiprocessing_from_loop(
+        mock_create_presentation, wrap_end_pickup,
+        nprocesses, ntasks, niterations, time_starting_task):
+
+    # make niterations as long as ntasks. repeat if necessary
+    niterations = list(itertools.chain(*itertools.repeat(niterations, ntasks//len(niterations)+1)))[:ntasks]
+
+    run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task)
+
+    ## print()
+    ## print(mock_create_presentation)
+
+    nreports_expected_from_main = ntasks + 1
+    nreports_expected_from_tasks = sum(niterations) + ntasks
+    nreports_expected = nreports_expected_from_main + nreports_expected_from_tasks
+
+    presentations = mock_create_presentation.presentations
+
+    if nreports_expected_from_tasks == 0:
+        assert 3 == len(presentations) # in find_reporter(), at the
+                                       # end of `atpbar` in the main
+                                       # process, and in flush().
+
+        progressbar0 = presentations[0]
+        assert nreports_expected == len(progressbar0.reports)
+        # one report from `atpbar` in the main thread
+
+        assert 1 == len(progressbar0.taskids)
+        assert 1 == progressbar0.nfirsts
+        assert 1 == progressbar0.nlasts
+
+    else:
+        if 2 == len(presentations):
+
+            progressbar0 = presentations[0]
+            assert nreports_expected == len(progressbar0.reports)
+            assert ntasks + 1 == len(progressbar0.taskids)
+            assert ntasks + 1 == progressbar0.nfirsts
+            assert ntasks + 1 == progressbar0.nlasts
+
+            progressbar1 = presentations[1]
+            assert 0 == len(progressbar1.reports)
+
+        else:
+            assert 3 == len(presentations)
+
+            progressbar0 = presentations[0]
+            progressbar1 = presentations[1]
+
+            assert nreports_expected == len(progressbar0.reports) + len(progressbar1.reports)
+            assert ntasks + 1 == len(progressbar0.taskids) + len(progressbar1.taskids)
+            assert ntasks + 1 == progressbar0.nfirsts + progressbar1.nfirsts
+            assert ntasks + 1 == progressbar0.nlasts + progressbar1.nlasts
+
+            progressbar2 = presentations[2]
+            assert 0 == len(progressbar2.reports)
+
+    # At this point the pickup shouldn't be owned. Therefore, a new
+    # `atpbar` in the main thread should own it.
+    npresentations = len(presentations)
+    for i in atpbar(range(4)):
+        pass
+    assert npresentations + 1 == len(presentations)
+    progressbar = presentations[-2]
+    assert 4 + 1 == len(progressbar.reports)
+    assert 1 == len(progressbar.taskids)
+    assert 1 == progressbar.nfirsts
+    assert 1 == progressbar.nlasts
 
 ##__________________________________________________________________||
