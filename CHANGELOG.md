@@ -2,7 +2,13 @@
 
 ## [Unreleased]
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.6...master))
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.7...master))
+
+## [0.9.7] - 2019-02-24
+
+**PyPI**: https://pypi.org/project/atpbar/0.9.7/
+
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.6...v0.9.7))
 - fixed the problem of progress bars stopping in multiprocessing.
     - `atpbar` in sub-processes will not send the end order to the
       pickup.
