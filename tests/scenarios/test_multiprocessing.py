@@ -1,4 +1,5 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
+import os
 import time, random
 import itertools
 import multiprocessing
@@ -52,6 +53,9 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task
 def test_multiprocessing_from_loop(
         mock_create_presentation, wrap_end_pickup,
         nprocesses, ntasks, niterations, time_starting_task):
+
+    if nprocesses == 1 and 'TRAVIS' in os.environ and os.environ["TRAVIS"]:
+        pytest.skip('skip nprocesses = 1 on Travis CI.')
 
     # make niterations as long as ntasks. repeat if necessary
     niterations = list(itertools.chain(*itertools.repeat(niterations, ntasks//len(niterations)+1)))[:ntasks]
