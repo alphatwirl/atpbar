@@ -304,7 +304,7 @@ This feature works as well with nested loops, threading, and
 multiprocessing. For example, in the following code, the loops in five
 threads break at 1235th iteration.
 
-```
+```python
 from atpbar import flush
 import threading
 
