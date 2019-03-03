@@ -33,10 +33,10 @@ install:
   - export CONDA_ENV_PATH=$HOME/miniconda/envs/testenv
   - source activate testenv
   - if "$JUPYTER"; then
-      pip install -r requirements/jupyter.txt
+      pip install -r requirements/jupyter.txt;
       if [ ${TRAVIS_PYTHON_VERSION%-*} == '2.7' ]; then
-        pip install -r requirements/jupyter-extra-py27.txt
-      fi
+        pip install -r requirements/jupyter-extra-py27.txt;
+      fi;
     fi
   - pip install -r requirements/test.txt
 
