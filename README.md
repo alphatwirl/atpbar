@@ -21,31 +21,35 @@ tasks. _atpbar_ can display progress bars on terminal and [Jupyter
 Notebook](https://jupyter.org/). _atpbar_ can be used with
 [_Mantichora_](https://github.com/alphatwirl/mantichora).
 
-The code in _atpbar_ started its development in 2015 as part of
-[_alphatwirl_](https://github.com/alphatwirl/alphatwirl). It had been the
+_atpbar_ started its development in 2015 as part of
+[_alphatwirl_](https://github.com/alphatwirl/alphatwirl). _atpbar_
+prevented physicists from terminating their running analysis codes,
+which would take many hours to complete, by showing progress bars
+indicating their codes were actually running. The progress bars have
+saved the physicists countless hours total. _atpbar_ had been the
 sub-package
 [_progressbar_](https://github.com/alphatwirl/alphatwirl/tree/v0.22.0/alphatwirl/progressbar)
-of alphatwirl until it became an independent package in February 2019.
+of alphatwirl until it became an independent package, with the name
+_atpbar_, in February 2019.
 
 
-The examples in this file can be also run on Jupyter Notebook. <br />
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/alphatwirl/notebook-atpbar-001/master?filepath=atpbar.ipynb)
-
+You can try it on Jupyter Notebook online: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/alphatwirl/notebook-atpbar-001/master?filepath=atpbar.ipynb)
 
 *****
 
 - [**Requirement**](#requirement)
 - [**Install**](#install)
-- [**Quick start**](#quick-start)
-    - [Import libraries](#import-libraries)
-    - [One loop](#one-loop)
-    - [Nested loops](#nested-loops)
-    - [Threading](#threading)
-    - [Multiprocessing](#multiprocessing)
-- [**Advanced features**](#advanced-features)
-    - [A `break` and an exception](#a-break-and-an-exception)
-    - [Progress of starting threads and processes with progress bars](#progress-of-starting-threads-and-processes-with-progress-bars)
-- [**How to disable progress bars**](#how-to-disable-progress-bars)
+- [**User guide**](#user-guide)
+    - [**Quick start**](#quick-start)
+        - [Import libraries](#import-libraries)
+        - [One loop](#one-loop)
+        - [Nested loops](#nested-loops)
+        - [Threading](#threading)
+        - [Multiprocessing](#multiprocessing)
+    - [**Advanced features**](#advanced-features)
+        - [A `break` and an exception](#a-break-and-an-exception)
+        - [Progress of starting threads and processes with progress bars](#progress-of-starting-threads-and-processes-with-progress-bars)
+    - [**How to disable progress bars**](#how-to-disable-progress-bars)
 - [**License**](#license)
 - [**Contact**](#contact)
 
@@ -70,11 +74,13 @@ $ pip install -U atpbar
 
 *****
 
-## Quick start
+## User guide
+
+### Quick start
 
 I will show here how to use atpbar by simple examples.
 
-### Import libraries
+#### Import libraries
 
 To create simple loops in the examples, we use two python standard
 libraries, [time](https://docs.python.org/3/library/time.html) and
@@ -89,7 +95,7 @@ from atpbar import atpbar
 **Note**: import the object `atpbar` from the package `atpbar` rather
 than importing the package `atpbar` itself.
 
-### One loop
+#### One loop
 
 The object `atpbar` is an iterable that can wrap another iterable and
 shows the progress bars for the iterations. (The idea of making the
@@ -117,7 +123,7 @@ In order for `atpbar` to show a progress bar, the wrapped iterable
 needs to have a length. If the length cannot be obtained by `len()`,
 `atpbar` won't show a progress bar.
 
-### Nested loops
+#### Nested loops
 
 `atpbar` can show progress bars for nested loops as in the following
 example.
@@ -146,7 +152,7 @@ In the snapshot of the progress bars above, the outer loop is in its
 third. The progress bars for the completed tasks move up. The progress
 bars for the active tasks are growing at the bottom.
 
-### Threading
+#### Threading
 
 `atpbar` can show multiple progress bars for loops concurrently
 iterating in different threads.
@@ -194,7 +200,7 @@ progress bars have finished updating.
 As a task completes, the progress bar for the task moves up. The
 progress bars for active tasks are at the bottom.
 
-### Multiprocessing
+#### Multiprocessing
 
 `atpbar` can be used with `multiprocessing`.
 
@@ -263,9 +269,9 @@ Simultaneously growing progress bars will be shown.
 
 *****
 
-## Advanced features
+### Advanced features
 
-### A `break` and an exception
+#### A `break` and an exception
 
 When the loop ends with a `break` or an exception, the progress bar stops with
 the last complete iteration.
@@ -341,7 +347,7 @@ All progress bars stop at 1234.
   19.67% :::::::                                  |     1234 /     6274 |:  thread 3
 ```
 
-### Progress of starting threads and processes with progress bars
+#### Progress of starting threads and processes with progress bars
 
 `atpbar` can be used for a loop that starts sub-threads or
 sub-processes in which `atpbar` is also used.
@@ -387,7 +393,7 @@ threads ended; the loop in the last thread ended afterwards.
 
 *****
 
-## How to disable progress bars
+### How to disable progress bars
 
 The function `disable()` disables `atpbar`; progress bars will not be shown.
 
