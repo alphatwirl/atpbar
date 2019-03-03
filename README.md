@@ -63,10 +63,16 @@ You can try it on Jupyter Notebook online: [![Binder](https://mybinder.org/badge
 
 ## Install
 
-You can install with `pip`.
+You can install with `conda` from conda-forge:
 
 ```bash
-$ pip install -U atpbar
+conda install -c conda-forge atpbar
+```
+
+or with `pip`:
+
+```bash
+pip install -U atpbar
 ```
 
 *****
