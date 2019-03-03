@@ -126,13 +126,11 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations):
                 break
             task(*args)
             queue.task_done()
-    processes = [ ]
     reporter = find_reporter()
     queue = multiprocessing.JoinableQueue()
     for i in range(nprocesses):
         p = multiprocessing.Process(target=worker, args=(reporter, task, queue))
         p.start()
-        processes.append(p)
     for i in range(ntasks):
         name = 'task {}'.format(i)
         n = niterations[i]
