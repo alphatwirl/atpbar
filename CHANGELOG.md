@@ -2,14 +2,22 @@
 
 ## [Unreleased]
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.9...master))
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.0...master))
+
+## [1.0.0] - 2019-03-03
+
+**PyPI**: https://pypi.org/project/atpbar/1.0.0/
+
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.9...v1.0.0))
+- changed "Development Status" to "Production/Stable" in `setup.py`
+- updated `.travis.yml`, not allowing failure in Python 3.7
 
 ## [0.9.9] - 2019-03-03
 
 **PyPI**: https://pypi.org/project/atpbar/0.9.9/
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.8...v0.9.9))
-- confirmed `atpbar` works on Jupyter Notebook in Python 2.7 (https://github.com/alphatwirl/atpbar/issues/3)
+- confirmed `atpbar` works on Jupyter Notebook in Python 2.7 [#3](https://github.com/alphatwirl/atpbar/issues/3)
 - updated `README.md`, `.travis.yml`
 - added files in `requirements`
 
