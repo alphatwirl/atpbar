@@ -57,10 +57,7 @@ You can try it on Jupyter Notebook online: [![Binder](https://mybinder.org/badge
 
 ## Requirement
 
-- On terminal
-    - Python 2.7, 3.6, or 3.7
-- On Jupyter Notebook
-    - Python 3.6 or 3.7
+- Python 2.7, 3.6, or 3.7
 
 *****
 
