@@ -94,14 +94,14 @@ interface iterable was inspired by
 
 
 ```python
-n = random.randint(5, 10000)
+n = random.randint(1000, 10000)
 for i in atpbar(range(n)):
     time.sleep(0.0001)
 ```
 
 The task in the above code is to sleep for `0.0001` seconds in each
 iteration of the loop. The number of the iterations of the loop is
-randomly selected from between `5` and `10000`.
+randomly selected from between `1000` and `10000`.
 
 A progress bar will be shown by `atpbar`.
 
@@ -120,7 +120,7 @@ example.
 
 ```python
 for i in atpbar(range(4), name='outer'):
-    n = random.randint(5, 10000)
+    n = random.randint(1000, 10000)
     for j in atpbar(range(n), name='inner {}'.format(i)):
         time.sleep(0.0001)
 ```
@@ -155,10 +155,10 @@ from atpbar import flush
 import threading
 
 def run_with_threading():
+    nthreads = 5
     def task(n, name):
         for i in atpbar(range(n), name=name):
             time.sleep(0.0001)
-    nthreads = 5
     threads = [ ]
     for i in range(nthreads):
         name = 'thread {}'.format(i)
@@ -215,14 +215,12 @@ def run_with_multiprocessing():
             task(*args)
             queue.task_done()
     nprocesses = 4
-    processes = [ ]
+    ntasks = 10
     reporter = find_reporter()
     queue = multiprocessing.JoinableQueue()
     for i in range(nprocesses):
         p = multiprocessing.Process(target=worker, args=(reporter, task, queue))
         p.start()
-        processes.append(p)
-    ntasks = 10
     for i in range(ntasks):
         name = 'task {}'.format(i)
         n = random.randint(5, 100000)
