@@ -42,6 +42,7 @@ The examples in this file can be also run on Jupyter Notebook. <br />
 - [**Advanced features**](#advanced-features)
     - [A `break` and an exception](#a-break-and-an-exception)
     - [Progress of starting threads and processes with progress bars](#progress-of-starting-threads-and-processes-with-progress-bars)
+- [**How to disable progress bars**](#how-to-disable-progress-bars)
 - [**License**](#license)
 - [**Contact**](#contact)
 
@@ -380,6 +381,21 @@ instances of `atpbar` in multiple threads and multiple processes start
 and end. The progress bars in the example above indicates that the
 loops in four threads have already ended before the loop in the main
 threads ended; the loop in the last thread ended afterwards.
+
+*****
+
+## How to disable progress bars
+
+The function `disable()` disables `atpbar`; progress bars will not be shown.
+
+```python
+from atpbar import disable
+
+disable()
+```
+
+This function needs to be called before `atpbar` or `find_reporter()` is used,
+typically at the beginning of the program.
 
 *****
 
