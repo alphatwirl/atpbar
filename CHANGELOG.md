@@ -2,7 +2,16 @@
 
 ## [Unreleased]
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.8...master))
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.9...master))
+
+## [0.9.9] - 2019-03-03
+
+**PyPI**: https://pypi.org/project/atpbar/0.9.9/
+
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.8...v0.9.9))
+- confirmed `atpbar` works on Jupyter Notebook in Python 2.7 (https://github.com/alphatwirl/atpbar/issues/3)
+- updated `README.md`, `.travis.yml`
+- added files in `requirements`
 
 ## [0.9.8] - 2019-03-03
 
@@ -23,7 +32,7 @@
 - fixed the problem of duplicate progress bar for complete tasks.
     - The last report will be sent only once for each task regardless
       of whether the loop completes all iterations.
-- updated .travis.yml, using 3.7-dev for python 3.7
+- updated `.travis.yml`, using 3.7-dev for python 3.7
 - updated tests
 - cleaned code
 
