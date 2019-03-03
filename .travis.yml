@@ -6,6 +6,8 @@ matrix:
     include:
         - python: 2.7
           env: JUPYTER=false
+        - python: 2.7
+          env: JUPYTER=true
         - python: 3.6
           env: JUPYTER=true
         - python: 3.6
@@ -31,7 +33,10 @@ install:
   - export CONDA_ENV_PATH=$HOME/miniconda/envs/testenv
   - source activate testenv
   - if "$JUPYTER"; then
-        pip install jupyter;
+      pip install -r requirements/jupyter.txt;
+      if [ ${TRAVIS_PYTHON_VERSION%-*} == '2.7' ]; then
+        pip install -r requirements/jupyter-extra-py27.txt;
+      fi;
     fi
   - pip install -r requirements/test.txt
 
