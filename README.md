@@ -18,11 +18,14 @@ show the progresses of iterations of loops in
 [threading](https://docs.python.org/3/library/threading.html) or
 [multiprocessing](https://docs.python.org/3/library/multiprocessing.html)
 tasks. _atpbar_ can display progress bars on terminal and [Jupyter
-Notebook](https://jupyter.org/). The code in _atpbar_ started its
-development in 2015 as part of
-[alphatwirl](https://github.com/alphatwirl/alphatwirl). It had been a
-sub-package, _progressbar_, of alphatwirl until it became an
-independent package in February 2019.
+Notebook](https://jupyter.org/). _atpbar_ can be used with
+[_Mantichora_](https://github.com/alphatwirl/mantichora).
+
+The code in _atpbar_ started its development in 2015 as part of
+[_alphatwirl_](https://github.com/alphatwirl/alphatwirl). It had been the
+sub-package
+[_progressbar_](https://github.com/alphatwirl/alphatwirl/tree/v0.22.0/alphatwirl/progressbar)
+of alphatwirl until it became an independent package in February 2019.
 
 
 The examples in this file can be also run on Jupyter Notebook. <br />
