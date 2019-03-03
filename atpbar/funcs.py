@@ -86,6 +86,21 @@ def flush():
     _lock.release()
 
 ##__________________________________________________________________||
+def disable():
+    """disables progress bars
+
+    This function needs to be called in the main process before
+    `atpbar()` or `find_reporter()` is used.
+
+    Returns
+    -------
+    None
+
+    """
+    global _do_not_start_pickup
+    _do_not_start_pickup = True
+
+##__________________________________________________________________||
 def end_pickup():
     """ends the pickup
 
