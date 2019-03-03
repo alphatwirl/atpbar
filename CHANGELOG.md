@@ -2,7 +2,14 @@
 
 ## [Unreleased]
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.0...master))
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.1...master))
+
+## [1.0.1] - 2019-03-03
+
+**PyPI**: https://pypi.org/project/atpbar/1.0.1/
+
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.0...v1.0.1))
+- updated `setup.py`, `travis.yml`
 
 ## [1.0.0] - 2019-03-03
 
