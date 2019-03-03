@@ -2,9 +2,15 @@
 
 ## [Unreleased]
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.7...master))
-- updated tests, `README.md`
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.8...master))
+
+## [0.9.8] - 2019-03-03
+
+**PyPI**: https://pypi.org/project/atpbar/0.9.8/
+
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v0.9.7...v0.9.8))
 - added `disable()`
+- updated tests, `README.md`
 
 ## [0.9.7] - 2019-02-24
 
