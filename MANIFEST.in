@@ -1,2 +1,3 @@
+include LICENSE
 include versioneer.py
 include atpbar/_version.py
