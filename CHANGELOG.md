@@ -4,7 +4,7 @@
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.1...master))
 
-## [1.0.2] - 2019-03-03
+## [1.0.2] - 2019-03-08
 
 **PyPI**: https://pypi.org/project/atpbar/1.0.2/
 - updated `README.md`, `MANIFEST.in`
