@@ -7,12 +7,14 @@
 ## [1.0.3] - 2019-03-15
 
 **PyPI**: https://pypi.org/project/atpbar/1.0.3/
+
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.2...v1.0.3))
 - fixed the `EOFError` [#4](https://github.com/alphatwirl/atpbar/issues/4)
 
 ## [1.0.2] - 2019-03-08
 
 **PyPI**: https://pypi.org/project/atpbar/1.0.2/
+
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.1...v1.0.2))
 - updated `README.md`, `MANIFEST.in`
 
