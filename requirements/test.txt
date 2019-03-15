@@ -2,3 +2,4 @@ pytest
 codecov
 pytest-cov
 pytest-mock
+pytest-console-scripts
