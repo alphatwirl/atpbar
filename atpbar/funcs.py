@@ -114,6 +114,10 @@ def end_pickup():
     _end_pickup()
     _lock.release()
 
+
+import multiprocessing.queues # This import prevents the issue
+                              # https://github.com/alphatwirl/atpbar/issues/4
+
 atexit.register(end_pickup)
 
 ##__________________________________________________________________||
