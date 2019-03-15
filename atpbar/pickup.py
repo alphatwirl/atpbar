@@ -19,8 +19,11 @@ class ProgressReportPickup(threading.Thread):
         self.taskids = set()
 
     def run(self):
-        self._run_until_the_end_order_arrives()
-        self._run_until_reports_stop_coming()
+        try:
+            self._run_until_the_end_order_arrives()
+            self._run_until_reports_stop_coming()
+        except EOFError:
+            pass
 
     def _run_until_the_end_order_arrives(self):
         end_order_arrived = False
