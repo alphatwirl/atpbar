@@ -46,6 +46,7 @@ You can try it on Jupyter Notebook online: [![Binder](https://mybinder.org/badge
         - [Nested loops](#nested-loops)
         - [Threading](#threading)
         - [Multiprocessing](#multiprocessing)
+        - [With Mantichora](#with-mantichora)
     - [**Features**](#features)
         - [A `break` and an exception](#a-break-and-an-exception)
         - [Progress of starting threads and processes with progress bars](#progress-of-starting-threads-and-processes-with-progress-bars)
@@ -271,6 +272,40 @@ Simultaneously growing progress bars will be shown.
   76.09% ::::::::::::::::::::::::::::::           |     9266 /    12177 |:  task 9
 ```
 
+#### With Mantichora
+
+[_Mantichora_](https://github.com/alphatwirl/mantichora) provides a
+simple interface to _multiprocessing_.
+
+With Mantichora, `task()` can be concurrently run with multiprocessing
+with as simple code as the following example:
+
+```python
+from mantichora import mantichora
+
+def task(name):
+    n = random.randint(1000, 10000)
+    for i in atpbar(range(n), name=name):
+        time.sleep(0.0001)
+
+with mantichora() as mcore:
+    mcore.run(task, 'task 1')
+    mcore.run(task, 'task 2')
+    mcore.run(task, 'task 3')
+    mcore.run(task, 'task 4')
+    mcore.run(task, 'task 5')
+    returns = mcore.returns()
+```
+
+`atpbar` can be used in the task function.
+
+```
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     2288 /     2288 |:  task 3
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     3964 /     3964 |:  task 4
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     4207 /     4207 |:  task 2
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     8519 /     8519 |:  task 1
+ 100.00% :::::::::::::::::::::::::::::::::::::::: |     6595 /     6595 |:  task 5
+```
 
 *****
 
