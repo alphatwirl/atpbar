@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.3...master))
+- updated tests, `README.md`
 
 ## [1.0.3] - 2019-03-15
 
