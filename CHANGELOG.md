@@ -2,7 +2,15 @@
 
 ## [Unreleased]
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.3...master))
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.4...master))
+
+## [1.0.4] - 2019-04-23
+
+**PyPI**: https://pypi.org/project/atpbar/1.0.4/
+
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.3...v1.0.4))
+- made the name field next to progress bars longer in wide terminals
+  [#5](https://github.com/alphatwirl/atpbar/issues/5)
 - updated tests, `README.md`
 
 ## [1.0.3] - 2019-03-15
