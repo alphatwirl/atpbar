@@ -34,6 +34,7 @@ class ProgressReportPickup(threading.Thread):
                     end_order_arrived = True
                     continue
                 self._process_report(report)
+            time.sleep(0.001)
 
     def _run_until_reports_stop_coming(self):
         self._read_time()
