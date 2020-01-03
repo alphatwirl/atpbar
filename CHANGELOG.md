@@ -2,7 +2,14 @@
 
 ## [Unreleased]
 
-#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.4...master))
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.5...master))
+
+## [1.0.5] - 2020-01-03
+
+**PyPI**: https://pypi.org/project/atpbar/1.0.5/
+
+#### Changs from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.4...v1.0.5))
+- addressed the slowdown issue [#8](https://github.com/alphatwirl/atpbar/issues/8)
 
 ## [1.0.4] - 2019-04-23
 
