@@ -12,6 +12,8 @@ matrix:
           env: JUPYTER=true
         - python: 3.7
           env: JUPYTER=false
+        - python: 3.8
+          env: JUPYTER=true
     allow_failures:
 
 install:
