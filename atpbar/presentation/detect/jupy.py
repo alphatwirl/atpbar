@@ -1,12 +1,49 @@
 
 ##__________________________________________________________________||
+try:
+    import ipywidgets as widgets
+except ImportError:
+    widgets = None
+
+try:
+    from IPython.display import display
+except ImportError:
+    display = None
+
+try:
+    from IPython import get_ipython
+except ImportError:
+    get_ipython = None
+
+
+from .spy import is_spyder_ide
+
+##__________________________________________________________________||
 def is_jupyter_notebook():
+    """Tests is on Jupyter Notebook
+
+    Returns
+    -------
+    bool
+        True if on Jupyter Notebook
+
+    """
+
+    if widgets is None:
+        return False
+
+    if display is None:
+        return False
+
     try:
-        from IPython import get_ipython
-        if 'IPKernelApp' in get_ipython().config:
-            return True
+        if 'IPKernelApp' not in get_ipython().config:
+            return False
     except:
-        pass
-    return False
+        return False
+
+    if is_spyder_ide():
+        return False
+
+    return True
 
 ##__________________________________________________________________||
