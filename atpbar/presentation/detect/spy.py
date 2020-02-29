@@ -12,7 +12,7 @@ except ImportError:
 
 ##__________________________________________________________________||
 def is_spyder_ide():
-    """Tests is on Spyder IDE
+    """Tests if on Spyder IDE
 
     Returns
     -------

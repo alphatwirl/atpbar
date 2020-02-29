@@ -20,7 +20,7 @@ from .spy import is_spyder_ide
 
 ##__________________________________________________________________||
 def is_jupyter_notebook():
-    """Tests is on Jupyter Notebook
+    """Tests if on Jupyter Notebook
 
     Returns
     -------
