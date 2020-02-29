@@ -1,4 +1,5 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
+import os
 import sys
 
 import pytest
@@ -49,13 +50,31 @@ def is_jupyter_notebook(request, monkeypatch):
     return ret
 
 ##__________________________________________________________________||
-def test_create_presentation(isatty, is_jupyter_notebook):
+@pytest.fixture(
+    params=[True, False]
+)
+def del_ProgressBarJupyter(request, monkeypatch):
+    ret = request.param
+    module = sys.modules['atpbar.presentation.create']
+    if ret:
+        monkeypatch.delattr(module, 'ProgressBarJupyter', raising=False)
+    else:
+        m = mock.Mock()
+        m().__class__.__name__ = 'ProgressBarJupyter'
+        monkeypatch.setattr(module, 'ProgressBarJupyter', m, raising=False)
+    return ret
+
+##__________________________________________________________________||
+def test_create_presentation(isatty, is_jupyter_notebook, del_ProgressBarJupyter):
     actual = create_presentation()
 
     if isatty:
         assert 'ProgressBar' == actual.__class__.__name__
     elif is_jupyter_notebook:
-        assert 'ProgressBarJupyter' == actual.__class__.__name__
+        if del_ProgressBarJupyter:
+            assert 'ProgressPrint' == actual.__class__.__name__
+        else:
+            assert 'ProgressBarJupyter' == actual.__class__.__name__
     else:
         assert 'ProgressPrint' == actual.__class__.__name__
 

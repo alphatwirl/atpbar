@@ -13,10 +13,26 @@ except ImportError:
 
 ##__________________________________________________________________||
 def create_presentation():
+    """Create a presentation of progress report, e.g., progress bars
+
+    Returns
+    -------
+    object
+        an instance of ProgressBar if on TTY
+        an instance of ProgressBarJupyter if on Jupyter Notebook
+        an instance of ProgressPrint otherwise
+
+    """
+
     if sys.stdout.isatty():
         return ProgressBar()
+
     if is_jupyter_notebook():
-        return ProgressBarJupyter()
+        try:
+            return ProgressBarJupyter()
+        except:
+            pass
+
     return ProgressPrint()
 
 ##__________________________________________________________________||
