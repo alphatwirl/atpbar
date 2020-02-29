@@ -3,8 +3,9 @@
 ## [Unreleased]
 
 #### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.6...master))
+- addressed the issue [#15](https://github.com/alphatwirl/atpbar/issues/15)
+    - use `ProgressPrint` on Spyder IDE
 - listed Python 3.8 in `setup.py`
-- fixed a typo in CHANGELOG.md
 
 ## [1.0.6] - 2020-02-15
 
