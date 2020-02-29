@@ -3,9 +3,16 @@
 ## [Unreleased]
 
 #### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.6...master))
+
+## [1.0.7] - 2020-02-29
+
+**PyPI**: https://pypi.org/project/atpbar/1.0.7/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.6...v1.0.7))
 - addressed the issue [#15](https://github.com/alphatwirl/atpbar/issues/15)
     - use `ProgressPrint` on Spyder IDE
 - listed Python 3.8 in `setup.py`
+- updated `.travis.yml`, allowing failure in Python 2.7
 
 ## [1.0.6] - 2020-02-15
 
