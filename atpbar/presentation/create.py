@@ -1,6 +1,8 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import sys
 
+from .detect.jupy import is_jupyter_notebook
+
 from .bartty import ProgressBar
 from .txtprint import ProgressPrint
 
@@ -16,14 +18,5 @@ def create_presentation():
     if is_jupyter_notebook():
         return ProgressBarJupyter()
     return ProgressPrint()
-
-def is_jupyter_notebook():
-    try:
-        from IPython import get_ipython
-        if 'IPKernelApp' in get_ipython().config:
-            return True
-    except:
-        pass
-    return False
 
 ##__________________________________________________________________||
