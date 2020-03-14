@@ -4,8 +4,6 @@ language: python
 
 matrix:
     include:
-        - python: 2.7
-          env: JUPYTER=true
         - python: 3.6
           env: JUPYTER=true
         - python: 3.7
@@ -15,8 +13,6 @@ matrix:
         - python: 3.8
           env: JUPYTER=true
     allow_failures:
-        - python: 2.7
-          env: JUPYTER=true
 
 install:
   - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then curl --silent http://repo.continuum.io/miniconda/Miniconda-latest-MacOSX-x86_64.sh -o miniconda.sh; fi
@@ -34,9 +30,6 @@ install:
   - source activate testenv
   - if "$JUPYTER"; then
       pip install -r requirements/jupyter.txt;
-      if [ ${TRAVIS_PYTHON_VERSION%-*} == '2.7' ]; then
-        pip install -r requirements/jupyter-extra-py27.txt;
-      fi;
     fi
   - python setup.py -q install
   - pip install -r requirements/test.txt

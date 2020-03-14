@@ -2,7 +2,14 @@
 
 ## [Unreleased]
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.6...master))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.8...master))
+
+## [1.0.8] - 2020-03-14
+
+**PyPI**: https://pypi.org/project/atpbar/1.0.8/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.7...v1.0.8))
+- stopped supporting Python 2.7
 
 ## [1.0.7] - 2020-02-29
 
