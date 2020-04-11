@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 #### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.8...master))
+- moved the dependency list from `requirements` to `setup.py`
+- updated `.travis.yml`, `.coveragerc`
 
 ## [1.0.8] - 2020-03-14
 
