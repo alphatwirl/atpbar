@@ -3,7 +3,8 @@
 branch = True
 concurrency = multiprocessing
 omit =
-     atpbar/_version.py
+     */_version.py
+     */site-packages/*
 
 [report]
 # Regexes for lines to exclude from consideration

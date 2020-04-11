@@ -27,5 +27,17 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    packages=find_packages(exclude=['docs', 'tests'])
+    packages=find_packages(exclude=['docs', 'tests']),
+    extras_require={
+        'tests': [
+            'pytest>-5.4',
+            'pytest-cov>=2.8',
+            'pytest-console-scripts>=0.2',
+            'mantichora>=0.10',
+        ],
+        'jupyter': [
+            'jupyter>-1.0',
+            'ipywidgets>=7.5',
+        ]
+    }
 )
