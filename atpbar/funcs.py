@@ -154,11 +154,7 @@ def fetch_reporter():
         _lock.release()
 
 def in_main_thread():
-    try:
-        return threading.current_thread() == threading.main_thread()
-    except:
-        # python 2
-        return isinstance(threading.current_thread(), threading._MainThread)
+    return threading.current_thread() == threading.main_thread()
 
 ##__________________________________________________________________||
 def _start_pickup_if_necessary():
