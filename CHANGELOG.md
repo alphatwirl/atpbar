@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.9...master))
+- set start method of `multiprocessing` in an example for Python 3.8
 - removed code for Python 2.7
 
 ## [1.0.9] - 2020-04-19
