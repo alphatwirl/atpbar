@@ -98,4 +98,24 @@ class Presentation(object):
     def _read_time(self):
         self.last_time = self._time()
 
+    def _get_time_track(self, start_time, percent):
+        """Format seconds as hours, minutes and seconds.
+        """
+        time_elapsed = self._time() - start_time
+        time_remaining = (time_elapsed * (100/percent)) - time_elapsed if percent > 0 else 0
+
+        return self._time_to_str(time_elapsed), self._time_to_str(time_remaining)
+    
+    def _time_to_str(self, t):
+        mins = t // 60
+        s = int(t % 60)
+        
+        h = int(mins // 60)
+        m = int(mins % 60)
+
+        if h:
+            return '{0:d}:{1:02d}:{2:02d}'.format(h, m, s)
+        else:
+            return '{0:02d}:{1:02d}'.format(m, s)
+
 ##__________________________________________________________________||

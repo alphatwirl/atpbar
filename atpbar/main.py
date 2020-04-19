@@ -1,13 +1,14 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import os, uuid
 import logging
+import time
 
 import contextlib
 
 from .funcs import fetch_reporter, in_main_thread
 
 ##__________________________________________________________________||
-def atpbar(iterable, name=None):
+def atpbar(iterable, name=None, time_track=False):
     """returns an instance of `Atpbar`
 
     Parameters
@@ -35,7 +36,7 @@ def atpbar(iterable, name=None):
     if name is None:
         name = repr(iterable)
 
-    return Atpbar(iterable, name=name, len_=len_)
+    return Atpbar(iterable, name=name, len_=len_, time_track=time_track)
 
 ##__________________________________________________________________||
 class Atpbar(object):
@@ -56,11 +57,12 @@ class Atpbar(object):
 
     """
 
-    def __init__(self, iterable, name, len_):
+    def __init__(self, iterable, name, len_, time_track=False):
         self.iterable = iterable
         self.name = name
         self.len_ = len_
         self.id_ = uuid.uuid4()
+        self.time_track = time_track
 
     def __iter__(self):
         with fetch_reporter() as reporter:
@@ -82,6 +84,8 @@ class Atpbar(object):
                 taskid=self.id_, name=self.name,
                 done=0, total=self.len_,
                 pid=os.getpid(), in_main_thread=in_main_thread())
+            if self.time_track:
+                report['start_time'] = start_time=time.time()
             self.reporter.report(report)
         except:
             pass
