@@ -3,6 +3,8 @@
 import time, random
 import multiprocessing
 
+multiprocessing.set_start_method('fork')
+
 from atpbar import atpbar, register_reporter, find_reporter, flush
 
 ##__________________________________________________________________||
