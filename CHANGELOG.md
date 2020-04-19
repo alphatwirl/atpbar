@@ -2,7 +2,14 @@
 
 ## [Unreleased]
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.8...master))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.9...master))
+
+## [1.0.9] - 2020-04-19
+
+**PyPI**: https://pypi.org/project/atpbar/1.0.9/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.8...v1.0.9))
+- added the option to show time elapsed and remaining on Jupyter Notebook [#13](https://github.com/alphatwirl/atpbar/pull/13)
 - moved the dependency list from `requirements` to `setup.py`
 - updated `.travis.yml`, `.coveragerc`
 
