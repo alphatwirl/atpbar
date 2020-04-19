@@ -215,6 +215,8 @@ an example.
 
 ```python
 import multiprocessing
+multiprocessing.set_start_method('fork', force=True)
+
 from atpbar import register_reporter, find_reporter, flush
 
 def run_with_multiprocessing():
