@@ -1,6 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import os
 import sys
+import shutil
 
 from .base import Presentation
 
@@ -22,18 +23,9 @@ class ProgressBar(Presentation):
 
     def _get_width(self):
         try:
-            import shutil
             columns = shutil.get_terminal_size().columns
             return max(MINIMUM_TERMINAL_WIDTH, columns - 1)
         except AttributeError:
-            # Python 2
-            pass
-
-        try:
-            rows, columns = os.popen('stty size', 'r').read().split()
-            columns = int(columns)
-            return max(MINIMUM_TERMINAL_WIDTH, columns - 1)
-        except Exception:
             return MINIMUM_TERMINAL_WIDTH
 
     def _present(self):
