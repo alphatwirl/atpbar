@@ -35,7 +35,7 @@ def mock_fetch_reporter_raise(monkeypatch, mock_reporter):
     return ret
 
 ##__________________________________________________________________||
-class Iter(object):
+class Iter:
     def __init__(self, content):
         self.content = content
 

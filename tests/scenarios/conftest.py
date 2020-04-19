@@ -42,7 +42,7 @@ class MockProgressBar(Presentation):
     def _present(self):
         pass
 
-class MockCreatePresentation(object):
+class MockCreatePresentation:
     """A functor to mock `create_presentation()`.
 
     It keeps returned values so they can be examined later.

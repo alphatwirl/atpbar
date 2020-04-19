@@ -29,7 +29,7 @@ def test_mock_fetch_reporter(mock_fetch_reporter, mock_reporter):
         assert reporter is mock_reporter
 
 ##__________________________________________________________________||
-class Iter(object):
+class Iter:
     def __init__(self, content):
         self.content = content
 
@@ -40,7 +40,7 @@ class Iter(object):
         for e in self.content:
             yield e
 
-class GetItem(object):
+class GetItem:
     def __init__(self, content):
         self.content = content
 

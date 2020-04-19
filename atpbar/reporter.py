@@ -6,7 +6,7 @@ from .report import ProgressReportComplementer
 DEFAULT_INTERVAL = 0.1 # [second]
 
 ##__________________________________________________________________||
-class ProgressReporter(object):
+class ProgressReporter:
     """A progress reporter
 
     This class sends progress reports. The reports will be picked up

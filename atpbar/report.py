@@ -1,7 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 
 ##__________________________________________________________________||
-class ProgressReportComplementer(object):
+class ProgressReportComplementer:
     """Complement progress reports
 
     Complement a progress report with the previous report for the same

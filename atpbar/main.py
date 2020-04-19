@@ -39,7 +39,7 @@ def atpbar(iterable, name=None, time_track=False):
     return Atpbar(iterable, name=name, len_=len_, time_track=time_track)
 
 ##__________________________________________________________________||
-class Atpbar(object):
+class Atpbar:
     """Progress bar
 
     An iterable that wraps another iterable and shows the progress

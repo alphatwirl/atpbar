@@ -2,7 +2,7 @@
 import time
 
 ##__________________________________________________________________||
-class Presentation(object):
+class Presentation:
     """A base class of the progress presentation.
 
     A subclass of this class should implement ``_present()``.
