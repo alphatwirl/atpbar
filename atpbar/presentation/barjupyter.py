@@ -82,7 +82,11 @@ class ProgressBarJupyter(Presentation):
         bar = (':' * int(percent * 40)).ljust(40, " ")
         percent = round(percent * 100, 2)
         name = report['name'][0:name_field_length]
-        label.value = '<pre> | {:8d} / {:8d} |:  {:<{}s}</pre>'.format(report['done'], report['total'], name, name_field_length)
+        if 'start_time' in report.keys():
+            elapsed_str, remaining_str = self._get_time_track(report['start_time'], percent)
+            label.value = '<pre> | {:8d} / {:8d}  ({:s} / {:s}) |: {:<{}s}</pre>'.format(report['done'], report['total'], elapsed_str, remaining_str, name, name_field_length)
+        else:
+            label.value = '<pre> | {:8d} / {:8d} |: {:<{}s}</pre>'.format(report['done'], report['total'], name, name_field_length)
 
     def _reorder_widgets(self, report):
         for taskid in self._finishing_taskids:
