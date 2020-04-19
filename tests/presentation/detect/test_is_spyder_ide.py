@@ -3,10 +3,7 @@ import sys
 
 import pytest
 
-try:
-    import unittest.mock as mock
-except ImportError:
-    import mock
+import unittest.mock as mock
 
 from atpbar.presentation.detect.spy import is_spyder_ide
 

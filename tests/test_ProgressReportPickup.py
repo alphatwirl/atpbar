@@ -3,10 +3,7 @@ import pytest
 import time
 import multiprocessing
 
-try:
-    import unittest.mock as mock
-except ImportError:
-    import mock
+import unittest.mock as mock
 
 from atpbar.pickup import ProgressReportPickup
 

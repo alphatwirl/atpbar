@@ -4,10 +4,7 @@ import sys
 
 import pytest
 
-try:
-    import unittest.mock as mock
-except ImportError:
-    import mock
+import unittest.mock as mock
 
 has_jupyter_notebook = False
 try:
