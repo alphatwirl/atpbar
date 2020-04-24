@@ -36,9 +36,8 @@ def find_reporter():
     global _lock
     global _reporter
 
-    _lock.acquire()
-    _start_pickup_if_necessary()
-    _lock.release()
+    with _lock:
+        _start_pickup_if_necessary()
 
     return _reporter
 
@@ -80,10 +79,9 @@ def flush():
 
     """
     global _lock
-    _lock.acquire()
-    _end_pickup()
-    _start_pickup_if_necessary()
-    _lock.release()
+    with _lock:
+        _end_pickup()
+        _start_pickup_if_necessary()
 
 ##__________________________________________________________________||
 def disable():
@@ -110,9 +108,8 @@ def end_pickup():
 
     """
     global _lock
-    _lock.acquire()
-    _end_pickup()
-    _lock.release()
+    with _lock:
+        _end_pickup()
 
 
 import multiprocessing.queues # This import prevents the issue
@@ -128,9 +125,8 @@ def fetch_reporter():
     global _do_not_start_pickup
     global _pickup_owned
 
-    _lock.acquire()
-    _start_pickup_if_necessary()
-    _lock.release()
+    with _lock:
+        _start_pickup_if_necessary()
 
     own_pickup = False
     if not _do_not_start_pickup:
@@ -143,15 +139,14 @@ def fetch_reporter():
     try:
         yield _reporter
     finally:
-        _lock.acquire()
-        if detach.to_detach_pickup:
+        with _lock:
+            if detach.to_detach_pickup:
+                if own_pickup:
+                    own_pickup = False
+                    _pickup_owned = False
             if own_pickup:
-                own_pickup = False
-                _pickup_owned = False
-        if own_pickup:
-            _end_pickup()
-            _start_pickup_if_necessary()
-        _lock.release()
+                _end_pickup()
+                _start_pickup_if_necessary()
 
 def in_main_thread():
     return threading.current_thread() == threading.main_thread()
