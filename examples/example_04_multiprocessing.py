@@ -38,7 +38,7 @@ for i in range(nprocesses):
 ntasks = 10
 for i in range(ntasks):
     name = 'task {}'.format(i)
-    n = random.randint(5, 100000)
+    n = random.randint(5, 10000)
     queue.put((n, name))
 
 ##__________________________________________________________________||

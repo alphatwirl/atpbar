@@ -16,7 +16,7 @@ threads = [ ]
 
 for i in range(nthreads):
     name = 'thread {}'.format(i)
-    n = random.randint(5, 100000)
+    n = random.randint(5, 10000)
     t = threading.Thread(target=task, args=(n, name))
     t.start()
     threads.append(t)
