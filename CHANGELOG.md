@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 #### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.9...master))
+- cleaned code
+- updated tests
+- made the number of iterations in examples smaller
 - set start method of `multiprocessing` in an example for Python 3.8
 - removed code for Python 2.7
 
