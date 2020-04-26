@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 #### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.9...master))
+- optimized the brief short of pickup
 - cleaned code
 - updated tests
 - made the number of iterations in examples smaller
