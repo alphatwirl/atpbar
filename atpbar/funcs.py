@@ -110,7 +110,6 @@ class StateMachine:
         self._reporter = None
         self._pickup = None
         self._pickup_owned = False
-        self._do_not_start_pickup = False
 
     def change_state(self, State):
         self.state = State(self)
@@ -128,11 +127,9 @@ class State:
 
     def register_reporter(self, reporter):
         self.machine._reporter = reporter
-        self.machine._do_not_start_pickup = True
         self.machine.change_state(Registered)
 
     def disable(self):
-        self.machine._do_not_start_pickup = True
         self.machine.change_state(Disabled)
 
     def end_pickup(self):
@@ -154,11 +151,10 @@ class Initial(State):
             self._start_pickup_if_necessary()
 
         own_pickup = False
-        if not self.machine._do_not_start_pickup:
-            if in_main_thread():
-                if not self.machine._pickup_owned:
-                    own_pickup = True
-                    self.machine._pickup_owned = True
+        if in_main_thread():
+            if not self.machine._pickup_owned:
+                own_pickup = True
+                self.machine._pickup_owned = True
 
 
         try:
@@ -174,9 +170,6 @@ class Initial(State):
                     self._start_pickup_if_necessary()
 
     def _start_pickup_if_necessary(self):
-        if self.machine._do_not_start_pickup:
-            return
-
         if self.machine._reporter is None:
             if self.machine._queue is None:
                 self.machine._queue = multiprocessing.Queue()
