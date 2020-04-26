@@ -32,14 +32,7 @@ def find_reporter():
         The progress reporter
 
     """
-
-    global _lock
-    global _reporter
-
-    with _lock:
-        _start_pickup_if_necessary()
-
-    return _reporter
+    return _machine.state.find_reporter()
 
 ##__________________________________________________________________||
 def register_reporter(reporter):
@@ -168,6 +161,15 @@ class State:
     """
     def __init__(self, machine):
         self.machine = machine
+    def find_reporter(self):
+        global _lock
+        global _reporter
+
+        with _lock:
+            _start_pickup_if_necessary()
+
+        return _reporter
+
     def register_reporter(self, reporter):
         global _reporter
         global _do_not_start_pickup
