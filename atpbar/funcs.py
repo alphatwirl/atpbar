@@ -67,10 +67,7 @@ def flush():
     None
 
     """
-    global _lock
-    with _lock:
-        _end_pickup()
-        _start_pickup_if_necessary()
+    _machine.state.flush()
 
 ##__________________________________________________________________||
 def disable():
@@ -169,6 +166,12 @@ class State:
             _start_pickup_if_necessary()
 
         return _reporter
+
+    def flush(self):
+        global _lock
+        with _lock:
+            _end_pickup()
+            _start_pickup_if_necessary()
 
     def register_reporter(self, reporter):
         global _reporter
