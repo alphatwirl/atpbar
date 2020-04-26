@@ -111,32 +111,6 @@ def in_main_thread():
     return threading.current_thread() == threading.main_thread()
 
 ##__________________________________________________________________||
-def _start_pickup_if_necessary():
-    global _reporter
-    global _queue
-    global _pickup
-    global _pickup_owned
-    global _do_not_start_pickup
-
-    if _do_not_start_pickup:
-        return
-
-    if _reporter is None:
-        if _queue is None:
-            _queue = multiprocessing.Queue()
-        _reporter = ProgressReporter(queue=_queue)
-
-    if _pickup is not None:
-        return
-
-    presentation = create_presentation()
-    _pickup = ProgressReportPickup(_queue, presentation)
-    _pickup.start()
-    _pickup_owned = False
-
-    return
-
-##__________________________________________________________________||
 def _end_pickup():
     global _queue
     global _pickup
@@ -163,7 +137,7 @@ class State:
         global _reporter
 
         with _lock:
-            _start_pickup_if_necessary()
+            self._start_pickup_if_necessary()
 
         return _reporter
 
@@ -171,7 +145,7 @@ class State:
         global _lock
         with _lock:
             _end_pickup()
-            _start_pickup_if_necessary()
+            self._start_pickup_if_necessary()
 
     def register_reporter(self, reporter):
         global _reporter
@@ -183,6 +157,32 @@ class State:
         global _do_not_start_pickup
         _do_not_start_pickup = True
         self.machine.change_state(Disabled)
+
+    def _start_pickup_if_necessary(self):
+        global _reporter
+        global _queue
+        global _pickup
+        global _pickup_owned
+        global _do_not_start_pickup
+
+        if _do_not_start_pickup:
+            return
+
+        if _reporter is None:
+            if _queue is None:
+                _queue = multiprocessing.Queue()
+            _reporter = ProgressReporter(queue=_queue)
+
+        if _pickup is not None:
+            return
+
+        presentation = create_presentation()
+        _pickup = ProgressReportPickup(_queue, presentation)
+        _pickup.start()
+        _pickup_owned = False
+
+        return
+
 
 class Initial(State):
     """Initial state
@@ -214,7 +214,7 @@ class Initial(State):
                         _pickup_owned = False
                 if own_pickup:
                     _end_pickup()
-                    _start_pickup_if_necessary()
+                    self._start_pickup_if_necessary()
 
 class Registered(State):
     """Registered state
