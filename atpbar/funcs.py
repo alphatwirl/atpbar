@@ -126,11 +126,6 @@ class State:
 
         return self.machine._reporter
 
-    def flush(self):
-        with self.machine._lock:
-            self._end_pickup()
-            self._start_pickup_if_necessary()
-
     def register_reporter(self, reporter):
         self.machine._reporter = reporter
         self.machine._do_not_start_pickup = True
@@ -150,26 +145,6 @@ class State:
             self.machine._pickup.join()
             self.machine._pickup = None
             detach.to_detach_pickup = False
-
-    def _start_pickup_if_necessary(self):
-        if self.machine._do_not_start_pickup:
-            return
-
-        if self.machine._reporter is None:
-            if self.machine._queue is None:
-                self.machine._queue = multiprocessing.Queue()
-            self.machine._reporter = ProgressReporter(queue=self.machine._queue)
-
-        if self.machine._pickup is not None:
-            return
-
-        presentation = create_presentation()
-        self.machine._pickup = ProgressReportPickup(self.machine._queue, presentation)
-        self.machine._pickup.start()
-        self.machine._pickup_owned = False
-
-        return
-
 
 class Initial(State):
     """Initial state
@@ -198,6 +173,30 @@ class Initial(State):
                     self._end_pickup()
                     self._start_pickup_if_necessary()
 
+    def _start_pickup_if_necessary(self):
+        if self.machine._do_not_start_pickup:
+            return
+
+        if self.machine._reporter is None:
+            if self.machine._queue is None:
+                self.machine._queue = multiprocessing.Queue()
+            self.machine._reporter = ProgressReporter(queue=self.machine._queue)
+
+        if self.machine._pickup is not None:
+            return
+
+        presentation = create_presentation()
+        self.machine._pickup = ProgressReportPickup(self.machine._queue, presentation)
+        self.machine._pickup.start()
+        self.machine._pickup_owned = False
+
+        return
+
+    def flush(self):
+        with self.machine._lock:
+            self._end_pickup()
+            self._start_pickup_if_necessary()
+
 class Registered(State):
     """Registered state
     """
@@ -207,6 +206,10 @@ class Registered(State):
         finally:
             pass
 
+    def flush(self):
+        with self.machine._lock:
+            self._end_pickup()
+
 class Disabled(State):
     """Disabled state
     """
@@ -215,6 +218,9 @@ class Disabled(State):
             yield self.machine._reporter
         finally:
             pass
+
+    def flush(self):
+        pass
 
 _machine = StateMachine()
 
