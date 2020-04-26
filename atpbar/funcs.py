@@ -60,11 +60,7 @@ def register_reporter(reporter):
     None
 
     """
-
-    global _reporter
-    global _do_not_start_pickup
-    _reporter = reporter
-    _do_not_start_pickup = True
+    _machine.state.register_reporter(reporter)
 
 ##__________________________________________________________________||
 def flush():
@@ -96,8 +92,6 @@ def disable():
 
     """
     _machine.state.disable()
-    # global _do_not_start_pickup
-    # _do_not_start_pickup = True
 
 ##__________________________________________________________________||
 def end_pickup():
@@ -174,6 +168,12 @@ class State:
     """
     def __init__(self, machine):
         self.machine = machine
+    def register_reporter(self, reporter):
+        global _reporter
+        global _do_not_start_pickup
+        _reporter = reporter
+        _do_not_start_pickup = True
+        self.machine.change_state(Registered)
     def disable(self):
         global _do_not_start_pickup
         _do_not_start_pickup = True
