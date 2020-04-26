@@ -105,9 +105,10 @@ class StateMachine:
     def __init__(self):
         self.state = Initial(self)
 
+        self._reporter = None
+
         self._lock = threading.Lock()
         self._queue = None
-        self._reporter = None
         self._pickup = None
         self._pickup_owned = False
 
@@ -156,7 +157,6 @@ class Initial(State):
                 own_pickup = True
                 self.machine._pickup_owned = True
 
-
         try:
             yield self.machine._reporter
         finally:
@@ -192,25 +192,21 @@ class Initial(State):
 
 class Registered(State):
     """Registered state
+
+    Typically, in a sub-process. The reporter, which has been created
+    in the main process, is registered in the sub-process
     """
     def fetch_reporter(self):
-        try:
-            yield self.machine._reporter
-        finally:
-            pass
+        yield self.machine._reporter
 
     def flush(self):
-        with self.machine._lock:
-            self._end_pickup()
+        pass
 
 class Disabled(State):
     """Disabled state
     """
     def fetch_reporter(self):
-        try:
-            yield self.machine._reporter
-        finally:
-            pass
+        yield None
 
     def flush(self):
         pass
