@@ -172,10 +172,6 @@ def _start_pickup_if_necessary():
 
     presentation = create_presentation()
     _pickup = ProgressReportPickup(_queue, presentation)
-    _pickup.daemon = True # this makes the functions
-                          # registered at atexit called even
-                          # if the pickup is still running
-
     _pickup.start()
     _pickup_owned = False
 

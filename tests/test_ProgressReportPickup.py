@@ -10,7 +10,7 @@ from atpbar.pickup import ProgressReportPickup
 ##__________________________________________________________________||
 @pytest.fixture()
 def presentation():
-    return mock.MagicMock()
+    return mock.Mock()
 
 ##__________________________________________________________________||
 @pytest.fixture()
@@ -27,6 +27,11 @@ def test_start_join(pickup, queue, presentation):
     pickup.start()
     queue.put(None)
     pickup.join()
+
+def test_daemon(pickup, queue, presentation):
+    presentation.active.return_value = True
+    pickup.start()
+    # it is ok not to execute `queue.put(None)`.
 
 ##__________________________________________________________________||
 @pytest.fixture()

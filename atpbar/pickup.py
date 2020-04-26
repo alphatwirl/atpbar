@@ -12,7 +12,10 @@ class ProgressReportPickup(threading.Thread):
 
     """
     def __init__(self, queue, presentation):
-        threading.Thread.__init__(self)
+        super().__init__(daemon=True)
+        # The daemon makes the functions registered at atexit called
+        # even if the pickup is still running
+
         self.queue = queue
         self.presentation = presentation
         self.last_wait_time = 1.0 # [second]
