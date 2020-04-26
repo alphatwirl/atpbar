@@ -76,6 +76,8 @@ def global_variables(monkeypatch):
     monkeypatch.setattr(module, '_pickup_owned', False)
     monkeypatch.setattr(module, '_do_not_start_pickup', False)
 
+    monkeypatch.setattr(module, '_machine', module.StateMachine())
+
     module = sys.modules['atpbar.detach']
     monkeypatch.setattr(module, 'to_detach_pickup', False)
 

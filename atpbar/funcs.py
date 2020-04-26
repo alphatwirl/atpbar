@@ -95,8 +95,9 @@ def disable():
     None
 
     """
-    global _do_not_start_pickup
-    _do_not_start_pickup = True
+    _machine.state.disable()
+    # global _do_not_start_pickup
+    # _do_not_start_pickup = True
 
 ##__________________________________________________________________||
 def end_pickup():
@@ -120,33 +121,7 @@ atexit.register(end_pickup)
 ##__________________________________________________________________||
 @contextlib.contextmanager
 def fetch_reporter():
-    global _lock
-    global _reporter
-    global _do_not_start_pickup
-    global _pickup_owned
-
-    with _lock:
-        _start_pickup_if_necessary()
-
-    own_pickup = False
-    if not _do_not_start_pickup:
-        if in_main_thread():
-            if not _pickup_owned:
-                own_pickup = True
-                _pickup_owned = True
-
-
-    try:
-        yield _reporter
-    finally:
-        with _lock:
-            if detach.to_detach_pickup:
-                if own_pickup:
-                    own_pickup = False
-                    _pickup_owned = False
-            if own_pickup:
-                _end_pickup()
-                _start_pickup_if_necessary()
+    yield from _machine.state.fetch_reporter()
 
 def in_main_thread():
     return threading.current_thread() == threading.main_thread()
@@ -186,5 +161,76 @@ def _end_pickup():
         _pickup.join()
         _pickup = None
         detach.to_detach_pickup = False
+
+##__________________________________________________________________||
+class StateMachine:
+    def __init__(self):
+        self.state = Initial(self)
+    def change_state(self, State):
+        self.state = State(self)
+
+class State:
+    """The base class of the states
+    """
+    def __init__(self, machine):
+        self.machine = machine
+    def disable(self):
+        global _do_not_start_pickup
+        _do_not_start_pickup = True
+        self.machine.change_state(Disabled)
+
+class Initial(State):
+    """Initial state
+    """
+    def fetch_reporter(self):
+        global _lock
+        global _reporter
+        global _do_not_start_pickup
+        global _pickup_owned
+
+        with _lock:
+            _start_pickup_if_necessary()
+
+        own_pickup = False
+        if not _do_not_start_pickup:
+            if in_main_thread():
+                if not _pickup_owned:
+                    own_pickup = True
+                    _pickup_owned = True
+
+
+        try:
+            yield _reporter
+        finally:
+            with _lock:
+                if detach.to_detach_pickup:
+                    if own_pickup:
+                        own_pickup = False
+                        _pickup_owned = False
+                if own_pickup:
+                    _end_pickup()
+                    _start_pickup_if_necessary()
+
+class Registered(State):
+    """Registered state
+    """
+    def fetch_reporter(self):
+        global _reporter
+        try:
+            yield _reporter
+        finally:
+            pass
+
+class Disabled(State):
+    """Disabled state
+    """
+    def fetch_reporter(self):
+        global _reporter
+        try:
+            yield _reporter
+        finally:
+            pass
+
+_machine = StateMachine()
 
 ##__________________________________________________________________||

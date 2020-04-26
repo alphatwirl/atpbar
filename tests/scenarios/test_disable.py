@@ -132,3 +132,8 @@ def test_multiprocessing(mock_create_presentation, wrap_end_pickup, nprocesses, 
     assert 0 == len(presentations)
 
 ##__________________________________________________________________||
+def test_call_twice():
+    disable()
+    disable()
+
+##__________________________________________________________________||
