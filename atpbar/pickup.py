@@ -10,6 +10,12 @@ class ProgressReportPickup(threading.Thread):
 
     This class picks up progress reports and presents them.
 
+    Parameters
+    ----------
+    queue : multiprocessing.Queue
+        The queue through which this class receives progress reports
+    presentation :
+        The presentation of the reports
     """
     def __init__(self, queue, presentation):
         super().__init__(daemon=True)
@@ -37,7 +43,8 @@ class ProgressReportPickup(threading.Thread):
                     end_order_arrived = True
                     continue
                 self._process_report(report)
-            time.sleep(0.001)
+            time.sleep(0.001) # to prevent the empty `while` loop from
+                              # increasing CPU loads
 
     def _run_until_reports_stop_coming(self):
         self._read_time()

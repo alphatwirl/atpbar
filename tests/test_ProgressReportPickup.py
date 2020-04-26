@@ -36,7 +36,7 @@ def test_daemon(pickup, queue, presentation):
 ##__________________________________________________________________||
 @pytest.fixture()
 def mock_queue():
-    return mock.MagicMock()
+    return mock.Mock()
 
 @pytest.fixture()
 def pickup0(mock_queue, presentation):
