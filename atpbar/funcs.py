@@ -92,9 +92,7 @@ def end_pickup():
     None
 
     """
-    global _lock
-    with _lock:
-        _end_pickup()
+    _machine.state.end_pickup()
 
 
 import multiprocessing.queues # This import prevents the issue
@@ -109,16 +107,6 @@ def fetch_reporter():
 
 def in_main_thread():
     return threading.current_thread() == threading.main_thread()
-
-##__________________________________________________________________||
-def _end_pickup():
-    global _queue
-    global _pickup
-    if _pickup:
-        _queue.put(None)
-        _pickup.join()
-        _pickup = None
-        detach.to_detach_pickup = False
 
 ##__________________________________________________________________||
 class StateMachine:
@@ -144,7 +132,7 @@ class State:
     def flush(self):
         global _lock
         with _lock:
-            _end_pickup()
+            self._end_pickup()
             self._start_pickup_if_necessary()
 
     def register_reporter(self, reporter):
@@ -153,10 +141,25 @@ class State:
         _reporter = reporter
         _do_not_start_pickup = True
         self.machine.change_state(Registered)
+
     def disable(self):
         global _do_not_start_pickup
         _do_not_start_pickup = True
         self.machine.change_state(Disabled)
+
+    def end_pickup(self):
+        global _lock
+        with _lock:
+            self._end_pickup()
+
+    def _end_pickup(self):
+        global _queue
+        global _pickup
+        if _pickup:
+            _queue.put(None)
+            _pickup.join()
+            _pickup = None
+            detach.to_detach_pickup = False
 
     def _start_pickup_if_necessary(self):
         global _reporter
@@ -194,7 +197,7 @@ class Initial(State):
         global _pickup_owned
 
         with _lock:
-            _start_pickup_if_necessary()
+            self._start_pickup_if_necessary()
 
         own_pickup = False
         if not _do_not_start_pickup:
@@ -213,7 +216,7 @@ class Initial(State):
                         own_pickup = False
                         _pickup_owned = False
                 if own_pickup:
-                    _end_pickup()
+                    self._end_pickup()
                     self._start_pickup_if_necessary()
 
 class Registered(State):

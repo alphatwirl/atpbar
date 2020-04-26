@@ -8,7 +8,7 @@ import unittest.mock as mock
 
 from atpbar.presentation.base import Presentation
 
-from atpbar.funcs import end_pickup, _end_pickup
+from atpbar.funcs import end_pickup
 
 ##__________________________________________________________________||
 class MockProgressBar(Presentation):
@@ -87,10 +87,10 @@ def global_variables(monkeypatch):
 
 ##__________________________________________________________________||
 @pytest.fixture(autouse=True)
-def wrap_end_pickup(monkeypatch):
-    ret = mock.Mock(wraps=_end_pickup)
+def wrap_end_pickup(global_variables):
     module = sys.modules['atpbar.funcs']
-    monkeypatch.setattr(module, '_end_pickup', ret)
+    ret = mock.Mock(wraps=module._machine.state._end_pickup)
+    module.State._end_pickup = ret
     yield ret
 
 ##__________________________________________________________________||
