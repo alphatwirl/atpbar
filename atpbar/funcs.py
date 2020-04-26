@@ -11,14 +11,6 @@ from .presentation.create import create_presentation
 from . import detach
 
 ##__________________________________________________________________||
-_lock = threading.Lock()
-_queue = None
-_reporter = None
-_pickup = None
-_pickup_owned = False
-_do_not_start_pickup = False
-
-##__________________________________________________________________||
 def find_reporter():
     """returns the progress reporter
 
@@ -112,6 +104,14 @@ def in_main_thread():
 class StateMachine:
     def __init__(self):
         self.state = Initial(self)
+
+        self._lock = threading.Lock()
+        self._queue = None
+        self._reporter = None
+        self._pickup = None
+        self._pickup_owned = False
+        self._do_not_start_pickup = False
+
     def change_state(self, State):
         self.state = State(self)
 
@@ -121,68 +121,52 @@ class State:
     def __init__(self, machine):
         self.machine = machine
     def find_reporter(self):
-        global _lock
-        global _reporter
-
-        with _lock:
+        with self.machine._lock:
             self._start_pickup_if_necessary()
 
-        return _reporter
+        return self.machine._reporter
 
     def flush(self):
-        global _lock
-        with _lock:
+        with self.machine._lock:
             self._end_pickup()
             self._start_pickup_if_necessary()
 
     def register_reporter(self, reporter):
-        global _reporter
-        global _do_not_start_pickup
-        _reporter = reporter
-        _do_not_start_pickup = True
+        self.machine._reporter = reporter
+        self.machine._do_not_start_pickup = True
         self.machine.change_state(Registered)
 
     def disable(self):
-        global _do_not_start_pickup
-        _do_not_start_pickup = True
+        self.machine._do_not_start_pickup = True
         self.machine.change_state(Disabled)
 
     def end_pickup(self):
-        global _lock
-        with _lock:
+        with self.machine._lock:
             self._end_pickup()
 
     def _end_pickup(self):
-        global _queue
-        global _pickup
-        if _pickup:
-            _queue.put(None)
-            _pickup.join()
-            _pickup = None
+        if self.machine._pickup:
+            self.machine._queue.put(None)
+            self.machine._pickup.join()
+            self.machine._pickup = None
             detach.to_detach_pickup = False
 
     def _start_pickup_if_necessary(self):
-        global _reporter
-        global _queue
-        global _pickup
-        global _pickup_owned
-        global _do_not_start_pickup
-
-        if _do_not_start_pickup:
+        if self.machine._do_not_start_pickup:
             return
 
-        if _reporter is None:
-            if _queue is None:
-                _queue = multiprocessing.Queue()
-            _reporter = ProgressReporter(queue=_queue)
+        if self.machine._reporter is None:
+            if self.machine._queue is None:
+                self.machine._queue = multiprocessing.Queue()
+            self.machine._reporter = ProgressReporter(queue=self.machine._queue)
 
-        if _pickup is not None:
+        if self.machine._pickup is not None:
             return
 
         presentation = create_presentation()
-        _pickup = ProgressReportPickup(_queue, presentation)
-        _pickup.start()
-        _pickup_owned = False
+        self.machine._pickup = ProgressReportPickup(self.machine._queue, presentation)
+        self.machine._pickup.start()
+        self.machine._pickup_owned = False
 
         return
 
@@ -191,30 +175,25 @@ class Initial(State):
     """Initial state
     """
     def fetch_reporter(self):
-        global _lock
-        global _reporter
-        global _do_not_start_pickup
-        global _pickup_owned
-
-        with _lock:
+        with self.machine._lock:
             self._start_pickup_if_necessary()
 
         own_pickup = False
-        if not _do_not_start_pickup:
+        if not self.machine._do_not_start_pickup:
             if in_main_thread():
-                if not _pickup_owned:
+                if not self.machine._pickup_owned:
                     own_pickup = True
-                    _pickup_owned = True
+                    self.machine._pickup_owned = True
 
 
         try:
-            yield _reporter
+            yield self.machine._reporter
         finally:
-            with _lock:
+            with self.machine._lock:
                 if detach.to_detach_pickup:
                     if own_pickup:
                         own_pickup = False
-                        _pickup_owned = False
+                        self.machine._pickup_owned = False
                 if own_pickup:
                     self._end_pickup()
                     self._start_pickup_if_necessary()
@@ -223,9 +202,8 @@ class Registered(State):
     """Registered state
     """
     def fetch_reporter(self):
-        global _reporter
         try:
-            yield _reporter
+            yield self.machine._reporter
         finally:
             pass
 
@@ -233,9 +211,8 @@ class Disabled(State):
     """Disabled state
     """
     def fetch_reporter(self):
-        global _reporter
         try:
-            yield _reporter
+            yield self.machine._reporter
         finally:
             pass
 

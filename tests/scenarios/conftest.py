@@ -68,30 +68,17 @@ def mock_create_presentation(monkeypatch):
 ##__________________________________________________________________||
 @pytest.fixture(autouse=True)
 def global_variables(monkeypatch):
-    module = sys.modules['atpbar.funcs']
-    monkeypatch.setattr(module, '_lock', threading.Lock())
-    monkeypatch.setattr(module, '_queue', None)
-    monkeypatch.setattr(module, '_reporter', None)
-    monkeypatch.setattr(module, '_pickup', None)
-    monkeypatch.setattr(module, '_pickup_owned', False)
-    monkeypatch.setattr(module, '_do_not_start_pickup', False)
-
-    monkeypatch.setattr(module, '_machine', module.StateMachine())
-
     module = sys.modules['atpbar.detach']
     monkeypatch.setattr(module, 'to_detach_pickup', False)
-
     yield
 
-    end_pickup()
-
-##__________________________________________________________________||
 @pytest.fixture(autouse=True)
-def wrap_end_pickup(global_variables):
+def machine(monkeypatch):
     module = sys.modules['atpbar.funcs']
-    ret = mock.Mock(wraps=module._machine.state._end_pickup)
-    module.State._end_pickup = ret
-    yield ret
+    y = module.StateMachine()
+    monkeypatch.setattr(module, '_machine', y)
+    yield
+    end_pickup()
 
 ##__________________________________________________________________||
 @pytest.fixture(autouse=True)

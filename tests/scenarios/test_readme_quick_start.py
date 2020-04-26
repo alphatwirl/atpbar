@@ -12,7 +12,7 @@ from atpbar import register_reporter, find_reporter, flush
 
 ##__________________________________________________________________||
 @pytest.mark.parametrize('niterations', [10, 1, 0])
-def test_one_loop(mock_create_presentation, wrap_end_pickup, niterations):
+def test_one_loop(mock_create_presentation, niterations):
 
     #
     for i in atpbar(range(niterations)):
@@ -22,8 +22,6 @@ def test_one_loop(mock_create_presentation, wrap_end_pickup, niterations):
     ## print(mock_create_presentation)
 
     #
-    assert 1 == wrap_end_pickup.call_count
-
     nreports_expected = niterations + 1
     presentations = mock_create_presentation.presentations
 
@@ -41,15 +39,13 @@ def test_one_loop(mock_create_presentation, wrap_end_pickup, niterations):
     assert 0 == len(progressbar1.reports)
 
 ##__________________________________________________________________||
-def test_nested_loops(mock_create_presentation, wrap_end_pickup):
+def test_nested_loops(mock_create_presentation):
     for i in atpbar(range(4)):
         for j in atpbar(range(3)):
             pass
 
     ## print()
     ## print(mock_create_presentation)
-
-    assert 1 == wrap_end_pickup.call_count
 
     presentations = mock_create_presentation.presentations
     assert 2 == len(presentations)
@@ -81,7 +77,7 @@ def run_with_threading(nthreads=3, niterations=[5, 5, 5]):
 
 @pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
 @pytest.mark.parametrize('nthreads', [3, 1, 0])
-def test_threading(mock_create_presentation, wrap_end_pickup, nthreads, niterations):
+def test_threading(mock_create_presentation, nthreads, niterations):
 
     # make niterations as long as nthreads. repeat if necessary
     niterations = list(itertools.chain(*itertools.repeat(niterations, nthreads//len(niterations)+1)))[:nthreads]
@@ -90,8 +86,6 @@ def test_threading(mock_create_presentation, wrap_end_pickup, nthreads, niterati
 
     ## print()
     ## print(mock_create_presentation)
-
-    assert 1 == wrap_end_pickup.call_count
 
     nreports_expected = sum(niterations) + nthreads
     presentations = mock_create_presentation.presentations
@@ -144,7 +138,7 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations):
 @pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
 @pytest.mark.parametrize('ntasks', [6, 3, 1, 0])
 @pytest.mark.parametrize('nprocesses', [10, 6, 2, 1])
-def test_multiprocessing(mock_create_presentation, wrap_end_pickup, nprocesses, ntasks, niterations):
+def test_multiprocessing(mock_create_presentation, nprocesses, ntasks, niterations):
 
     # make niterations as long as ntasks. repeat if necessary
     niterations = list(itertools.chain(*itertools.repeat(niterations, ntasks//len(niterations)+1)))[:ntasks]
@@ -153,8 +147,6 @@ def test_multiprocessing(mock_create_presentation, wrap_end_pickup, nprocesses, 
 
     ## print()
     ## print(mock_create_presentation)
-
-    assert 1 == wrap_end_pickup.call_count
 
     nreports_expected = sum(niterations) + ntasks
     presentations = mock_create_presentation.presentations

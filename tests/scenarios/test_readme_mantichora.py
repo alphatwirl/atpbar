@@ -28,7 +28,7 @@ def run_with_mantichora(nprocesses, ntasks, niterations):
 @pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
 @pytest.mark.parametrize('ntasks', [6, 3, 1, 0])
 @pytest.mark.parametrize('nprocesses', [10, 6, 2, 1])
-def test_mantichora(mock_create_presentation, wrap_end_pickup, nprocesses, ntasks, niterations):
+def test_mantichora(mock_create_presentation, nprocesses, ntasks, niterations):
 
     # make niterations as long as ntasks. repeat if necessary
     niterations = list(itertools.chain(*itertools.repeat(niterations, ntasks//len(niterations)+1)))[:ntasks]
@@ -37,8 +37,6 @@ def test_mantichora(mock_create_presentation, wrap_end_pickup, nprocesses, ntask
 
     print()
     print(mock_create_presentation)
-
-    assert 2 == wrap_end_pickup.call_count
 
     nreports_expected = sum(niterations) + ntasks
     presentations = mock_create_presentation.presentations

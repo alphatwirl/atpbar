@@ -12,7 +12,7 @@ from atpbar import flush
 @pytest.mark.parametrize('time_starting_task', [0, 0.01, 0.2])
 @pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
 @pytest.mark.parametrize('nthreads', [3, 1, 0])
-def test_threading_from_loop(mock_create_presentation, wrap_end_pickup, nthreads, niterations, time_starting_task):
+def test_threading_from_loop(mock_create_presentation, nthreads, niterations, time_starting_task):
 
     # make niterations as long as nthreads. repeat if necessary
     niterations = list(itertools.chain(*itertools.repeat(niterations, nthreads//len(niterations)+1)))[:nthreads]
@@ -60,8 +60,6 @@ def test_threading_from_loop(mock_create_presentation, wrap_end_pickup, nthreads
 
     ## print()
     ## print(mock_create_presentation)
-
-    ## assert 1 == wrap_end_pickup.call_count # 1 or 2 depending on how quickly the loop ends
 
     nreports_expected_from_main = nthreads + 1
     nreports_expected_from_threads = sum(niterations) + nthreads
