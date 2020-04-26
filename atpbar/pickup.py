@@ -36,27 +36,30 @@ class ProgressReportPickup(threading.Thread):
 
     def _run_until_the_end_order_arrives(self):
         end_order_arrived = False
-        while not end_order_arrived:
+        while True:
             while not self.queue.empty():
                 report = self.queue.get()
                 if report is None: # the end order
                     end_order_arrived = True
                     continue
                 self._process_report(report)
-            time.sleep(0.001) # to prevent the empty `while` loop from
-                              # increasing CPU loads
+            if end_order_arrived:
+                break
+            else:
+                self._short_sleep()
 
     def _run_until_reports_stop_coming(self):
-        self._read_time()
+        self.last_time = time.time()
         while self.presentation.active():
-            if self._time() - self.last_time > self.last_wait_time:
+            if time.time() - self.last_time > self.last_wait_time:
                 break
             while not self.queue.empty():
                 report = self.queue.get()
                 if report is None:
                     continue
-                self._read_time()
+                self.last_time = time.time()
                 self._process_report(report)
+            self._short_sleep()
 
     def _process_report(self, report):
         self._detach_self_if_necessary(report)
@@ -70,10 +73,14 @@ class ProgressReportPickup(threading.Thread):
             return
         detach_pickup()
 
-    def _time(self):
-        return time.time()
+    def _short_sleep(self):
+        """sleep very briefly
 
-    def _read_time(self):
-        self.last_time = self._time()
+        used to prevent the empty `while` loop from increasing CPU
+        loads
+
+        """
+        time.sleep(0.001)
+
 
 ##__________________________________________________________________||
