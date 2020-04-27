@@ -103,6 +103,7 @@ def in_main_thread():
 ##__________________________________________________________________||
 class StateMachine:
     def __init__(self):
+        self.lock = threading.Lock()
         self.state = Initial(self)
 
     def change_state(self, state):
@@ -129,18 +130,17 @@ class Initial(State):
         super().__init__(machine)
 
         self.reporter = None
-        self.lock = threading.Lock()
         self.queue = None
         self.pickup = None
         self.pickup_owned = False
 
     def find_reporter(self):
-        with self.lock:
+        with self.machine.lock:
             self._start_pickup_if_necessary()
         return self.reporter
 
     def fetch_reporter(self):
-        with self.lock:
+        with self.machine.lock:
             self._start_pickup_if_necessary()
 
         own_pickup = False
@@ -152,7 +152,7 @@ class Initial(State):
         try:
             yield self.reporter
         finally:
-            with self.lock:
+            with self.machine.lock:
                 if detach.to_detach_pickup:
                     if own_pickup:
                         own_pickup = False
@@ -178,12 +178,12 @@ class Initial(State):
         return
 
     def flush(self):
-        with self.lock:
+        with self.machine.lock:
             self._end_pickup()
             self._start_pickup_if_necessary()
 
     def end_pickup(self):
-        with self.lock:
+        with self.machine.lock:
             self._end_pickup()
 
     def _end_pickup(self):
