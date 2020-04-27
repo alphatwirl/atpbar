@@ -61,7 +61,7 @@ class MockCreatePresentation:
 @pytest.fixture(autouse=True)
 def mock_create_presentation(monkeypatch):
     ret = MockCreatePresentation()
-    module = sys.modules['atpbar.funcs']
+    module = sys.modules['atpbar.machine']
     monkeypatch.setattr(module, 'create_presentation', ret)
     return ret
 
