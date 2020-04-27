@@ -24,7 +24,8 @@ def find_reporter():
         The progress reporter
 
     """
-    _machine.state.prepare_reporter()
+    with _machine.lock:
+        _machine.state.prepare_reporter()
     return _machine.state.find_reporter()
 
 ##__________________________________________________________________||
@@ -96,7 +97,8 @@ atexit.register(end_pickup)
 ##__________________________________________________________________||
 @contextlib.contextmanager
 def fetch_reporter():
-    _machine.state.prepare_reporter()
+    with _machine.lock:
+        _machine.state.prepare_reporter()
     yield from _machine.state.fetch_reporter()
 
 def in_main_thread():
@@ -136,12 +138,20 @@ class MainProcess(State):
         self.reporter = reporter
         self.queue = queue
 
+class Initial(MainProcess):
+    """Initial state
+
+    The pickup is not running
+    """
+
+    def __init__(self, machine, reporter=None, queue=None):
+        super().__init__(machine, reporter=reporter, queue=queue)
+
         self.pickup = None
         self.pickup_owned = False
 
     def prepare_reporter(self):
-        with self.machine.lock:
-            self._start_pickup_if_necessary()
+        self._start_pickup_if_necessary()
 
     def find_reporter(self):
         return self.reporter
@@ -197,12 +207,12 @@ class MainProcess(State):
             self.pickup = None
             detach.to_detach_pickup = False
 
-class Initial(MainProcess):
-    """Initial state
-    """
+class Started(MainProcess):
+    """Started state
 
-    def __init__(self, machine, reporter=None, queue=None):
-        super().__init__(machine, reporter=reporter, queue=queue)
+    The pickup started and is running.
+    """
+    pass
 
 class Registered(State):
     """Registered state
