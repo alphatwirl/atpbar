@@ -2,7 +2,7 @@
 import atpbar
 
 # This simple script always ends with an error in a certain
-# environment in atpvar 1.0.2 as described in
+# environment in atpbar 1.0.2 as described in
 # https://github.com/alphatwirl/atpbar/issues/4
 
 ##__________________________________________________________________||
