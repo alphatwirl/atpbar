@@ -177,12 +177,31 @@ class Started(MainProcess):
     def __init__(self, machine, reporter=None, queue=None):
         super().__init__(machine, reporter=reporter, queue=queue)
 
-        self.pickup = None
+        if self.reporter is None:
+            if self.queue is None:
+                self.queue = multiprocessing.Queue()
+            self.reporter = ProgressReporter(queue=self.queue)
+
+        self._start_pickup()
+
+    def _start_pickup(self):
+        presentation = create_presentation()
+        self.pickup = ProgressReportPickup(self.queue, presentation)
+        self.pickup.start()
         self.pickup_owned = False
-        self._start_pickup_if_necessary()
+
+    def _end_pickup(self):
+        self.queue.put(None)
+        self.pickup.join()
+        self.pickup = None
+        detach.to_detach_pickup = False
+
+    def _restart_pickup(self):
+        self._end_pickup()
+        self._start_pickup()
 
     def prepare_reporter(self):
-        self._start_pickup_if_necessary()
+        pass
 
     def find_reporter(self):
         return self.reporter
@@ -203,40 +222,15 @@ class Started(MainProcess):
                         own_pickup = False
                         self.pickup_owned = False
                 if own_pickup:
-                    self._end_pickup()
-                    self._start_pickup_if_necessary()
-
-    def _start_pickup_if_necessary(self):
-        if self.reporter is None:
-            if self.queue is None:
-                self.queue = multiprocessing.Queue()
-            self.reporter = ProgressReporter(queue=self.queue)
-
-        if self.pickup is not None:
-            return
-
-        presentation = create_presentation()
-        self.pickup = ProgressReportPickup(self.queue, presentation)
-        self.pickup.start()
-        self.pickup_owned = False
-
-        return
+                    self._restart_pickup()
 
     def flush(self):
-        self._end_pickup()
-        self._start_pickup_if_necessary()
+        self._restart_pickup()
 
     def end_pickup(self):
         self._end_pickup()
         next_state = Initial(self.machine, reporter=self.reporter, queue=self.queue)
         self.machine.change_state(next_state)
-
-    def _end_pickup(self):
-        if self.pickup:
-            self.queue.put(None)
-            self.pickup.join()
-            self.pickup = None
-            detach.to_detach_pickup = False
 
 class Registered(State):
     """Registered state
