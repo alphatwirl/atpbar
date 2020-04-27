@@ -107,9 +107,6 @@ class Started(MainProcess):
         self._end_pickup()
         self._start_pickup()
 
-    def prepare_reporter(self):
-        pass
-
     def fetch_reporter(self):
 
         if not in_main_thread():
