@@ -24,7 +24,7 @@ def find_reporter():
     """
     with _machine.lock:
         _machine.state.prepare_reporter()
-    return _machine.state.find_reporter()
+    return _machine.state.reporter
 
 ##__________________________________________________________________||
 def register_reporter(reporter):

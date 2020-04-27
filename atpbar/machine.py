@@ -60,9 +60,6 @@ class Initial(MainProcess):
         next_state = Started(self.machine, reporter=self.reporter, queue=self.queue)
         self.machine.change_state(next_state)
 
-    def find_reporter(self):
-        return self.reporter
-
     def fetch_reporter(self):
         yield self.reporter
 
@@ -107,9 +104,6 @@ class Started(MainProcess):
     def prepare_reporter(self):
         pass
 
-    def find_reporter(self):
-        return self.reporter
-
     def fetch_reporter(self):
         own_pickup = False
         if in_main_thread():
@@ -148,9 +142,6 @@ class Registered(State):
         super().__init__(machine)
         self.reporter = reporter
 
-    def find_reporter(self):
-        return self.reporter
-
     def fetch_reporter(self):
         yield self.reporter
 
@@ -163,9 +154,9 @@ class Registered(State):
 class Disabled(State):
     """Disabled state
     """
-
-    def find_reporter(self):
-        return None
+    def __init__(self, machine):
+        super().__init__(machine)
+        self.reporter = None
 
     def fetch_reporter(self):
         yield None
