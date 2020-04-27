@@ -95,6 +95,7 @@ atexit.register(end_pickup)
 ##__________________________________________________________________||
 @contextlib.contextmanager
 def fetch_reporter():
+    _machine.state.prepare_reporter()
     yield from _machine.state.fetch_reporter()
 
 def in_main_thread():
@@ -114,6 +115,9 @@ class State:
     """
     def __init__(self, machine):
         self.machine = machine
+
+    def prepare_reporter(self):
+        pass
 
     def register_reporter(self, reporter):
         next_state = Registered(self.machine, reporter=reporter)
@@ -139,10 +143,11 @@ class MainProcess(State):
             self._start_pickup_if_necessary()
         return self.reporter
 
-    def fetch_reporter(self):
+    def prepare_reporter(self):
         with self.machine.lock:
             self._start_pickup_if_necessary()
 
+    def fetch_reporter(self):
         own_pickup = False
         if in_main_thread():
             if not self.pickup_owned:
