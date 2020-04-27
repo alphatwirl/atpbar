@@ -24,6 +24,7 @@ def find_reporter():
         The progress reporter
 
     """
+    _machine.state.prepare_reporter()
     return _machine.state.find_reporter()
 
 ##__________________________________________________________________||
@@ -138,14 +139,12 @@ class MainProcess(State):
         self.pickup = None
         self.pickup_owned = False
 
-    def find_reporter(self):
-        with self.machine.lock:
-            self._start_pickup_if_necessary()
-        return self.reporter
-
     def prepare_reporter(self):
         with self.machine.lock:
             self._start_pickup_if_necessary()
+
+    def find_reporter(self):
+        return self.reporter
 
     def fetch_reporter(self):
         own_pickup = False
