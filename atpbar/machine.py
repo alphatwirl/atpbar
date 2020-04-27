@@ -34,6 +34,15 @@ class State:
     def disable(self):
         self.machine.change_state(Disabled(self.machine))
 
+    def fetch_reporter(self):
+        yield None
+
+    def flush(self):
+        pass
+
+    def end_pickup(self):
+        pass
+
 ##__________________________________________________________________||
 class MainProcess(State):
     """The base class of the states in the main process
@@ -66,9 +75,6 @@ class Initial(MainProcess):
     def flush(self):
         next_state = Started(self.machine, reporter=self.reporter, queue=self.queue)
         self.machine.change_state(next_state)
-
-    def end_pickup(self):
-        pass
 
 class Started(MainProcess):
     """Started state
@@ -145,26 +151,11 @@ class Registered(State):
     def fetch_reporter(self):
         yield self.reporter
 
-    def flush(self):
-        pass
-
-    def end_pickup(self):
-        pass
-
 class Disabled(State):
     """Disabled state
     """
     def __init__(self, machine):
         super().__init__(machine)
         self.reporter = None
-
-    def fetch_reporter(self):
-        yield None
-
-    def flush(self):
-        pass
-
-    def end_pickup(self):
-        pass
 
 ##__________________________________________________________________||
