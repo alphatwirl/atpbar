@@ -3,7 +3,8 @@
 ## [Unreleased]
 
 #### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.9...master))
-- optimized the brief short of pickup
+- reimplemented the logic in `funcs.py` with a state machine [#17](https://github.com/alphatwirl/atpbar/pull/17)
+- optimized the brief sleep of pickup
 - cleaned code
 - updated tests
 - made the number of iterations in examples smaller
