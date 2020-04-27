@@ -122,15 +122,15 @@ class State:
     def disable(self):
         self.machine.change_state(Disabled(self.machine))
 
-class Initial(State):
-    """Initial state
+class MainProcess(State):
+    """The base class of the states in the main process
     """
-
-    def __init__(self, machine, reporter=None, queue=None):
+    def __init__(self, machine, reporter, queue):
         super().__init__(machine)
 
         self.reporter = reporter
         self.queue = queue
+
         self.pickup = None
         self.pickup_owned = False
 
@@ -192,6 +192,13 @@ class Initial(State):
             self.pickup.join()
             self.pickup = None
             detach.to_detach_pickup = False
+
+class Initial(MainProcess):
+    """Initial state
+    """
+
+    def __init__(self, machine, reporter=None, queue=None):
+        super().__init__(machine, reporter=reporter, queue=queue)
 
 class Registered(State):
     """Registered state
