@@ -112,8 +112,8 @@ class StateMachine:
         self._pickup = None
         self._pickup_owned = False
 
-    def change_state(self, State):
-        self.state = State(self)
+    def change_state(self, state):
+        self.state = state
 
 class State:
     """The base class of the states
@@ -123,10 +123,10 @@ class State:
 
     def register_reporter(self, reporter):
         self.machine._reporter = reporter
-        self.machine.change_state(Registered)
+        self.machine.change_state(Registered(self.machine))
 
     def disable(self):
-        self.machine.change_state(Disabled)
+        self.machine.change_state(Disabled(self.machine))
 
 class Initial(State):
     """Initial state
