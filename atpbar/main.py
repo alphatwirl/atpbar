@@ -112,12 +112,14 @@ def report_last(pbar):
     try:
         yield
     finally:
-        if not pbar.loop_complete:
-            if pbar.reporter is not None:
-                try:
-                    report = dict(taskid=pbar.id_, first=False, last=True)
-                    pbar.reporter.report(report)
-                except:
-                    pass
+        if pbar.loop_complete:
+            return
+        if pbar.reporter is None:
+            return
+        try:
+            report = dict(taskid=pbar.id_, first=False, last=True)
+            pbar.reporter.report(report)
+        except:
+            pass
 
 ##__________________________________________________________________||
