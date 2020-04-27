@@ -76,6 +76,8 @@ class Started(State):
 
         self.reporter = reporter
         self.queue = queue
+        self.pickup = None
+        self.pickup_owned = False
 
         if self.reporter is None:
             if self.queue is None:
@@ -88,7 +90,6 @@ class Started(State):
         presentation = create_presentation()
         self.pickup = ProgressReportPickup(self.queue, presentation)
         self.pickup.start()
-        self.pickup_owned = False
 
     def _end_pickup(self):
         self.queue.put(None)
@@ -116,8 +117,8 @@ class Started(State):
             yield self.reporter
         finally:
             with self.machine.lock:
+                self.pickup_owned = False
                 if detach.to_detach_pickup:
-                    self.pickup_owned = False
                     return
                 self._restart_pickup()
 
