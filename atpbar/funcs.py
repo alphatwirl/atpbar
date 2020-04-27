@@ -153,6 +153,35 @@ class Initial(MainProcess):
         self.pickup_owned = False
 
     def prepare_reporter(self):
+        next_state = Started(self.machine, reporter=self.reporter, queue=self.queue)
+        self.machine.change_state(next_state)
+
+    def find_reporter(self):
+        return self.reporter
+
+    def fetch_reporter(self):
+        yield self.reporter
+
+    def flush(self):
+        next_state = Started(self.machine, reporter=self.reporter, queue=self.queue)
+        self.machine.change_state(next_state)
+
+    def end_pickup(self):
+        pass
+
+class Started(MainProcess):
+    """Started state
+
+    The pickup started and is running.
+    """
+    def __init__(self, machine, reporter=None, queue=None):
+        super().__init__(machine, reporter=reporter, queue=queue)
+
+        self.pickup = None
+        self.pickup_owned = False
+        self._start_pickup_if_necessary()
+
+    def prepare_reporter(self):
         self._start_pickup_if_necessary()
 
     def find_reporter(self):
@@ -199,6 +228,8 @@ class Initial(MainProcess):
 
     def end_pickup(self):
         self._end_pickup()
+        next_state = Initial(self.machine, reporter=self.reporter, queue=self.queue)
+        self.machine.change_state(next_state)
 
     def _end_pickup(self):
         if self.pickup:
@@ -206,13 +237,6 @@ class Initial(MainProcess):
             self.pickup.join()
             self.pickup = None
             detach.to_detach_pickup = False
-
-class Started(MainProcess):
-    """Started state
-
-    The pickup started and is running.
-    """
-    pass
 
 class Registered(State):
     """Registered state
