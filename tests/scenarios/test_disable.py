@@ -12,7 +12,7 @@ from atpbar import register_reporter, find_reporter, flush, disable
 
 ##__________________________________________________________________||
 @pytest.mark.parametrize('niterations', [10, 1, 0])
-def test_one_loop(mock_create_presentation, wrap_end_pickup, niterations):
+def test_one_loop(mock_create_presentation, niterations):
 
     #
     disable()
@@ -25,15 +25,12 @@ def test_one_loop(mock_create_presentation, wrap_end_pickup, niterations):
     print(mock_create_presentation)
 
     #
-    assert 0 == wrap_end_pickup.call_count
-
-    #
     presentations = mock_create_presentation.presentations
     assert 0 == len(presentations)
 
 
 ##__________________________________________________________________||
-def test_nested_loops(mock_create_presentation, wrap_end_pickup):
+def test_nested_loops(mock_create_presentation):
 
     disable()
 
@@ -43,8 +40,6 @@ def test_nested_loops(mock_create_presentation, wrap_end_pickup):
 
     ## print()
     ## print(mock_create_presentation)
-
-    assert 0 == wrap_end_pickup.call_count
 
 ##__________________________________________________________________||
 def run_with_threading(nthreads=3, niterations=[5, 5, 5]):
@@ -64,7 +59,7 @@ def run_with_threading(nthreads=3, niterations=[5, 5, 5]):
 
 @pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
 @pytest.mark.parametrize('nthreads', [3, 1, 0])
-def test_threading(mock_create_presentation, wrap_end_pickup, nthreads, niterations):
+def test_threading(mock_create_presentation, nthreads, niterations):
 
     disable()
 
@@ -75,8 +70,6 @@ def test_threading(mock_create_presentation, wrap_end_pickup, nthreads, niterati
 
     ## print()
     ## print(mock_create_presentation)
-
-    assert 1 == wrap_end_pickup.call_count
 
     presentations = mock_create_presentation.presentations
     assert 0 == len(presentations)
@@ -114,7 +107,7 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations):
 @pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
 @pytest.mark.parametrize('ntasks', [3, 1, 0])
 @pytest.mark.parametrize('nprocesses', [4, 1])
-def test_multiprocessing(mock_create_presentation, wrap_end_pickup, nprocesses, ntasks, niterations):
+def test_multiprocessing(mock_create_presentation, nprocesses, ntasks, niterations):
 
     disable()
 
@@ -126,9 +119,12 @@ def test_multiprocessing(mock_create_presentation, wrap_end_pickup, nprocesses, 
     ## print()
     ## print(mock_create_presentation)
 
-    assert 1 == wrap_end_pickup.call_count
-
     presentations = mock_create_presentation.presentations
     assert 0 == len(presentations)
+
+##__________________________________________________________________||
+def test_call_twice():
+    disable()
+    disable()
 
 ##__________________________________________________________________||

@@ -11,7 +11,7 @@ from atpbar import flush
 @pytest.mark.parametrize('method', ['break', 'exception'])
 @pytest.mark.parametrize('niterations', [10, 1, 0])
 @pytest.mark.parametrize('ndones', [10, 4, 1, 0])
-def test_one_loop_break_exception(mock_create_presentation, wrap_end_pickup, niterations, ndones, method):
+def test_one_loop_break_exception(mock_create_presentation, niterations, ndones, method):
     ndones = min(ndones, niterations)
 
     def task_break(ndones, niterations):
@@ -36,9 +36,6 @@ def test_one_loop_break_exception(mock_create_presentation, wrap_end_pickup, nit
 
     ## print()
     ## print(mock_create_presentation)
-
-    #
-    assert 1 == wrap_end_pickup.call_count
 
     nreports_expected = ndones + 1 + bool(ndones<niterations)
     presentations = mock_create_presentation.presentations

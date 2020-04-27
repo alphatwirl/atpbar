@@ -1,22 +1,12 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-import sys
 import atexit
-import threading
 import multiprocessing
 import contextlib
 
-from .reporter import ProgressReporter
-from .pickup import ProgressReportPickup
-from .presentation.create import create_presentation
-from . import detach
+from .machine import StateMachine
 
 ##__________________________________________________________________||
-_lock = threading.Lock()
-_queue = None
-_reporter = None
-_pickup = None
-_pickup_owned = False
-_do_not_start_pickup = False
+_machine = StateMachine()
 
 ##__________________________________________________________________||
 def find_reporter():
@@ -32,14 +22,9 @@ def find_reporter():
         The progress reporter
 
     """
-
-    global _lock
-    global _reporter
-
-    with _lock:
-        _start_pickup_if_necessary()
-
-    return _reporter
+    with _machine.lock:
+        _machine.state.prepare_reporter()
+    return _machine.state.find_reporter()
 
 ##__________________________________________________________________||
 def register_reporter(reporter):
@@ -60,11 +45,7 @@ def register_reporter(reporter):
     None
 
     """
-
-    global _reporter
-    global _do_not_start_pickup
-    _reporter = reporter
-    _do_not_start_pickup = True
+    _machine.state.register_reporter(reporter)
 
 ##__________________________________________________________________||
 def flush():
@@ -78,10 +59,8 @@ def flush():
     None
 
     """
-    global _lock
-    with _lock:
-        _end_pickup()
-        _start_pickup_if_necessary()
+    with _machine.lock:
+        _machine.state.flush()
 
 ##__________________________________________________________________||
 def disable():
@@ -95,8 +74,7 @@ def disable():
     None
 
     """
-    global _do_not_start_pickup
-    _do_not_start_pickup = True
+    _machine.state.disable()
 
 ##__________________________________________________________________||
 def end_pickup():
@@ -107,9 +85,8 @@ def end_pickup():
     None
 
     """
-    global _lock
-    with _lock:
-        _end_pickup()
+    with _machine.lock:
+        _machine.state.end_pickup()
 
 
 import multiprocessing.queues # This import prevents the issue
@@ -120,71 +97,8 @@ atexit.register(end_pickup)
 ##__________________________________________________________________||
 @contextlib.contextmanager
 def fetch_reporter():
-    global _lock
-    global _reporter
-    global _do_not_start_pickup
-    global _pickup_owned
-
-    with _lock:
-        _start_pickup_if_necessary()
-
-    own_pickup = False
-    if not _do_not_start_pickup:
-        if in_main_thread():
-            if not _pickup_owned:
-                own_pickup = True
-                _pickup_owned = True
-
-
-    try:
-        yield _reporter
-    finally:
-        with _lock:
-            if detach.to_detach_pickup:
-                if own_pickup:
-                    own_pickup = False
-                    _pickup_owned = False
-            if own_pickup:
-                _end_pickup()
-                _start_pickup_if_necessary()
-
-def in_main_thread():
-    return threading.current_thread() == threading.main_thread()
-
-##__________________________________________________________________||
-def _start_pickup_if_necessary():
-    global _reporter
-    global _queue
-    global _pickup
-    global _pickup_owned
-    global _do_not_start_pickup
-
-    if _do_not_start_pickup:
-        return
-
-    if _reporter is None:
-        if _queue is None:
-            _queue = multiprocessing.Queue()
-        _reporter = ProgressReporter(queue=_queue)
-
-    if _pickup is not None:
-        return
-
-    presentation = create_presentation()
-    _pickup = ProgressReportPickup(_queue, presentation)
-    _pickup.start()
-    _pickup_owned = False
-
-    return
-
-##__________________________________________________________________||
-def _end_pickup():
-    global _queue
-    global _pickup
-    if _pickup:
-        _queue.put(None)
-        _pickup.join()
-        _pickup = None
-        detach.to_detach_pickup = False
+    with _machine.lock:
+        _machine.state.prepare_reporter()
+    yield from _machine.state.fetch_reporter()
 
 ##__________________________________________________________________||

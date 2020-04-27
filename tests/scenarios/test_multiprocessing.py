@@ -51,7 +51,7 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task
 @pytest.mark.parametrize('ntasks', [3, 1, 0])
 @pytest.mark.parametrize('nprocesses', [6, 2, 1])
 def test_multiprocessing_from_loop(
-        mock_create_presentation, wrap_end_pickup,
+        mock_create_presentation,
         nprocesses, ntasks, niterations, time_starting_task):
 
     # make niterations as long as ntasks. repeat if necessary

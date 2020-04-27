@@ -5,7 +5,8 @@ import time
 
 import contextlib
 
-from .funcs import fetch_reporter, in_main_thread
+from .funcs import fetch_reporter
+from .misc import in_main_thread
 
 ##__________________________________________________________________||
 def atpbar(iterable, name=None, time_track=False):
