@@ -126,11 +126,11 @@ class Initial(State):
     """Initial state
     """
 
-    def __init__(self, machine):
+    def __init__(self, machine, reporter=None, queue=None):
         super().__init__(machine)
 
-        self.reporter = None
-        self.queue = None
+        self.reporter = reporter
+        self.queue = queue
         self.pickup = None
         self.pickup_owned = False
 
