@@ -44,26 +44,16 @@ class State:
         pass
 
 ##__________________________________________________________________||
-class MainProcess(State):
-    """The base class of the states in the main process
-    """
-    def __init__(self, machine, reporter, queue):
-        super().__init__(machine)
-
-        self.reporter = reporter
-        self.queue = queue
-
-class Initial(MainProcess):
+class Initial(State):
     """Initial state
 
-    The pickup is not running
+    The pickup is not running.
     """
 
     def __init__(self, machine, reporter=None, queue=None):
-        super().__init__(machine, reporter=reporter, queue=queue)
-
-        self.pickup = None
-        self.pickup_owned = False
+        super().__init__(machine)
+        self.reporter = reporter
+        self.queue = queue
 
     def prepare_reporter(self):
         next_state = Started(self.machine, reporter=self.reporter, queue=self.queue)
@@ -76,13 +66,16 @@ class Initial(MainProcess):
         next_state = Started(self.machine, reporter=self.reporter, queue=self.queue)
         self.machine.change_state(next_state)
 
-class Started(MainProcess):
+class Started(State):
     """Started state
 
-    The pickup started and is running.
+    The pickup started and is running, typically, in the main process
     """
     def __init__(self, machine, reporter=None, queue=None):
-        super().__init__(machine, reporter=reporter, queue=queue)
+        super().__init__(machine)
+
+        self.reporter = reporter
+        self.queue = queue
 
         if self.reporter is None:
             if self.queue is None:
