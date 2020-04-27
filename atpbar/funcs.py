@@ -122,8 +122,8 @@ class State:
         self.machine = machine
 
     def register_reporter(self, reporter):
-        self.machine._reporter = reporter
-        self.machine.change_state(Registered(self.machine))
+        next_state = Registered(self.machine, reporter=reporter)
+        self.machine.change_state(next_state)
 
     def disable(self):
         self.machine.change_state(Disabled(self.machine))
@@ -197,11 +197,15 @@ class Registered(State):
     in the main process, is registered in the sub-process
     """
 
+    def __init__(self, machine, reporter):
+        super().__init__(machine)
+        self.reporter = reporter
+
     def find_reporter(self):
-        return self.machine._reporter
+        return self.reporter
 
     def fetch_reporter(self):
-        yield self.machine._reporter
+        yield self.reporter
 
     def flush(self):
         pass
