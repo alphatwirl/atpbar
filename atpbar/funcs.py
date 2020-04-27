@@ -105,13 +105,6 @@ class StateMachine:
     def __init__(self):
         self.state = Initial(self)
 
-        self._reporter = None
-
-        self._lock = threading.Lock()
-        self._queue = None
-        self._pickup = None
-        self._pickup_owned = False
-
     def change_state(self, state):
         self.state = state
 
@@ -131,63 +124,73 @@ class State:
 class Initial(State):
     """Initial state
     """
+
+    def __init__(self, machine):
+        super().__init__(machine)
+
+        self.reporter = None
+        self.lock = threading.Lock()
+        self.queue = None
+        self.pickup = None
+        self.pickup_owned = False
+
     def find_reporter(self):
-        with self.machine._lock:
+        with self.lock:
             self._start_pickup_if_necessary()
-        return self.machine._reporter
+        return self.reporter
 
     def fetch_reporter(self):
-        with self.machine._lock:
+        with self.lock:
             self._start_pickup_if_necessary()
 
         own_pickup = False
         if in_main_thread():
-            if not self.machine._pickup_owned:
+            if not self.pickup_owned:
                 own_pickup = True
-                self.machine._pickup_owned = True
+                self.pickup_owned = True
 
         try:
-            yield self.machine._reporter
+            yield self.reporter
         finally:
-            with self.machine._lock:
+            with self.lock:
                 if detach.to_detach_pickup:
                     if own_pickup:
                         own_pickup = False
-                        self.machine._pickup_owned = False
+                        self.pickup_owned = False
                 if own_pickup:
                     self._end_pickup()
                     self._start_pickup_if_necessary()
 
     def _start_pickup_if_necessary(self):
-        if self.machine._reporter is None:
-            if self.machine._queue is None:
-                self.machine._queue = multiprocessing.Queue()
-            self.machine._reporter = ProgressReporter(queue=self.machine._queue)
+        if self.reporter is None:
+            if self.queue is None:
+                self.queue = multiprocessing.Queue()
+            self.reporter = ProgressReporter(queue=self.queue)
 
-        if self.machine._pickup is not None:
+        if self.pickup is not None:
             return
 
         presentation = create_presentation()
-        self.machine._pickup = ProgressReportPickup(self.machine._queue, presentation)
-        self.machine._pickup.start()
-        self.machine._pickup_owned = False
+        self.pickup = ProgressReportPickup(self.queue, presentation)
+        self.pickup.start()
+        self.pickup_owned = False
 
         return
 
     def flush(self):
-        with self.machine._lock:
+        with self.lock:
             self._end_pickup()
             self._start_pickup_if_necessary()
 
     def end_pickup(self):
-        with self.machine._lock:
+        with self.lock:
             self._end_pickup()
 
     def _end_pickup(self):
-        if self.machine._pickup:
-            self.machine._queue.put(None)
-            self.machine._pickup.join()
-            self.machine._pickup = None
+        if self.pickup:
+            self.queue.put(None)
+            self.pickup.join()
+            self.pickup = None
             detach.to_detach_pickup = False
 
 class Registered(State):
