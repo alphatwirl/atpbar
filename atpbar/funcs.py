@@ -61,7 +61,8 @@ def flush():
     None
 
     """
-    _machine.state.flush()
+    with _machine.lock:
+        _machine.state.flush()
 
 ##__________________________________________________________________||
 def disable():
@@ -86,7 +87,8 @@ def end_pickup():
     None
 
     """
-    _machine.state.end_pickup()
+    with _machine.lock:
+        _machine.state.end_pickup()
 
 
 import multiprocessing.queues # This import prevents the issue
@@ -192,13 +194,11 @@ class Initial(MainProcess):
         return
 
     def flush(self):
-        with self.machine.lock:
-            self._end_pickup()
-            self._start_pickup_if_necessary()
+        self._end_pickup()
+        self._start_pickup_if_necessary()
 
     def end_pickup(self):
-        with self.machine.lock:
-            self._end_pickup()
+        self._end_pickup()
 
     def _end_pickup(self):
         if self.pickup:
