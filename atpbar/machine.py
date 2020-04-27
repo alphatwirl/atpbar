@@ -111,22 +111,25 @@ class Started(MainProcess):
         pass
 
     def fetch_reporter(self):
-        own_pickup = False
-        if in_main_thread():
-            if not self.pickup_owned:
-                own_pickup = True
-                self.pickup_owned = True
+
+        if not in_main_thread():
+            yield self.reporter
+            return
+
+        if self.pickup_owned:
+            yield self.reporter
+            return
+
+        self.pickup_owned = True
 
         try:
             yield self.reporter
         finally:
             with self.machine.lock:
                 if detach.to_detach_pickup:
-                    if own_pickup:
-                        own_pickup = False
-                        self.pickup_owned = False
-                if own_pickup:
-                    self._restart_pickup()
+                    self.pickup_owned = False
+                    return
+                self._restart_pickup()
 
     def flush(self):
         self._restart_pickup()
