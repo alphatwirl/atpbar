@@ -120,11 +120,6 @@ class State:
     """
     def __init__(self, machine):
         self.machine = machine
-    def find_reporter(self):
-        with self.machine._lock:
-            self._start_pickup_if_necessary()
-
-        return self.machine._reporter
 
     def register_reporter(self, reporter):
         self.machine._reporter = reporter
@@ -133,20 +128,14 @@ class State:
     def disable(self):
         self.machine.change_state(Disabled)
 
-    def end_pickup(self):
-        with self.machine._lock:
-            self._end_pickup()
-
-    def _end_pickup(self):
-        if self.machine._pickup:
-            self.machine._queue.put(None)
-            self.machine._pickup.join()
-            self.machine._pickup = None
-            detach.to_detach_pickup = False
-
 class Initial(State):
     """Initial state
     """
+    def find_reporter(self):
+        with self.machine._lock:
+            self._start_pickup_if_necessary()
+        return self.machine._reporter
+
     def fetch_reporter(self):
         with self.machine._lock:
             self._start_pickup_if_necessary()
@@ -190,25 +179,50 @@ class Initial(State):
             self._end_pickup()
             self._start_pickup_if_necessary()
 
+    def end_pickup(self):
+        with self.machine._lock:
+            self._end_pickup()
+
+    def _end_pickup(self):
+        if self.machine._pickup:
+            self.machine._queue.put(None)
+            self.machine._pickup.join()
+            self.machine._pickup = None
+            detach.to_detach_pickup = False
+
 class Registered(State):
     """Registered state
 
     Typically, in a sub-process. The reporter, which has been created
     in the main process, is registered in the sub-process
     """
+
+    def find_reporter(self):
+        return self.machine._reporter
+
     def fetch_reporter(self):
         yield self.machine._reporter
 
     def flush(self):
         pass
 
+    def end_pickup(self):
+        pass
+
 class Disabled(State):
     """Disabled state
     """
+
+    def find_reporter(self):
+        return None
+
     def fetch_reporter(self):
         yield None
 
     def flush(self):
+        pass
+
+    def end_pickup(self):
         pass
 
 _machine = StateMachine()
