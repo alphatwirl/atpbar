@@ -2,11 +2,17 @@
 
 ## [Unreleased]
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.9...master))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.0...master))
+
+## [1.1.0] - 2020-04-27
+
+**PyPI**: https://pypi.org/project/atpbar/1.1.0/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.0.9...v1.1.0))
 - reimplemented the logic in `funcs.py` with a state machine [#17](https://github.com/alphatwirl/atpbar/pull/17)
 - optimized the brief sleep of pickup
 - cleaned code
-- updated tests
+- updated `setup.py`, tests
 - made the number of iterations in examples smaller
 - set start method of `multiprocessing` in an example for Python 3.8
 - removed code for Python 2.7
