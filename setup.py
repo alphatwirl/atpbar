@@ -1,12 +1,10 @@
 from setuptools import setup, find_packages
 import versioneer
 
-import os
-import io
+from pathlib import Path
 
-here = os.path.abspath(os.path.dirname(__file__))
-with io.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
+here = Path(__file__).resolve().parent
+long_description = here.joinpath('README.md').read_text()
 
 setup(
     name='atpbar',
