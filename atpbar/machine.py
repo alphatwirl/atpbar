@@ -13,31 +13,28 @@ class StateMachine:
         self.lock = threading.Lock()
         self.state = Initial(self)
 
-    def change_state(self, state):
-        self.state = state
-
     def find_reporter(self):
         with self.lock:
-            self.state.prepare_reporter()
+            self.state = self.state.prepare_reporter()
         return self.state.reporter
 
     def register_reporter(self, reporter):
-        self.state.register_reporter(reporter)
+        self.state = self.state.register_reporter(reporter)
 
     def flush(self):
         with self.lock:
-            self.state.flush()
+            self.state = self.state.flush()
 
     def disable(self):
-        self.state.disable()
+        self.state = self.state.disable()
 
     def shutdown(self):
         with self.lock:
-            self.state.shutdown()
+            self.state = self.state.shutdown()
 
     def fetch_reporter(self):
         with self.lock:
-            self.state.prepare_reporter()
+            self.state = self.state.prepare_reporter()
         yield from self.state.fetch_reporter()
 
 ##__________________________________________________________________||
@@ -48,23 +45,22 @@ class State:
         self.machine = machine
 
     def prepare_reporter(self):
-        pass
+        return self
 
     def register_reporter(self, reporter):
-        next_state = Registered(self.machine, reporter=reporter)
-        self.machine.change_state(next_state)
+        return Registered(self.machine, reporter=reporter)
 
     def disable(self):
-        self.machine.change_state(Disabled(self.machine))
+        return Disabled(self.machine)
 
     def fetch_reporter(self):
         yield None
 
     def flush(self):
-        pass
+        return self
 
     def shutdown(self):
-        pass
+        return self
 
 ##__________________________________________________________________||
 class Initial(State):
@@ -79,15 +75,13 @@ class Initial(State):
         self.queue = queue
 
     def prepare_reporter(self):
-        next_state = Started(self.machine, reporter=self.reporter, queue=self.queue)
-        self.machine.change_state(next_state)
+        return Started(self.machine, reporter=self.reporter, queue=self.queue)
 
     def fetch_reporter(self):
         yield self.reporter
 
     def flush(self):
-        next_state = Started(self.machine, reporter=self.reporter, queue=self.queue)
-        self.machine.change_state(next_state)
+        return Started(self.machine, reporter=self.reporter, queue=self.queue)
 
 class Started(State):
     """Started state
@@ -169,11 +163,11 @@ class Started(State):
 
     def flush(self):
         self._restart_pickup()
+        return self
 
     def shutdown(self):
         self._end_pickup()
-        next_state = Initial(self.machine, reporter=self.reporter, queue=self.queue)
-        self.machine.change_state(next_state)
+        return Initial(self.machine, reporter=self.reporter, queue=self.queue)
 
 ##__________________________________________________________________||
 class Registered(State):
