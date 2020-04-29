@@ -95,7 +95,6 @@ class Started(State):
         self.queue.put(None)
         self.pickup.join()
         self.pickup = None
-        detach.to_detach_pickup = False
 
     def _restart_pickup(self):
         self._end_pickup()
@@ -112,6 +111,7 @@ class Started(State):
             return
 
         self.pickup_owned = True
+        detach.to_detach_pickup = False
 
         try:
             yield self.reporter
