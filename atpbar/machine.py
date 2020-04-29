@@ -70,16 +70,16 @@ class Initial(State):
         self.reporter = None
 
     def prepare_reporter(self):
-        return Started()
+        return Active()
 
     def fetch_reporter(self, lock):
         yield self.reporter
 
     def flush(self):
-        return Started()
+        return Active()
 
-class Started(State):
-    """Started state
+class Active(State):
+    """Active state
 
     The pickup started and is running, typically, in the main process
     """
