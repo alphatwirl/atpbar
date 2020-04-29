@@ -77,8 +77,10 @@ def disable():
     _machine.state.disable()
 
 ##__________________________________________________________________||
-def end_pickup():
-    """ends the pickup
+
+##__________________________________________________________________||
+def shutdown():
+    """shutdowns the progress bars
 
     Returns
     -------
@@ -92,7 +94,7 @@ def end_pickup():
 import multiprocessing.queues # This import prevents the issue
                               # https://github.com/alphatwirl/atpbar/issues/4
 
-atexit.register(end_pickup)
+atexit.register(shutdown)
 
 ##__________________________________________________________________||
 @contextlib.contextmanager

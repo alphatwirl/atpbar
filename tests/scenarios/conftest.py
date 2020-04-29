@@ -8,7 +8,7 @@ import unittest.mock as mock
 
 from atpbar.presentation.base import Presentation
 
-from atpbar.funcs import end_pickup
+from atpbar.funcs import shutdown
 
 ##__________________________________________________________________||
 class MockProgressBar(Presentation):
@@ -72,7 +72,7 @@ def machine(monkeypatch):
     y = module.StateMachine()
     monkeypatch.setattr(module, '_machine', y)
     yield
-    end_pickup()
+    shutdown()
 
 ##__________________________________________________________________||
 @pytest.fixture(autouse=True)
