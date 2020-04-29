@@ -76,7 +76,7 @@ class Started(State):
         self.reporter = reporter
         self.queue = queue
         self.pickup = None
-        self.pickup_owned = False
+        self.reporter_yielded = False
         self.to_detach_pickup = False
 
         if self.reporter is None:
@@ -106,17 +106,17 @@ class Started(State):
             yield self.reporter
             return
 
-        if self.pickup_owned:
+        if self.reporter_yielded:
             yield self.reporter
             return
 
-        self.pickup_owned = True
+        self.reporter_yielded = True
         self.to_detach_pickup = False
 
         try:
             yield self.reporter
         finally:
-            self.pickup_owned = False
+            self.reporter_yielded = False
             if self.to_detach_pickup:
                 return
             with self.machine.lock:
