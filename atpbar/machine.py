@@ -84,16 +84,10 @@ class Started(State):
     The pickup started and is running, typically, in the main process
     """
     def __init__(self,):
-        self.reporter = None
-        self.queue = None
-        self.pickup = None
-        self.reporter_yielded = False
-        self.to_restart_pickup = True
 
-        if self.reporter is None:
-            if self.queue is None:
-                self.queue = multiprocessing.Queue()
-            self.reporter = ProgressReporter(queue=self.queue)
+        self.queue = multiprocessing.Queue()
+        self.reporter = ProgressReporter(queue=self.queue)
+        self.reporter_yielded = False
 
         self._start_pickup()
 
@@ -105,7 +99,6 @@ class Started(State):
     def _end_pickup(self):
         self.queue.put(None)
         self.pickup.join()
-        self.pickup = None
 
     def _restart_pickup(self):
         self._end_pickup()
