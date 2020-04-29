@@ -77,7 +77,7 @@ class Started(State):
         self.queue = queue
         self.pickup = None
         self.reporter_yielded = False
-        self.to_detach_pickup = False
+        self.to_restart_pickup = True
 
         if self.reporter is None:
             if self.queue is None:
@@ -107,17 +107,18 @@ class Started(State):
             return
 
         if self.reporter_yielded:
+            # called from an inner loop
             yield self.reporter
             return
 
         self.reporter_yielded = True
-        self.to_detach_pickup = False
+        self.to_restart_pickup = True
 
         try:
             yield self.reporter
         finally:
             self.reporter_yielded = False
-            if self.to_detach_pickup:
+            if not self.to_restart_pickup:
                 return
             with self.machine.lock:
                 self._restart_pickup()
@@ -140,7 +141,7 @@ class Started(State):
         cannot tell which loop ends last.
         """
 
-        self.to_detach_pickup = True
+        self.to_restart_pickup = False
 
     def flush(self):
         self._restart_pickup()
