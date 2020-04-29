@@ -39,7 +39,7 @@ class State:
     def flush(self):
         pass
 
-    def end_pickup(self):
+    def shutdown(self):
         pass
 
 ##__________________________________________________________________||
@@ -146,7 +146,7 @@ class Started(State):
     def flush(self):
         self._restart_pickup()
 
-    def end_pickup(self):
+    def shutdown(self):
         self._end_pickup()
         next_state = Initial(self.machine, reporter=self.reporter, queue=self.queue)
         self.machine.change_state(next_state)

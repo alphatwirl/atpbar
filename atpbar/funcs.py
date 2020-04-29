@@ -88,7 +88,7 @@ def shutdown():
 
     """
     with _machine.lock:
-        _machine.state.end_pickup()
+        _machine.state.shutdown()
 
 
 import multiprocessing.queues # This import prevents the issue
