@@ -116,10 +116,10 @@ class Started(State):
         try:
             yield self.reporter
         finally:
+            self.pickup_owned = False
+            if detach.to_detach_pickup:
+                return
             with self.machine.lock:
-                self.pickup_owned = False
-                if detach.to_detach_pickup:
-                    return
                 self._restart_pickup()
 
     def flush(self):
