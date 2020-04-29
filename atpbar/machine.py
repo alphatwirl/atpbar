@@ -11,7 +11,7 @@ from .misc import in_main_thread
 class StateMachine:
     def __init__(self):
         self.lock = threading.Lock()
-        self.state = Initial(self)
+        self.state = Initial()
 
     def find_reporter(self):
         with self.lock:
@@ -35,25 +35,22 @@ class StateMachine:
     def fetch_reporter(self):
         with self.lock:
             self.state = self.state.prepare_reporter()
-        yield from self.state.fetch_reporter()
+        yield from self.state.fetch_reporter(lock=self.lock)
 
 ##__________________________________________________________________||
 class State:
     """The base class of the states
     """
-    def __init__(self, machine):
-        self.machine = machine
-
     def prepare_reporter(self):
         return self
 
     def register_reporter(self, reporter):
-        return Registered(self.machine, reporter=reporter)
+        return Registered(reporter=reporter)
 
     def disable(self):
-        return Disabled(self.machine)
+        return Disabled()
 
-    def fetch_reporter(self):
+    def fetch_reporter(self, lock):
         yield None
 
     def flush(self):
@@ -69,28 +66,25 @@ class Initial(State):
     The pickup is not running.
     """
 
-    def __init__(self, machine, reporter=None, queue=None):
-        super().__init__(machine)
+    def __init__(self, reporter=None, queue=None):
         self.reporter = reporter
         self.queue = queue
 
     def prepare_reporter(self):
-        return Started(self.machine, reporter=self.reporter, queue=self.queue)
+        return Started(reporter=self.reporter, queue=self.queue)
 
-    def fetch_reporter(self):
+    def fetch_reporter(self, lock):
         yield self.reporter
 
     def flush(self):
-        return Started(self.machine, reporter=self.reporter, queue=self.queue)
+        return Started(reporter=self.reporter, queue=self.queue)
 
 class Started(State):
     """Started state
 
     The pickup started and is running, typically, in the main process
     """
-    def __init__(self, machine, reporter=None, queue=None):
-        super().__init__(machine)
-
+    def __init__(self, reporter=None, queue=None):
         self.reporter = reporter
         self.queue = queue
         self.pickup = None
@@ -118,7 +112,7 @@ class Started(State):
         self._end_pickup()
         self._start_pickup()
 
-    def fetch_reporter(self):
+    def fetch_reporter(self, lock):
 
         if not in_main_thread():
             yield self.reporter
@@ -138,7 +132,7 @@ class Started(State):
             self.reporter_yielded = False
             if not self.to_restart_pickup:
                 return
-            with self.machine.lock:
+            with lock:
                 self._restart_pickup()
 
     def detach(self):
@@ -167,7 +161,7 @@ class Started(State):
 
     def shutdown(self):
         self._end_pickup()
-        return Initial(self.machine, reporter=self.reporter, queue=self.queue)
+        return Initial(reporter=self.reporter, queue=self.queue)
 
 ##__________________________________________________________________||
 class Registered(State):
@@ -177,18 +171,16 @@ class Registered(State):
     in the main process, is registered in the sub-process
     """
 
-    def __init__(self, machine, reporter):
-        super().__init__(machine)
+    def __init__(self, reporter):
         self.reporter = reporter
 
-    def fetch_reporter(self):
+    def fetch_reporter(self, lock):
         yield self.reporter
 
 class Disabled(State):
     """Disabled state
     """
-    def __init__(self, machine):
-        super().__init__(machine)
+    def __init__(self):
         self.reporter = None
 
 ##__________________________________________________________________||
