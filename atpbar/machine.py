@@ -88,7 +88,7 @@ class Started(State):
 
     def _start_pickup(self):
         presentation = create_presentation()
-        self.pickup = ProgressReportPickup(self.queue, presentation)
+        self.pickup = ProgressReportPickup(self.queue, presentation, detach.detach_pickup)
         self.pickup.start()
 
     def _end_pickup(self):

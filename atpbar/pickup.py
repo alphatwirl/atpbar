@@ -2,8 +2,6 @@
 import os, time
 import threading
 
-from .detach import detach_pickup
-
 ##__________________________________________________________________||
 class ProgressReportPickup(threading.Thread):
     """A pickup of progress reports.
@@ -16,14 +14,18 @@ class ProgressReportPickup(threading.Thread):
         The queue through which this class receives progress reports
     presentation :
         The presentation of the reports
+    detach_func : callable
+        The function to be called when this class receives a progress
+        report from a sub-thread or a sub-process.
     """
-    def __init__(self, queue, presentation):
+    def __init__(self, queue, presentation, detach_func=None):
         super().__init__(daemon=True)
         # The daemon makes the functions registered at atexit called
         # even if the pickup is still running
 
         self.queue = queue
         self.presentation = presentation
+        self.detach_func = detach_func
         self.last_wait_time = 1.0 # [second]
         self.taskids = set()
 
@@ -66,12 +68,14 @@ class ProgressReportPickup(threading.Thread):
         self.presentation.present(report)
 
     def _detach_self_if_necessary(self, report):
+        if self.detach_func is None:
+            return
         if report['taskid'] in self.taskids:
             return
         self.taskids.add(report['taskid'])
         if os.getpid() == report['pid'] and report['in_main_thread']:
             return
-        detach_pickup()
+        self.detach_func()
 
     def _short_sleep(self):
         """sleep very briefly
