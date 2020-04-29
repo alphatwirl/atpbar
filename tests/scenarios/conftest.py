@@ -67,12 +67,6 @@ def mock_create_presentation(monkeypatch):
 
 ##__________________________________________________________________||
 @pytest.fixture(autouse=True)
-def global_variables(monkeypatch):
-    module = sys.modules['atpbar.detach']
-    monkeypatch.setattr(module, 'to_detach_pickup', False)
-    yield
-
-@pytest.fixture(autouse=True)
 def machine(monkeypatch):
     module = sys.modules['atpbar.funcs']
     y = module.StateMachine()

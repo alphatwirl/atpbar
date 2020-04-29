@@ -6,7 +6,6 @@ from .reporter import ProgressReporter
 from .pickup import ProgressReportPickup
 from .presentation.create import create_presentation
 from .misc import in_main_thread
-from . import detach
 
 ##__________________________________________________________________||
 class StateMachine:
@@ -78,6 +77,7 @@ class Started(State):
         self.queue = queue
         self.pickup = None
         self.pickup_owned = False
+        self.to_detach_pickup = False
 
         if self.reporter is None:
             if self.queue is None:
@@ -111,13 +111,13 @@ class Started(State):
             return
 
         self.pickup_owned = True
-        detach.to_detach_pickup = False
+        self.to_detach_pickup = False
 
         try:
             yield self.reporter
         finally:
             self.pickup_owned = False
-            if detach.to_detach_pickup:
+            if self.to_detach_pickup:
                 return
             with self.machine.lock:
                 self._restart_pickup()
@@ -136,7 +136,7 @@ class Started(State):
 
         """
 
-        detach.to_detach_pickup = True
+        self.to_detach_pickup = True
          # Locking here would causes a deadlock. `flush()` locks while
          # ending the pickup. Before receiving the end order, the pickup
          # might still receives a report with a new task ID from a
