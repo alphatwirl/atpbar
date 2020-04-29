@@ -88,7 +88,7 @@ class Started(State):
 
     def _start_pickup(self):
         presentation = create_presentation()
-        self.pickup = ProgressReportPickup(self.queue, presentation, self.detach_pickup)
+        self.pickup = ProgressReportPickup(self.queue, presentation, self.detach)
         self.pickup.start()
 
     def _end_pickup(self):
@@ -122,27 +122,25 @@ class Started(State):
             with self.machine.lock:
                 self._restart_pickup()
 
-    def detach_pickup(self):
-        """detach the pickup from any instances of `atpbar`
+    def detach(self):
+        """detach the pickup
 
-        If a pickup is started by an `atpbar` in the main thread of the
-        main process, the pickup will be owned by the `atpbar`. The
-        `atpbar` will end the pickup when the loop ends. This function
-        detaches the pickup from the `atpbar` and prevents the atpbar from
-        ending the pickup.
+        This method is given to the pickup. The pickup calls this method when
+        the pickup receives a report from a sub-thread or a sub-process.
 
-        This function is typically called by the pickup when the pickup
-        receives a report from a sub-thread or a sub-process.
+        The method fetch_reporter() yields the reporter. While yielding the
+        reporter from the main thread of the main process if fetch_reporter()
+        is called again from the main thread of the main process, atpbar is
+        used in nested loops. The fetch_reporter() restarts the pickup when the
+        outermost loop has ended.
 
+        If this method is called when yielding the reporter from the main
+        thread of the main process, atpbar is used in a sub-thread or a
+        sub-process. The fetch_reporter() doesn't restart the pickup because it
+        cannot tell which loop ends last.
         """
 
         self.to_detach_pickup = True
-         # Locking here would causes a deadlock. `flush()` locks while
-         # ending the pickup. Before receiving the end order, the pickup
-         # might still receives a report with a new task ID from a
-         # sub-thread or sub-process, it will call this function and will
-         # cause a deadlock.
-
 
     def flush(self):
         self._restart_pickup()
