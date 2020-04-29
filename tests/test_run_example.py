@@ -21,5 +21,7 @@ params = [
 def test_run_example_script(script_runner, script_name):
     script_path = example_dir.joinpath(script_name)
     ret = script_runner.run(script_path)
+    assert ret.success
+    assert ret.stderr == ''
 
 ##__________________________________________________________________||
