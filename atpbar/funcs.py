@@ -22,9 +22,7 @@ def find_reporter():
         The progress reporter
 
     """
-    with _machine.lock:
-        _machine.state.prepare_reporter()
-    return _machine.state.reporter
+    return _machine.find_reporter()
 
 ##__________________________________________________________________||
 def register_reporter(reporter):
@@ -45,7 +43,7 @@ def register_reporter(reporter):
     None
 
     """
-    _machine.state.register_reporter(reporter)
+    _machine.register_reporter(reporter)
 
 ##__________________________________________________________________||
 def flush():
@@ -59,8 +57,7 @@ def flush():
     None
 
     """
-    with _machine.lock:
-        _machine.state.flush()
+    _machine.flush()
 
 ##__________________________________________________________________||
 def disable():
@@ -74,31 +71,30 @@ def disable():
     None
 
     """
-    _machine.state.disable()
+    _machine.disable()
 
 ##__________________________________________________________________||
-def end_pickup():
-    """ends the pickup
+
+##__________________________________________________________________||
+def shutdown():
+    """shutdowns the progress bars
 
     Returns
     -------
     None
 
     """
-    with _machine.lock:
-        _machine.state.end_pickup()
+    _machine.shutdown()
 
 
 import multiprocessing.queues # This import prevents the issue
                               # https://github.com/alphatwirl/atpbar/issues/4
 
-atexit.register(end_pickup)
+atexit.register(shutdown)
 
 ##__________________________________________________________________||
 @contextlib.contextmanager
 def fetch_reporter():
-    with _machine.lock:
-        _machine.state.prepare_reporter()
-    yield from _machine.state.fetch_reporter()
+    yield from _machine.fetch_reporter()
 
 ##__________________________________________________________________||
