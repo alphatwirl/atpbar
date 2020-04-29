@@ -66,27 +66,26 @@ class Initial(State):
     The pickup is not running.
     """
 
-    def __init__(self, reporter=None, queue=None):
-        self.reporter = reporter
-        self.queue = queue
+    def __init__(self):
+        self.reporter = None
 
     def prepare_reporter(self):
-        return Started(reporter=self.reporter, queue=self.queue)
+        return Started()
 
     def fetch_reporter(self, lock):
         yield self.reporter
 
     def flush(self):
-        return Started(reporter=self.reporter, queue=self.queue)
+        return Started()
 
 class Started(State):
     """Started state
 
     The pickup started and is running, typically, in the main process
     """
-    def __init__(self, reporter=None, queue=None):
-        self.reporter = reporter
-        self.queue = queue
+    def __init__(self,):
+        self.reporter = None
+        self.queue = None
         self.pickup = None
         self.reporter_yielded = False
         self.to_restart_pickup = True
@@ -161,7 +160,7 @@ class Started(State):
 
     def shutdown(self):
         self._end_pickup()
-        return Initial(reporter=self.reporter, queue=self.queue)
+        return Initial()
 
 ##__________________________________________________________________||
 class Registered(State):
