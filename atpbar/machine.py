@@ -16,6 +16,30 @@ class StateMachine:
     def change_state(self, state):
         self.state = state
 
+    def find_reporter(self):
+        with self.lock:
+            self.state.prepare_reporter()
+        return self.state.reporter
+
+    def register_reporter(self, reporter):
+        self.state.register_reporter(reporter)
+
+    def flush(self):
+        with self.lock:
+            self.state.flush()
+
+    def disable(self):
+        self.state.disable()
+
+    def shutdown(self):
+        with self.lock:
+            self.state.shutdown()
+
+    def fetch_reporter(self):
+        with self.lock:
+            self.state.prepare_reporter()
+        yield from self.state.fetch_reporter()
+
 ##__________________________________________________________________||
 class State:
     """The base class of the states
