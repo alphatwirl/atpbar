@@ -62,7 +62,7 @@ class ProgressReporter:
 
         self.queue.put(report)
 
-        self.last_time[report['taskid']] = self._time()
+        self.last_time[report['taskid']] = time.time()
 
     def _need_to_report(self, report):
 
@@ -75,12 +75,9 @@ class ProgressReporter:
         if report['taskid'] not in self.last_time:
             return True
 
-        if self._time() - self.last_time[report['taskid']] > self.interval:
+        if time.time() - self.last_time[report['taskid']] > self.interval:
             return True
 
         return False
-
-    def _time(self):
-        return time.time()
 
 ##__________________________________________________________________||
