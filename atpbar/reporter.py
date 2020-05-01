@@ -33,6 +33,11 @@ class ProgressReporter:
     of the task, will be always sent to the progress monitor
     regardless of whether it is given within the interval.
 
+    Parameters
+    ----------
+    queue : multiprocessing.Queue
+        The queue through which this class sends progress reports.
+
     """
     def __init__(self, queue):
         self.queue = queue
@@ -50,8 +55,10 @@ class ProgressReporter:
     def report(self, report):
         """send ``report`` to a progress monitor
 
-        Args:
-            report (ProgressReport): a progress report
+        Parameters
+        ----------
+        report : ProgressReport
+            a progress report
 
         """
 
