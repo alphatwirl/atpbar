@@ -1,5 +1,4 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-from __future__ import print_function
 import pytest
 
 import unittest.mock as mock
