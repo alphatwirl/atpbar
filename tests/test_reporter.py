@@ -1,6 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
+import sys
+
 import pytest
-import time
 
 import unittest.mock as mock
 
@@ -14,7 +15,8 @@ def mock_queue():
 @pytest.fixture()
 def mock_time(monkeypatch):
     ret = mock.Mock()
-    monkeypatch.setattr(time, 'time', ret)
+    module = sys.modules['atpbar.reporter']
+    monkeypatch.setattr(module, 'time', ret)
     return ret
 
 @pytest.fixture()
@@ -27,25 +29,27 @@ def test_repr(obj):
     repr(obj)
 
 ##__________________________________________________________________||
-def test_report_need_to_report(obj, monkeypatch, mock_queue, mock_time):
-    current_time = 15324.345
-    taskid = 234
-    mock_time.return_value = current_time
-    monkeypatch.setattr(obj, '_need_to_report', mock.Mock(return_value=True))
-    report = dict(taskid=taskid, done=0, total=10)
-    obj.report(report)
-    assert [mock.call(report)] == mock_queue.put.call_args_list
-    assert {taskid: current_time} == obj.last_time
+class TestReport:
 
-def test_report_no_need_to_report(obj, monkeypatch, mock_queue, mock_time):
-    current_time = 15324.345
-    taskid = 234
-    mock_time.return_value = current_time
-    monkeypatch.setattr(obj, '_need_to_report', mock.Mock(return_value=False))
-    report = dict(taskid=taskid, done=0, total=10)
-    obj.report(report)
-    assert [ ] == mock_queue.put.call_args_list
-    assert { } == obj.last_time
+    def test_report_need_to_report(self, obj, monkeypatch, mock_queue, mock_time):
+        current_time = 15324.345
+        taskid = 234
+        mock_time.time.return_value = current_time
+        monkeypatch.setattr(obj, '_need_to_report', mock.Mock(return_value=True))
+        report = dict(taskid=taskid, done=0, total=10)
+        obj.report(report)
+        assert [mock.call(report)] == mock_queue.put.call_args_list
+        assert {taskid: current_time} == obj.last_time
+
+    def test_report_no_need_to_report(self, obj, monkeypatch, mock_queue, mock_time):
+        current_time = 15324.345
+        taskid = 234
+        mock_time.time.return_value = current_time
+        monkeypatch.setattr(obj, '_need_to_report', mock.Mock(return_value=False))
+        report = dict(taskid=taskid, done=0, total=10)
+        obj.report(report)
+        assert [ ] == mock_queue.put.call_args_list
+        assert { } == obj.last_time
 
 ##__________________________________________________________________||
 params = [
@@ -67,7 +71,7 @@ def test_need_to_report(
 
     obj.interval = 10
     obj.last_time = last_time
-    mock_time.return_value = current_time
+    mock_time.time.return_value = current_time
     assert expected == obj._need_to_report(report)
 
 ##__________________________________________________________________||
