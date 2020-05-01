@@ -1,6 +1,5 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-import sys
-import time, random
+import time
 import itertools
 import threading
 import multiprocessing
@@ -13,33 +12,18 @@ from atpbar import register_reporter, find_reporter, flush, disable
 ##__________________________________________________________________||
 @pytest.mark.parametrize('niterations', [10, 1, 0])
 def test_one_loop(mock_create_presentation, niterations):
-
-    #
     disable()
-
-    #
     for i in atpbar(range(niterations)):
         pass
-
-    print()
-    print(mock_create_presentation)
-
-    #
     presentations = mock_create_presentation.presentations
     assert 0 == len(presentations)
 
-
 ##__________________________________________________________________||
 def test_nested_loops(mock_create_presentation):
-
     disable()
-
     for i in atpbar(range(4)):
         for j in atpbar(range(3)):
             pass
-
-    ## print()
-    ## print(mock_create_presentation)
 
 ##__________________________________________________________________||
 def run_with_threading(nthreads=3, niterations=[5, 5, 5]):
@@ -60,7 +44,6 @@ def run_with_threading(nthreads=3, niterations=[5, 5, 5]):
 @pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
 @pytest.mark.parametrize('nthreads', [3, 1, 0])
 def test_threading(mock_create_presentation, nthreads, niterations):
-
     disable()
 
     # make niterations as long as nthreads. repeat if necessary
@@ -68,12 +51,8 @@ def test_threading(mock_create_presentation, nthreads, niterations):
 
     run_with_threading(nthreads, niterations)
 
-    ## print()
-    ## print(mock_create_presentation)
-
     presentations = mock_create_presentation.presentations
     assert 0 == len(presentations)
-
 
 ##__________________________________________________________________||
 def run_with_multiprocessing(nprocesses, ntasks, niterations):
@@ -108,16 +87,12 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations):
 @pytest.mark.parametrize('ntasks', [3, 1, 0])
 @pytest.mark.parametrize('nprocesses', [4, 1])
 def test_multiprocessing(mock_create_presentation, nprocesses, ntasks, niterations):
-
     disable()
 
     # make niterations as long as ntasks. repeat if necessary
     niterations = list(itertools.chain(*itertools.repeat(niterations, ntasks//len(niterations)+1)))[:ntasks]
 
     run_with_multiprocessing(nprocesses, ntasks, niterations)
-
-    ## print()
-    ## print(mock_create_presentation)
 
     presentations = mock_create_presentation.presentations
     assert 0 == len(presentations)
