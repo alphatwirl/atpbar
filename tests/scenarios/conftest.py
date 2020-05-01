@@ -13,7 +13,7 @@ from atpbar.funcs import shutdown
 ##__________________________________________________________________||
 class MockProgressBar(Presentation):
     def __init__(self):
-        super(MockProgressBar, self).__init__()
+        super().__init__()
         self.reports = [ ]
         self.taskids = set()
         self.nfirsts = 0
@@ -30,7 +30,7 @@ class MockProgressBar(Presentation):
         return '\n'.join(lines)
 
     def present(self, report):
-        super(MockProgressBar, self).present(report)
+        super().present(report)
         self.reports.append(report)
         self.taskids.add(report['taskid'])
         self.nfirsts += report['first']

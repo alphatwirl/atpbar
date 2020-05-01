@@ -7,7 +7,7 @@ from .base import Presentation
 ##__________________________________________________________________||
 class ProgressBarJupyter(Presentation):
     def __init__(self):
-        super(ProgressBarJupyter, self).__init__()
+        super().__init__()
         self.interval = 0.05 # [second]
 
         self.container_widget = None

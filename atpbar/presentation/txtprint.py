@@ -6,7 +6,7 @@ from .base import Presentation
 ##__________________________________________________________________||
 class ProgressPrint(Presentation):
     def __init__(self):
-        super(ProgressPrint, self).__init__()
+        super().__init__()
         self.interval = 60.0 # [second]
         self.last_time = { } # key: taskid
 

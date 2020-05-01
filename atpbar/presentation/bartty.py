@@ -11,7 +11,7 @@ MINIMUM_TERMINAL_WIDTH = 90
 ##__________________________________________________________________||
 class ProgressBar(Presentation):
     def __init__(self):
-        super(ProgressBar, self).__init__()
+        super().__init__()
         self.lines = [ ]
         self.interval = 0.1 # [second]
         self.width = self._get_width()
