@@ -13,6 +13,10 @@ def mock_queue():
     return mock.Mock()
 
 @pytest.fixture()
+def mock_queue_detach():
+    return mock.Mock()
+
+@pytest.fixture()
 def mock_time(monkeypatch):
     ret = mock.Mock()
     module = sys.modules['atpbar.reporter']
@@ -20,8 +24,8 @@ def mock_time(monkeypatch):
     return ret
 
 @pytest.fixture()
-def obj(mock_queue, mock_time):
-    ret = ProgressReporter(mock_queue)
+def obj(mock_queue, mock_queue_detach, mock_time):
+    ret = ProgressReporter(mock_queue, mock_queue_detach)
     return ret
 
 ##__________________________________________________________________||

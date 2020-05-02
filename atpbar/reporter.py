@@ -37,10 +37,13 @@ class ProgressReporter:
     ----------
     queue : multiprocessing.Queue
         The queue through which this class sends progress reports.
+    queue_detach : multiprocessing.Queue
+        The queue through which to send a detach command
 
     """
-    def __init__(self, queue):
+    def __init__(self, queue, queue_detach):
         self.queue = queue
+        self.queue_detach = queue_detach
         self.interval = DEFAULT_INTERVAL # [second]
         self.last_time = { } # key: taskid
         self.complete_report = ProgressReportComplementer()

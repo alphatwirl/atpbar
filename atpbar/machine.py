@@ -86,14 +86,15 @@ class Active(State):
     def __init__(self,):
 
         self.queue = multiprocessing.Queue()
-        self.reporter = ProgressReporter(queue=self.queue)
+        self.queue_detach = multiprocessing.Queue()
+        self.reporter = ProgressReporter(queue=self.queue, queue_detach=self.queue_detach)
         self.reporter_yielded = False
 
         self._start_pickup()
 
     def _start_pickup(self):
         presentation = create_presentation()
-        self.pickup = ProgressReportPickup(self.queue, presentation, self.detach)
+        self.pickup = ProgressReportPickup(self.queue, presentation)
         self.pickup.start()
 
     def _end_pickup(self):
@@ -118,35 +119,20 @@ class Active(State):
 
         self.reporter_yielded = True
         self.to_restart_pickup = True
+        while not self.queue_detach.empty():
+            _ = self.queue_detach.get()
 
         try:
             yield self.reporter
         finally:
             self.reporter_yielded = False
+            while not self.queue_detach.empty():
+                _ = self.queue_detach.get()
+                self.to_restart_pickup = False
             if not self.to_restart_pickup:
                 return
             with lock:
                 self._restart_pickup()
-
-    def detach(self):
-        """detach the pickup
-
-        This method is given to the pickup. The pickup calls this method when
-        the pickup receives a report from a sub-thread or a sub-process.
-
-        The method fetch_reporter() yields the reporter. While yielding the
-        reporter from the main thread of the main process if fetch_reporter()
-        is called again from the main thread of the main process, atpbar is
-        used in nested loops. The fetch_reporter() restarts the pickup when the
-        outermost loop has ended.
-
-        If this method is called when yielding the reporter from the main
-        thread of the main process, atpbar is used in a sub-thread or a
-        sub-process. The fetch_reporter() doesn't restart the pickup because it
-        cannot tell which loop ends last.
-        """
-
-        self.to_restart_pickup = False
 
     def flush(self):
         self._restart_pickup()
@@ -168,6 +154,11 @@ class Registered(State):
         self.reporter = reporter
 
     def fetch_reporter(self, lock):
+        if self.reporter is None:
+            yield self.reporter
+            return
+
+        self.reporter.queue_detach.put(True)
         yield self.reporter
 
 class Disabled(State):
