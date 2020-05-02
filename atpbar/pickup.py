@@ -73,7 +73,7 @@ class ProgressReportPickup(threading.Thread):
         if report['taskid'] in self.taskids:
             return
         self.taskids.add(report['taskid'])
-        if os.getpid() == report['pid'] and report['in_main_thread']:
+        if os.getpid() == report['pid']:
             return
         self.detach_func()
 

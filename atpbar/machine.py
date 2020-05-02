@@ -107,6 +107,7 @@ class Active(State):
     def fetch_reporter(self, lock):
 
         if not in_main_thread():
+            self.to_restart_pickup = False
             yield self.reporter
             return
 
