@@ -6,7 +6,6 @@ import time
 import contextlib
 
 from .funcs import fetch_reporter
-from .misc import in_main_thread
 
 ##__________________________________________________________________||
 def atpbar(iterable, name=None, time_track=False):
@@ -84,7 +83,7 @@ class Atpbar:
             report = dict(
                 taskid=self.id_, name=self.name,
                 done=0, total=self.len_,
-                pid=os.getpid(), in_main_thread=in_main_thread())
+                pid=os.getpid())
             if self.time_track:
                 report['start_time'] = start_time=time.time()
             self.reporter.report(report)

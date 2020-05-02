@@ -15,26 +15,26 @@ def test_repr(obj):
 ##__________________________________________________________________||
 def test_complement(obj):
 
-    report0 = dict(taskid=5355, done=0, total=10, name='task1', pid=2342, in_main_thread=True)
-    expected0 = dict(taskid=5355, done=0, total=10, first=True, last=False, name='task1', pid=2342, in_main_thread=True)
+    report0 = dict(taskid=5355, done=0, total=10, name='task1', pid=2342)
+    expected0 = dict(taskid=5355, done=0, total=10, first=True, last=False, name='task1', pid=2342)
     assert obj(report0) is None
     assert expected0 == report0
 
     report1 = dict(taskid=5355, done=1, total=12)
-    expected1 = dict(taskid=5355, done=1, total=12, first=False, last=False, name='task1', pid=2342, in_main_thread=True)
+    expected1 = dict(taskid=5355, done=1, total=12, first=False, last=False, name='task1', pid=2342)
     assert obj(report1) is None
     assert expected0 == report0
     assert expected1 == report1
 
     report2 = dict(taskid=5355, done=2)
-    expected2 = dict(taskid=5355, done=2, total=12, first=False, last=False, name='task1', pid=2342, in_main_thread=True)
+    expected2 = dict(taskid=5355, done=2, total=12, first=False, last=False, name='task1', pid=2342)
     assert obj(report2) is None
     assert expected0 == report0
     assert expected1 == report1
     assert expected2 == report2
 
     report3 = dict(taskid=5355, done=12)
-    expected3 = dict(taskid=5355, done=12, total=12, first=False, last=True, name='task1', pid=2342, in_main_thread=True)
+    expected3 = dict(taskid=5355, done=12, total=12, first=False, last=True, name='task1', pid=2342)
     assert obj(report3) is None
     assert expected0 == report0
     assert expected1 == report1
