@@ -2,7 +2,13 @@
 
 ## [Unreleased]
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.0...master))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.1...master))
+
+## [1.1.1] - 2020-05-02
+
+**PyPI**: https://pypi.org/project/atpbar/1.1.1/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.0...v1.1.1))
 - cleaned code
 - updated tests
 
