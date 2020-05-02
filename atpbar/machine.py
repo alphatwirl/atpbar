@@ -86,8 +86,9 @@ class Active(State):
     def __init__(self,):
 
         self.queue = multiprocessing.Queue()
-        self.queue_detach = multiprocessing.Queue()
-        self.reporter = ProgressReporter(queue=self.queue, queue_detach=self.queue_detach)
+        self.reporter = ProgressReporter(queue=self.queue)
+        self.reporter.queue_detach = self.queue_detach = multiprocessing.Queue()
+
         self.reporter_yielded = False
 
         self._start_pickup()
