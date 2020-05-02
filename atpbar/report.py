@@ -12,8 +12,8 @@ class ProgressReportComplementer:
     report : dict
         A progress report, a dict with the following entries. The
         `taskid` must be always given. The first report for a task
-        must include `done`, `total`, 'name', and 'pid'. The `first`
-        and `last` will be automatically determined if not given.
+        must include `done`, `total`, and 'name'. The `first` and
+        `last` will be automatically determined if not given.
 
         taskid : immutable
             The unique task ID.
@@ -24,8 +24,6 @@ class ProgressReportComplementer:
         name : str
             A name of the task. It will be use as the label on the
             progress bars.
-        pid : optional
-            The process ID, e.g., the value returned by `os.getpid()`
         first : bool
             `True` if the first report for the task. If not given,
             automatically determined from `done`; `True` if `done` is

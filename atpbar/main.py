@@ -82,8 +82,7 @@ class Atpbar:
         try:
             report = dict(
                 taskid=self.id_, name=self.name,
-                done=0, total=self.len_,
-                pid=os.getpid())
+                done=0, total=self.len_)
             if self.time_track:
                 report['start_time'] = start_time=time.time()
             self.reporter.report(report)
