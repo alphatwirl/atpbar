@@ -35,9 +35,13 @@ class ProgressBar(Presentation):
 
     def _delete_previous_lines(self):
         if len(self.lines) >= 1:
-            sys.stdout.write('\b'*len(self.lines[-1]))
+            sys.stdout.write('\033[2K\033[1G')
+            # '\033[2K' erase the line
+            # '\033[1G' move the cursor to the beginning of the line
         if len(self.lines) >= 2:
-            sys.stdout.write('\033M'*(len(self.lines) - 1))
+            sys.stdout.write('\033[A\033[K'*(len(self.lines) - 1))
+            # '\033[A' move the cursor up
+            # '\033[K' clear from cursor to the end of the line
         self.lines = [ ]
         self.last = [ ]
 
