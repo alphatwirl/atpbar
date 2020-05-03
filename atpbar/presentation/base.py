@@ -1,4 +1,5 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
+import sys
 import time
 
 ##__________________________________________________________________||
@@ -9,6 +10,8 @@ class Presentation:
     """
 
     def __init__(self):
+
+        self.out = sys.stdout
 
         self._new_taskids = [ ]
         self._active_taskids = [ ] # in order of arrival
@@ -105,11 +108,11 @@ class Presentation:
         time_remaining = (time_elapsed * (100/percent)) - time_elapsed if percent > 0 else 0
 
         return self._time_to_str(time_elapsed), self._time_to_str(time_remaining)
-    
+
     def _time_to_str(self, t):
         mins = t // 60
         s = int(t % 60)
-        
+
         h = int(mins // 60)
         m = int(mins % 60)
 

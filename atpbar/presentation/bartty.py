@@ -35,9 +35,9 @@ class ProgressBar(Presentation):
 
     def _delete_previous_lines(self):
         if len(self.lines) >= 1:
-            sys.stdout.write('\b'*len(self.lines[-1]))
+            self.out.write('\b'*len(self.lines[-1]))
         if len(self.lines) >= 2:
-            sys.stdout.write('\033M'*(len(self.lines) - 1))
+            self.out.write('\033M'*(len(self.lines) - 1))
         self.lines = [ ]
         self.last = [ ]
 
@@ -64,8 +64,8 @@ class ProgressBar(Presentation):
         return ret
 
     def _print_lines(self):
-        if len(self.last) > 0: sys.stdout.write("\n".join(self.last) + "\n")
-        sys.stdout.write("\n".join(self.lines))
-        sys.stdout.flush()
+        if len(self.last) > 0: self.out.write("\n".join(self.last) + "\n")
+        self.out.write("\n".join(self.lines))
+        self.out.flush()
 
 ##__________________________________________________________________||
