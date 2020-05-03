@@ -3,6 +3,13 @@
 ## [Unreleased]
 
 #### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.1...master))
+
+## [1.1.2] - 2020-05-03
+
+**PyPI**: https://pypi.org/project/atpbar/1.1.2/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.10...v1.1.2))
+- updated escape code for moving cursor and clearing lines [#18](https://github.com/alphatwirl/atpbar/pull/18)
 - cleaned code
 - updated tests
 
