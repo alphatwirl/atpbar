@@ -1,5 +1,5 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-import time
+import sys
 import pytest
 
 import unittest.mock as mock
@@ -15,8 +15,9 @@ class MockProgressBar(Presentation):
 @pytest.fixture()
 def mock_time(monkeypatch):
     ret = mock.Mock()
-    monkeypatch.setattr(time, 'time', ret)
-    ret.return_value = 1533374055.904203
+    module = sys.modules['atpbar.presentation.base']
+    monkeypatch.setattr(module, 'time', ret)
+    ret.time.return_value = 1533374055.904203
     return ret
 
 @pytest.fixture()
@@ -201,7 +202,7 @@ def test_need_to_present(
     obj._new_taskids[:] = new_taskids
     obj._finishing_taskids[:] = finishing_taskids
 
-    mock_time.return_value = current_time
+    mock_time.time.return_value = current_time
     obj.last_time = last_time
     obj.interval = interval
 
