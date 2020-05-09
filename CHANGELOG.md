@@ -2,13 +2,20 @@
 
 ## [Unreleased]
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.1...master))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.3...master))
+
+## [1.1.3] - 2020-05-09
+
+**PyPI**: https://pypi.org/project/atpbar/1.1.3/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.2...v1.1.3))
+- made the option `time_track` effective on terminal as well [#19](https://github.com/alphatwirl/atpbar/pull/19)
 
 ## [1.1.2] - 2020-05-03
 
 **PyPI**: https://pypi.org/project/atpbar/1.1.2/
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.10...v1.1.2))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.1...v1.1.2))
 - updated escape code for moving cursor and clearing lines [#18](https://github.com/alphatwirl/atpbar/pull/18)
 - cleaned code
 - updated tests
