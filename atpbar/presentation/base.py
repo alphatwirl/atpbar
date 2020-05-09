@@ -90,21 +90,18 @@ class Presentation:
         if self._finishing_taskids:
             return True
 
-        if self._time() - self.last_time > self.interval:
+        if time.time() - self.last_time > self.interval:
             return True
 
         return False
 
-    def _time(self):
-        return time.time()
-
     def _read_time(self):
-        self.last_time = self._time()
+        self.last_time = time.time()
 
     def _get_time_track(self, start_time, percent):
         """Format seconds as hours, minutes and seconds.
         """
-        time_elapsed = self._time() - start_time
+        time_elapsed = time.time() - start_time
         time_remaining = (time_elapsed * (100/percent)) - time_elapsed if percent > 0 else 0
 
         return self._time_to_str(time_elapsed), self._time_to_str(time_remaining)
