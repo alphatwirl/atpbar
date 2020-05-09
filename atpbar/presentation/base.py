@@ -20,7 +20,7 @@ class Presentation:
         self._report_dict = { }
 
         self.interval = 1.0 # [second]
-        self._read_time()
+        self.last_time = time.time()
 
     def active(self):
         if self._active_taskids:
@@ -39,7 +39,7 @@ class Presentation:
 
         self._update_registry()
 
-        self._read_time()
+        self.last_time = time.time()
 
     def _register_report(self, report):
 
@@ -94,9 +94,6 @@ class Presentation:
             return True
 
         return False
-
-    def _read_time(self):
-        self.last_time = time.time()
 
     def _get_time_track(self, start_time, percent):
         """Format seconds as hours, minutes and seconds.
