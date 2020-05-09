@@ -1,6 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import sys
 import time
+import threading
 
 ##__________________________________________________________________||
 class Presentation:
@@ -12,6 +13,7 @@ class Presentation:
     def __init__(self):
 
         self.out = sys.stdout
+        self.lock = threading.Lock()
 
         self._new_taskids = [ ]
         self._active_taskids = [ ] # in order of arrival
@@ -28,18 +30,14 @@ class Presentation:
         return False
 
     def present(self, report):
-
-        if not self._register_report(report):
-            return
-
-        if not self._need_to_present():
-            return
-
-        self._present()
-
-        self._update_registry()
-
-        self.last_time = time.time()
+        with self.lock:
+            if not self._register_report(report):
+                return
+            if not self._need_to_present():
+                return
+            self._present()
+            self._update_registry()
+            self.last_time = time.time()
 
     def _register_report(self, report):
 
