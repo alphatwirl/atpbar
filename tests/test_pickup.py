@@ -20,21 +20,24 @@ class TestStart:
 
     @pytest.fixture()
     def pickup(self, queue, presentation):
+        presentation.active.return_value = True
         return ProgressReportPickup(queue, presentation)
 
-    def test_join(self, pickup, queue, presentation):
-        presentation.active.return_value = True
-        pickup.start()
-        queue.put(None)
-        pickup.join()
+    def test_end(self, pickup, queue, presentation):
+        pickup.end()
 
     def test_daemon(self, pickup, queue, presentation):
-        presentation.active.return_value = True
-        pickup.start()
-        # it is ok not to execute `queue.put(None)`.
+        pass
+        # it is ok not to execute `pickup.end()`.
 
 ##__________________________________________________________________||
 class TestRunUntilTheEndOrderArrives:
+
+    @pytest.fixture()
+    def mock_thread_start(self, monkeypatch):
+        y = mock.Mock()
+        monkeypatch.setattr(ProgressReportPickup, 'start', y)
+        yield y
 
     @pytest.fixture()
     def mock_queue(self):
@@ -45,7 +48,7 @@ class TestRunUntilTheEndOrderArrives:
         return mock.Mock()
 
     @pytest.fixture()
-    def pickup(self, mock_queue, presentation):
+    def pickup(self, mock_queue, presentation, mock_thread_start):
         y = ProgressReportPickup(mock_queue, presentation)
         yield y
 
@@ -94,6 +97,12 @@ class TestRunUntilTheEndOrderArrives:
 class TestRunUntilReportsStopComing:
 
     @pytest.fixture()
+    def mock_thread_start(self, monkeypatch):
+        y = mock.Mock()
+        monkeypatch.setattr(ProgressReportPickup, 'start', y)
+        yield y
+
+    @pytest.fixture()
     def mock_queue(self):
         return mock.Mock()
 
@@ -102,7 +111,7 @@ class TestRunUntilReportsStopComing:
         return mock.Mock()
 
     @pytest.fixture()
-    def pickup(self, mock_queue, presentation):
+    def pickup(self, mock_queue, presentation, mock_thread_start):
         return ProgressReportPickup(mock_queue, presentation)
 
     @pytest.fixture(autouse=True)
