@@ -5,7 +5,7 @@ import multiprocessing
 
 from .reporter import ProgressReporter
 from .pickup import ProgressReportPickup
-from .stream import FD, Stream, StreamPickup
+from .stream import StreamRedirection
 from .presentation.create import create_presentation
 from .misc import in_main_thread
 
@@ -92,8 +92,6 @@ class Active(State):
         self.reporter.queue_detach = self.queue_detach = multiprocessing.Queue()
 
         self.stream_queue = multiprocessing.Queue()
-        self.stdout_stream = Stream(self.stream_queue, FD.STDOUT)
-        self.stderr_stream = Stream(self.stream_queue, FD.STDERR)
 
         self.reporter_yielded = False
 
@@ -104,24 +102,14 @@ class Active(State):
         self.pickup = ProgressReportPickup(self.queue, presentation)
         self.pickup.start()
 
-        self.stream_pickup = StreamPickup(self.stream_queue, presentation.stdout_write, presentation.stderr_write)
-        self.stream_pickup.start()
-
-        self.stdout_org = sys.stdout
-        sys.stdout = self.stdout_stream
-
-        self.stderr_org = sys.stderr
-        sys.stderr = self.stderr_stream
+        self.stream_redirection = StreamRedirection(queue=self.stream_queue, presentation=presentation)
+        self.stream_redirection.start()
 
     def _end_pickup(self):
         self.queue.put(None)
         self.pickup.join()
 
-        sys.stdout = self.stdout_org
-        sys.stderr = self.stderr_org
-
-        self.stream_queue.put(None)
-        self.stream_pickup.join()
+        self.stream_redirection.end()
 
     def _restart_pickup(self):
         self._end_pickup()
