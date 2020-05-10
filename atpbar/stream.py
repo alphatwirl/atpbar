@@ -39,6 +39,13 @@ class StreamRedirection:
         self.pickup.join()
 
 ##__________________________________________________________________||
+def register_stream_queue(queue):
+    if queue is None:
+        return
+    sys.stdout = Stream(queue, FD.STDOUT)
+    sys.stderr = Stream(queue, FD.STDERR)
+
+##__________________________________________________________________||
 class FD(Enum):
     STDOUT = 1
     STDERR = 2
