@@ -43,36 +43,38 @@ class Presentation:
 
     def _register_report(self, report):
 
-        if report['taskid'] in self._complete_taskids:
+        taskid = report['taskid']
+
+        if taskid in self._complete_taskids:
             return False
 
-        self._report_dict[report['taskid']] = report
+        self._report_dict[taskid] = report
 
-        if report['taskid'] in self._finishing_taskids:
+        if taskid in self._finishing_taskids:
             return True
 
         if report['last']:
             try:
-                self._active_taskids.remove(report['taskid'])
+                self._active_taskids.remove(taskid)
             except ValueError:
                 pass
 
             try:
-                self._new_taskids.remove(report['taskid'])
+                self._new_taskids.remove(taskid)
             except ValueError:
                 pass
 
-            self._finishing_taskids.append(report['taskid'])
+            self._finishing_taskids.append(taskid)
 
             return True
 
-        if report['taskid'] in self._active_taskids:
+        if taskid in self._active_taskids:
             return True
 
-        if report['taskid'] in self._new_taskids:
+        if taskid in self._new_taskids:
             return True
 
-        self._new_taskids.append(report['taskid'])
+        self._new_taskids.append(taskid)
         return True
 
     def _update_registry(self):
