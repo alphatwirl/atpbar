@@ -79,4 +79,24 @@ class ProgressBar(Presentation):
         self.out.write("\n".join(self.lines))
         self.out.flush()
 
+    def _stdout_write(self, s):
+        self._write(s, out=self.out)
+
+    def _stderr_write(self, s):
+        self._write(s, out=self.err)
+
+    def _write(self, s, out):
+        if not s:
+            return
+        if len(self.lines) >= 1:
+            self.out.write('\033[2K\033[1G')
+        if len(self.lines) >= 2:
+            self.out.write('\033[A\033[K'*(len(self.lines) - 1))
+        self.out.flush()
+        out.write(s.rstrip())
+        out.write('\n')
+        out.flush()
+        self.out.write("\n".join(self.lines))
+        self.out.flush()
+
 ##__________________________________________________________________||
