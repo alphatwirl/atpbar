@@ -1,9 +1,11 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
+import sys
 import threading
 import multiprocessing
 
 from .reporter import ProgressReporter
 from .pickup import ProgressReportPickup
+from .stream import FD, Stream, StreamPickup
 from .presentation.create import create_presentation
 from .misc import in_main_thread
 
@@ -89,6 +91,10 @@ class Active(State):
         self.reporter = ProgressReporter(queue=self.queue)
         self.reporter.queue_detach = self.queue_detach = multiprocessing.Queue()
 
+        self.stream_queue = multiprocessing.Queue()
+        self.stdout_stream = Stream(self.stream_queue, FD.STDOUT)
+        self.stderr_stream = Stream(self.stream_queue, FD.STDERR)
+
         self.reporter_yielded = False
 
         self._start_pickup()
@@ -98,9 +104,24 @@ class Active(State):
         self.pickup = ProgressReportPickup(self.queue, presentation)
         self.pickup.start()
 
+        self.stream_pickup = StreamPickup(self.stream_queue, presentation.stdout_write, presentation.stderr_write)
+        self.stream_pickup.start()
+
+        self.stdout_org = sys.stdout
+        sys.stdout = self.stdout_stream
+
+        self.stderr_org = sys.stderr
+        sys.stderr = self.stderr_stream
+
     def _end_pickup(self):
         self.queue.put(None)
         self.pickup.join()
+
+        sys.stdout = self.stdout_org
+        sys.stderr = self.stderr_org
+
+        self.stream_queue.put(None)
+        self.stream_pickup.join()
 
     def _restart_pickup(self):
         self._end_pickup()

@@ -15,8 +15,6 @@ class ProgressBarJupyter(Presentation):
         self.complete_box_list = [ ]
         self.widget_dict = { } # {taskid: [box, bar, label]}
 
-        self._read_time()
-
     def __repr__(self):
         return '{}()'.format(
             self.__class__.__name__
