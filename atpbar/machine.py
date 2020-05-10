@@ -104,7 +104,6 @@ class Active(State):
     def _start_pickup(self):
         presentation = create_presentation()
         self.pickup = ProgressReportPickup(self.queue, presentation)
-        self.pickup.start()
 
         self.stream_redirection = StreamRedirection(queue=self.stream_queue, presentation=presentation)
         self.stream_redirection.start()

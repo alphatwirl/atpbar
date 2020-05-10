@@ -24,6 +24,8 @@ class ProgressReportPickup(threading.Thread):
         self.presentation = presentation
         self.last_wait_time = 1.0 # [second]
 
+        self.start()
+
     def end(self):
         """end the thread
 
