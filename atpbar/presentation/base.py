@@ -13,6 +13,8 @@ class Presentation:
     def __init__(self):
 
         self.out = sys.stdout
+        self.err = sys.stderr
+
         self.lock = threading.Lock()
 
         self._new_taskids = [ ]
@@ -112,5 +114,24 @@ class Presentation:
             return '{0:d}:{1:02d}:{2:02d}'.format(h, m, s)
         else:
             return '{0:02d}:{1:02d}'.format(m, s)
+
+    def stdout_write(self, s):
+        with self.lock:
+            self._stdout_write(s)
+
+    def stderr_write(self, s):
+        with self.lock:
+            self._stderr_write(s)
+
+    def _stdout_write(self, s):
+        self._write(s, out=self.out)
+
+    def _stderr_write(self, s):
+        self._write(s, out=self.err)
+
+    def _write(self, s, out):
+        out.write(s.rstrip())
+        out.write('\n')
+        out.flush()
 
 ##__________________________________________________________________||
