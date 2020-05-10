@@ -110,8 +110,7 @@ class Active(State):
         self.stream_redirection.start()
 
     def _end_pickup(self):
-        self.queue.put(None)
-        self.pickup.join()
+        self.pickup.end()
 
         self.stream_redirection.end()
 
