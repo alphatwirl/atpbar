@@ -1,6 +1,4 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-import os
-import sys
 import shutil
 
 from .base import Presentation
@@ -12,9 +10,11 @@ MINIMUM_TERMINAL_WIDTH = 90
 class ProgressBar(Presentation):
     def __init__(self):
         super().__init__()
-        self.lines = [ ]
         self.interval = 0.1 # [second]
         self.width = self._get_width()
+
+        self.active_bars = [ ]
+        self.just_finised_bars = [ ]
 
     def __repr__(self):
         return '{}()'.format(
@@ -29,36 +29,57 @@ class ProgressBar(Presentation):
             return MINIMUM_TERMINAL_WIDTH
 
     def _present(self):
-        self._delete_previous_lines()
-        self._create_lines()
-        self._print_lines()
+        self._erase_active_bars()
+        self._compose_just_finised_bars()
+        self._compose_active_bars()
+        self._draw_just_finised_bars()
+        self._draw_active_bars()
 
-    def _delete_previous_lines(self):
-        if len(self.lines) >= 1:
+    def _write(self, s, out):
+        if not s:
+            return
+        self._erase_active_bars()
+        out.write(s.rstrip())
+        out.write('\n')
+        out.flush()
+        self._draw_active_bars()
+
+    def _erase_active_bars(self):
+        if len(self.active_bars) >= 1:
             self.out.write('\033[2K\033[1G')
             # '\033[2K' erase the line
             # '\033[1G' move the cursor to the beginning of the line
-        if len(self.lines) >= 2:
-            self.out.write('\033[A\033[K'*(len(self.lines) - 1))
+        if len(self.active_bars) >= 2:
+            self.out.write('\033[A\033[K'*(len(self.active_bars) - 1))
             # '\033[A' move the cursor up
             # '\033[K' clear from cursor to the end of the line
-        self.lines = [ ]
-        self.last = [ ]
+        self.out.flush()
 
-    def _create_lines(self):
-        for taskid in self._active_taskids + self._new_taskids:
-            report = self._report_dict[taskid]
-            line = self._create_line(report)
-            self.lines.append(line)
-        for taskid in self._finishing_taskids:
-            report = self._report_dict[taskid]
-            line = self._create_line(report)
-            self.last.append(line)
+    def _compose_just_finised_bars(self):
+        self.just_finised_bars = [
+            self._compose_bar_from_taskid(i) for i in
+            self._finishing_taskids]
 
-    def _create_line(self, report):
+    def _compose_active_bars(self):
+        self.active_bars = [
+            self._compose_bar_from_taskid(i) for i in
+            self._active_taskids + self._new_taskids]
+
+    def _compose_bar_from_taskid(self, taskid):
+        report = self._report_dict[taskid]
+        return self._compose_bar_from_report(report)
+
+    def _compose_bar_from_report(self, report):
+
         percent = float(report['done'])/report['total'] if report['total'] > 0 else 1
+        # e.g., 0.7143369818769065
+
         bar = (':' * int(percent * 40)).ljust(40, " ")
+        # e.g., "::::::::::::::::::::::::::::            "
+
         percent = round(percent * 100, 2)
+        # e.g., 71.43
+
         format = ' {percent:6.2f}% {bar:s} | {done:8d} / {total:8d} |:  {name} '
 
         if "start_time" in report.keys():
@@ -71,32 +92,21 @@ class ProgressBar(Presentation):
             percent=percent, bar=bar,
             done=report['done'], total=report['total'],
             name=report['name'])
+        # e.g., "  71.43% ::::::::::::::::::::::::::::             |     3981 /     5573 |:  task name "
+
         ret = ret[:self.width].ljust(self.width, ' ')
+        # e.g., "  71.43% ::::::::::::::::::::::::::::             |     3981 /     5573 |:  task na"
+
         return ret
 
-    def _print_lines(self):
-        if len(self.last) > 0: self.out.write("\n".join(self.last) + "\n")
-        self.out.write("\n".join(self.lines))
-        self.out.flush()
+    def _draw_just_finised_bars(self):
+        if self.just_finised_bars:
+            self.out.write("\n".join(self.just_finised_bars) + "\n")
+            self.out.flush()
 
-    def _stdout_write(self, s):
-        self._write(s, out=self.out)
-
-    def _stderr_write(self, s):
-        self._write(s, out=self.err)
-
-    def _write(self, s, out):
-        if not s:
-            return
-        if len(self.lines) >= 1:
-            self.out.write('\033[2K\033[1G')
-        if len(self.lines) >= 2:
-            self.out.write('\033[A\033[K'*(len(self.lines) - 1))
-        self.out.flush()
-        out.write(s.rstrip())
-        out.write('\n')
-        out.flush()
-        self.out.write("\n".join(self.lines))
-        self.out.flush()
+    def _draw_active_bars(self):
+        if self.active_bars:
+            self.out.write("\n".join(self.active_bars))
+            self.out.flush()
 
 ##__________________________________________________________________||
