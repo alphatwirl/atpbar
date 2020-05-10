@@ -37,8 +37,8 @@ class ProgressPrint(Presentation):
             percent=percent, name=report['name']
         )
         line = '{}\n'.format(line)
-        sys.stdout.write(line)
-        sys.stdout.flush()
+        self.out.write(line)
+        self.out.flush()
 
     def _need_to_present(self, report):
 
