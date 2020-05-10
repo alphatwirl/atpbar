@@ -23,7 +23,6 @@ class ProgressReportPickup(threading.Thread):
         self.queue = queue
         self.presentation = presentation
         self.last_wait_time = 1.0 # [second]
-        self.taskids = set()
 
     def run(self):
         try:
