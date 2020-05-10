@@ -277,10 +277,9 @@ Simultaneously growing progress bars will be shown.
 #### With Mantichora
 
 [_Mantichora_](https://github.com/alphatwirl/mantichora) provides a
-simple interface to _multiprocessing_.
+simple interface to _multiprocessing_ and _threading_.
 
-With Mantichora, `task()` can be concurrently run with multiprocessing
-with as simple code as the following example:
+With Mantichora, `task()` can be concurrently run with multiprocessing or threading with as simple code as the following example:
 
 ```python
 from mantichora import mantichora
@@ -298,6 +297,9 @@ with mantichora() as mcore:
     mcore.run(task, 'task 5')
     returns = mcore.returns()
 ```
+
+This example uses multiprocessing. To use threading, set the option `mode` to `threading` (the default is
+`multiprocessing`), i.e., `mantichora(mode='threading')`
 
 `atpbar` can be used in the task function.
 
