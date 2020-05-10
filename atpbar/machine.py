@@ -166,6 +166,8 @@ class Registered(State):
 
     def __init__(self, reporter):
         self.reporter = reporter
+        if self.reporter is None:
+            return
         if reporter.stream_redirection_enablaed:
             register_stream_queue(reporter.stream_queue)
 
