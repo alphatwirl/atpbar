@@ -45,14 +45,18 @@ class ProgressBar(Presentation):
         self._draw_active_bars()
 
     def _erase_active_bars(self):
-        if len(self.active_bars) >= 1:
-            self.out.write('\033[2K\033[1G')
-            # '\033[2K' erase the line
-            # '\033[1G' move the cursor to the beginning of the line
-        if len(self.active_bars) >= 2:
-            self.out.write('\033[A\033[K'*(len(self.active_bars) - 1))
-            # '\033[A' move the cursor up
-            # '\033[K' clear from cursor to the end of the line
+        nlines = len(self._active_taskids) + len(self._finishing_taskids)
+        # must be the same as len(self.active_bars)
+
+        if nlines == 0:
+            return
+
+        code = '\033[1G' + '\033[A'*(nlines-1) + '\033[0J'
+        # '\033[1G' move the cursor to the beginning of the line
+        # '\033[A' move the cursor up
+        # '\033[0J' clear from cursor to end of screen
+
+        self.out.write(code)
         self.out.flush()
 
     def _compose_just_finised_bars(self):
