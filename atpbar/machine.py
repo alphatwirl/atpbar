@@ -5,7 +5,7 @@ import multiprocessing
 
 from .reporter import ProgressReporter
 from .pickup import ProgressReportPickup
-from .stream import StreamRedirection
+from .stream import StreamRedirection, register_stream_queue
 from .presentation.create import create_presentation
 from .misc import in_main_thread
 
@@ -91,11 +91,15 @@ class Active(State):
         self.reporter = ProgressReporter(queue=self.queue)
         self.reporter.queue_detach = self.queue_detach = multiprocessing.Queue()
 
-        self.stream_queue = multiprocessing.Queue()
+        self.reporter.stream_queue = self.stream_queue = multiprocessing.Queue()
 
         self.reporter_yielded = False
 
         self._start_pickup()
+
+        self.reporter.stream_redirection_enablaed = True
+        if self.stream_redirection.disabled:
+            self.reporter.stream_redirection_enablaed = False
 
     def _start_pickup(self):
         presentation = create_presentation()
@@ -162,6 +166,8 @@ class Registered(State):
 
     def __init__(self, reporter):
         self.reporter = reporter
+        if reporter.stream_redirection_enablaed:
+            register_stream_queue(reporter.stream_queue)
 
     def fetch_reporter(self, lock):
         if self.reporter is None:
