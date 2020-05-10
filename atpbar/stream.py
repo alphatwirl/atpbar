@@ -75,11 +75,11 @@ class Stream:
 
 ##__________________________________________________________________||
 class StreamPickup(threading.Thread):
-    def __init__(self, queue, send_stdout, send_stderr):
+    def __init__(self, queue, stdout_write, stderr_write):
         super().__init__(daemon=True)
         self.queue = queue
-        self.send_stdout = send_stdout
-        self.send_stderr = send_stderr
+        self.stdout_write = stdout_write
+        self.stderr_write = stderr_write
     def run(self):
         try:
             while True:
@@ -88,9 +88,9 @@ class StreamPickup(threading.Thread):
                     break;
                 s, f = m
                 if f == FD.STDOUT:
-                    self.send_stdout(s)
+                    self.stdout_write(s)
                 elif f == FD.STDERR:
-                    self.send_stderr(s)
+                    self.stderr_write(s)
                 else:
                     raise ValueError('unknown fd: {!r}'.format(f))
 
