@@ -9,6 +9,7 @@ class Presentation:
 
     A subclass of this class should implement ``_present()``.
     """
+    stdout_stderr_redrection = False
 
     def __init__(self):
 
