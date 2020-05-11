@@ -7,7 +7,6 @@ from .progressreport.reporter import ProgressReporter
 from .progressreport.pickup import ProgressReportPickup
 from .stream import StreamRedirection, register_stream_queue
 from .presentation.create import create_presentation
-from .misc import in_main_thread
 
 ##__________________________________________________________________||
 class StateMachine:
@@ -182,5 +181,11 @@ class Disabled(State):
     """
     def __init__(self):
         self.reporter = None
+
+##__________________________________________________________________||
+def in_main_thread():
+    """test if in the main thread
+    """
+    return threading.current_thread() == threading.main_thread()
 
 ##__________________________________________________________________||
