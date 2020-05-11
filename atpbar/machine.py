@@ -1,5 +1,4 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-import sys
 import threading
 import multiprocessing
 

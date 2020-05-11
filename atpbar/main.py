@@ -1,5 +1,5 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-import os, uuid
+import uuid
 import logging
 import time
 
