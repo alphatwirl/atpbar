@@ -1,6 +1,6 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import time
-from .report import ProgressReportComplementer
+from .complement import ProgressReportComplementer
 
 ##__________________________________________________________________||
 DEFAULT_INTERVAL = 0.1 # [second]

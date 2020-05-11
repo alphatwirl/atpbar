@@ -1,7 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import pytest
 
-from atpbar.progressreport.report import ProgressReportComplementer
+from atpbar.progressreport.complement import ProgressReportComplementer
 
 ##__________________________________________________________________||
 @pytest.fixture()
