@@ -3,8 +3,8 @@ import sys
 import threading
 import multiprocessing
 
-from .reporter import ProgressReporter
-from .pickup import ProgressReportPickup
+from .progressreport.reporter import ProgressReporter
+from .progressreport.pickup import ProgressReportPickup
 from .stream import StreamRedirection, register_stream_queue
 from .presentation.create import create_presentation
 from .misc import in_main_thread

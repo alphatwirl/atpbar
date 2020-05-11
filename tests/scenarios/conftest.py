@@ -77,7 +77,7 @@ def machine(monkeypatch):
 ##__________________________________________________________________||
 @pytest.fixture(autouse=True)
 def reporter_interval(monkeypatch):
-    module = sys.modules['atpbar.reporter']
+    module = sys.modules['atpbar.progressreport.reporter']
     monkeypatch.setattr(module, 'DEFAULT_INTERVAL', 0)
     yield
 

@@ -5,7 +5,7 @@ import multiprocessing
 
 import unittest.mock as mock
 
-from atpbar.pickup import ProgressReportPickup
+from atpbar.progressreport.pickup import ProgressReportPickup
 
 ##__________________________________________________________________||
 class TestStart:
@@ -124,7 +124,7 @@ class TestRunUntilReportsStopComing:
     def mock_time(self, monkeypatch):
         ret = mock.Mock()
         ret.time.return_value = 1000.0
-        from atpbar import pickup as m
+        from atpbar.progressreport import pickup as m
         monkeypatch.setattr(m, 'time', ret)
         return ret
 
