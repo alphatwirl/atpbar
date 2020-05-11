@@ -87,7 +87,7 @@ class Active(State):
 
         self.queue = multiprocessing.Queue()
         self.reporter = ProgressReporter(queue=self.queue)
-        self.reporter.queue_detach = self.queue_detach = multiprocessing.Queue()
+        self.reporter.notices_from_sub_processes = self.notices_from_sub_processes = multiprocessing.Queue()
 
         self.reporter.stream_queue = self.stream_queue = multiprocessing.Queue()
 
@@ -129,18 +129,22 @@ class Active(State):
 
         self.reporter_yielded = True
         self.to_restart_pickup = True
-        while not self.queue_detach.empty():
-            _ = self.queue_detach.get()
+
+        while not self.notices_from_sub_processes.empty():
+            _ = self.notices_from_sub_processes.get()
 
         try:
             yield self.reporter
         finally:
             self.reporter_yielded = False
-            while not self.queue_detach.empty():
-                _ = self.queue_detach.get()
+
+            while not self.notices_from_sub_processes.empty():
+                _ = self.notices_from_sub_processes.get()
                 self.to_restart_pickup = False
+
             if not self.to_restart_pickup:
                 return
+
             with lock:
                 self._restart_pickup()
 
@@ -172,7 +176,7 @@ class Registered(State):
             yield self.reporter
             return
 
-        self.reporter.queue_detach.put(True)
+        self.reporter.notices_from_sub_processes.put(True)
         yield self.reporter
 
 class Disabled(State):
