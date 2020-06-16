@@ -44,7 +44,7 @@ for i in range(ntasks):
 ##__________________________________________________________________||
 for i in range(nprocesses):
     queue.put(None)
-    queue.join()
+queue.join()
 
 flush()
 
