@@ -28,7 +28,7 @@ setup(
     packages=find_packages(exclude=['docs', 'tests']),
     extras_require={
         'tests': [
-            'pytest>-5.4',
+            'pytest>=5.4',
             'pytest-cov>=2.8',
             'pytest-console-scripts>=0.2',
             'mantichora>=0.10',
