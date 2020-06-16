@@ -21,6 +21,7 @@ install:
       pip install -e '.[jupyter]';
     fi
   - pip install codecov
+  - pip list
 
 script:
   - pytest --cov
