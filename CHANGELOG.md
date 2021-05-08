@@ -7,6 +7,8 @@
 - reorganized the directory structure
 - cleaned code
 - updated tests
+- changed the default branch to "main"
+- started supporting Python 3.9
 
 ## [1.1.4] - 2021-05-08
 
