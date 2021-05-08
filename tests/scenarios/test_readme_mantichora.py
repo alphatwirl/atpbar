@@ -8,7 +8,11 @@ import multiprocessing
 import pytest
 
 from atpbar import atpbar
-from mantichora import mantichora
+
+try:
+    from mantichora import mantichora
+except ImportError:
+    pytestmark = pytest.mark.skip(reason="mantichora not instaled")
 
 ##__________________________________________________________________||
 def task(n, name):
