@@ -50,6 +50,7 @@ You can try it on Jupyter Notebook online: [![Binder](https://mybinder.org/badge
         - [Nested loops](#nested-loops)
         - [Threading](#threading)
         - [Multiprocessing](#multiprocessing)
+        - [Multiprocessing.Pool](#multiprocessingpool)
         - [With Mantichora](#with-mantichora)
     - [**Features**](#features)
         - [A `break` and an exception](#a-break-and-an-exception)
@@ -278,6 +279,12 @@ Simultaneously growing progress bars will be shown.
   76.09% ::::::::::::::::::::::::::::::           |     9266 /    12177 |:  task 9
 ```
 
+#### Multiprocessing.Pool
+
+To use `atpbar` with [`multiprocessing.Pool`](https://docs.python.org/3/library/multiprocessing.html#multiprocessing.pool.Pool), use `find_reporter` as the initializer and give the `reporter` as an argument to the initializer.
+
+See the example code in the [issue](https://github.com/alphatwirl/atpbar/issues/21#issuecomment-766468695).
+
 #### With Mantichora
 
 [_Mantichora_](https://github.com/alphatwirl/mantichora) provides a
@@ -493,5 +500,5 @@ typically at the beginning of the program.
 
 ## Contact
 
-- <span itemscope itemtype="https://schema.org/Person"><a itemprop="sameAs" content="https://orcid.org/0000-0003-3225-9861" href="https://orcid.org/0000-0003-3225-9861" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:text-top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon"></a></span>Tai Sakuma - tai.sakuma@gmail.com
+- <span itemscope itemtype="https://schema.org/Person"><a itemprop="sameAs" content="https://orcid.org/0000-0003-3225-9861" href="https://orcid.org/0000-0003-3225-9861" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:text-top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon"></a></span> Tai Sakuma - tai.sakuma@gmail.com
 
