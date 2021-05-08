@@ -2,7 +2,15 @@
 
 ## [Unreleased]
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.3...master))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.4...master))
+
+## [1.1.4] - 2020-05-08
+
+**PyPI**: https://pypi.org/project/atpbar/1.1.4/
+
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.3...v1.1.4))
+- no change in the code
+- moved from Tavis-CI to GitHub Actions to publish to PyPI
 
 ## [1.1.3] - 2020-05-09
 
