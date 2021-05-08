@@ -1,4 +1,8 @@
-[![PyPI version](https://badge.fury.io/py/atpbar.svg)](https://badge.fury.io/py/atpbar) [![Anaconda-Server Badge](https://anaconda.org/conda-forge/atpbar/badges/version.svg)](https://anaconda.org/conda-forge/atpbar) [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.2567283.svg)](https://doi.org/10.5281/zenodo.2567283) [![Build Status](https://travis-ci.org/alphatwirl/atpbar.svg?branch=master)](https://travis-ci.org/alphatwirl/atpbar) [![codecov](https://codecov.io/gh/alphatwirl/atpbar/branch/master/graph/badge.svg)](https://codecov.io/gh/alphatwirl/atpbar)
+[![PyPI version](https://badge.fury.io/py/atpbar.svg)](https://badge.fury.io/py/atpbar) 
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/atpbar/badges/version.svg)](https://anaconda.org/conda-forge/atpbar) 
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.2567283.svg)](https://doi.org/10.5281/zenodo.2567283) 
+[![Test Status](https://github.com/alphatwirl/atpbar/workflows/Test/badge.svg)](https://github.com/alphatwirl/atpbar/actions?query=workflow%3ATest)
+[![codecov](https://codecov.io/gh/alphatwirl/atpbar/branch/master/graph/badge.svg)](https://codecov.io/gh/alphatwirl/atpbar)
 
 # atpbar
 
