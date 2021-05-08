@@ -64,7 +64,7 @@ You can try it on Jupyter Notebook online: [![Binder](https://mybinder.org/badge
 
 ## Requirement
 
-- Python 3.6, 3.7, or 3.8
+- Python 3.6, 3.7, 3.8, or 3.9
 
 *****
 
