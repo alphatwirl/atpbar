@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.4...master))
+#### Changes from the previous release: ([diff](https://github.com/alphatwirl/atpbar/compare/v1.1.4...main))
 - started capturing stdout and stderr and writing above the progress bars
 - reorganized the directory structure
 - cleaned code
