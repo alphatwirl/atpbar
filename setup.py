@@ -35,7 +35,7 @@ setup(
             # 'mantichora>=0.10',
         ],
         'jupyter': [
-            'jupyter>-1.0',
+            'jupyter>=1.0',
             'ipywidgets>=7.5',
         ]
     }
