@@ -172,7 +172,7 @@ The function `run_with_threading()` in the following code shows an
 example.
 
 ```python
-from atpbar import flush
+from atpbar import atpbar, flush
 import threading
 
 def run_with_threading():
@@ -210,6 +210,52 @@ progress bars have finished updating.
 
 As a task completes, the progress bar for the task moves up. The
 progress bars for active tasks are at the bottom.
+
+Of course, `atpbar` can be combined with other libraries/modules as in
+the `download_files` function in the following code, which employs the
+`requests` library to download multiple files concurrently via threading
+and uses `atpbar` to show progress bars for each thread.
+
+```python
+from atpbar import atpbar, flush
+import threading
+import requests
+
+CHUNK_SIZE = 512*1024
+
+def download_files(urls, filenames):
+    nthreads = len(urls)
+
+    def download_file(url, filename):
+            req = requests.get(url, headers=HEADERS, stream=True)
+            print(req.status_code)
+            print(req.headers)
+            size = int(req.headers['content-length'])
+            with open(filename, 'wb') as f:
+                    for i in atpbar(range(int(size/CHUNK_SIZE)), name=filename):
+                            for chunk in req.iter_content(chunk_size=CHUNK_SIZE):
+                                    if chunk:
+                                            f.write(chunk)
+                                            break
+                            continue
+
+    threads = []
+    for i in range(nthreads):
+            thread = threading.Thread(target=download_file, args=(urls[i], filenames[i]))
+            threads.append(thread)
+            thread.start()
+    for thread in threads:
+            thread.join()
+    flush()
+```
+The `atpbar` progress bar updates after each iteration of the loop,
+so we need to break out of the inner buffering loop in order to update
+the progress. So the fact that `req.iter_content()` is a generator is
+crucial in this implementation.
+
+(Note: It is assumed that the HTTP response has a Content-Length header,
+which may not always be the case. You might also have to pass in some
+headers in the request, such as the User-Agent.)
 
 #### Multiprocessing
 
