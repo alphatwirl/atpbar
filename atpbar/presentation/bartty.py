@@ -86,7 +86,7 @@ class ProgressBar(Presentation):
         percent = round(percent * 100, 2)
         # e.g., 71.43
 
-        format = ' {percent:6.2f}% {bar:s} | {done:8d} / {total:8d} |:  {name} '
+        format = '{percent:6.2f}% {bar:s} | {done:8d} / {total:8d} |:  {name} '
 
         if "start_time" in report.keys():
             elapsed_str, remaining_str = self._get_time_track(
