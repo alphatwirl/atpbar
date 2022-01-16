@@ -35,6 +35,10 @@ setup(
             "pytest-console-scripts>=0.2",
             # 'mantichora>=0.10',
         ],
+        "lintering": [
+            "black",
+            "isort",
+        ],
         "jupyter": [
             "jupyter>=1.0",
             "ipywidgets>=7.5",
