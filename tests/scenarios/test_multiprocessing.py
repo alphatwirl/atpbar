@@ -1,16 +1,16 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-import time, random
 import itertools
 import multiprocessing
+import random
+import time
 
 import pytest
 
-from atpbar import atpbar
-from atpbar import register_reporter, find_reporter, flush
+from atpbar import atpbar, find_reporter, flush, register_reporter
+
 
 ##__________________________________________________________________||
 def run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task):
-
     def task(n, name, time_starting):
         time.sleep(time_starting)
         for i in atpbar(range(n), name=name):  # `atpbar` is used here
@@ -33,8 +33,8 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task
         p = multiprocessing.Process(target=worker, args=(reporter, task, queue))
         p.start()
 
-    for i in atpbar(range(ntasks)): # `atpbar` is used here
-        name = 'task {}'.format(i)
+    for i in atpbar(range(ntasks)):  # `atpbar` is used here
+        name = "task {}".format(i)
         n = niterations[i]
         queue.put((n, name, time_starting_task))
         time.sleep(0.01)
@@ -45,17 +45,16 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task
 
     flush()
 
+
 @pytest.mark.xfail()
-@pytest.mark.parametrize('time_starting_task', [0, 0.01, 0.2])
-@pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
-@pytest.mark.parametrize('ntasks', [3, 1, 0])
-@pytest.mark.parametrize('nprocesses', [6, 2, 1])
-def test_multiprocessing_from_loop(
-        mock_create_presentation,
-        nprocesses, ntasks, niterations, time_starting_task):
+@pytest.mark.parametrize("time_starting_task", [0, 0.01, 0.2])
+@pytest.mark.parametrize("niterations", [[5, 4, 3], [5, 0, 1], [0], [1]])
+@pytest.mark.parametrize("ntasks", [3, 1, 0])
+@pytest.mark.parametrize("nprocesses", [6, 2, 1])
+def test_multiprocessing_from_loop(mock_create_presentation, nprocesses, ntasks, niterations, time_starting_task):
 
     # make niterations as long as ntasks. repeat if necessary
-    niterations = list(itertools.chain(*itertools.repeat(niterations, ntasks//len(niterations)+1)))[:ntasks]
+    niterations = list(itertools.chain(*itertools.repeat(niterations, ntasks // len(niterations) + 1)))[:ntasks]
 
     run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task)
 
@@ -69,9 +68,9 @@ def test_multiprocessing_from_loop(
     presentations = mock_create_presentation.presentations
 
     if nreports_expected_from_tasks == 0:
-        assert 3 == len(presentations) # in find_reporter(), at the
-                                       # end of `atpbar` in the main
-                                       # process, and in flush().
+        assert 3 == len(presentations)  # in find_reporter(), at the
+        # end of `atpbar` in the main
+        # process, and in flush().
 
         progressbar0 = presentations[0]
         assert nreports_expected == len(progressbar0.reports)
@@ -118,5 +117,6 @@ def test_multiprocessing_from_loop(
     assert 1 == progressbar.nfirsts
     assert 1 == progressbar.nlasts
     assert 4 + 1 == len(progressbar.reports)
+
 
 ##__________________________________________________________________||

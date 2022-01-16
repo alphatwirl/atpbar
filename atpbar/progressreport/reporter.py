@@ -1,9 +1,10 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import time
+
 from .complement import ProgressReportComplementer
 
 ##__________________________________________________________________||
-DEFAULT_INTERVAL = 0.1 # [second]
+DEFAULT_INTERVAL = 0.1  # [second]
 
 ##__________________________________________________________________||
 class ProgressReporter:
@@ -38,18 +39,15 @@ class ProgressReporter:
     queue : multiprocessing.Queue
         The queue through which this class sends progress reports.
     """
+
     def __init__(self, queue):
         self.queue = queue
-        self.interval = DEFAULT_INTERVAL # [second]
-        self.last_time = { } # key: taskid
+        self.interval = DEFAULT_INTERVAL  # [second]
+        self.last_time = {}  # key: taskid
         self.complete_report = ProgressReportComplementer()
 
     def __repr__(self):
-        return '{}(queue={!r}, interval={!r})'.format(
-            self.__class__.__name__,
-            self.queue,
-            self.interval
-        )
+        return "{}(queue={!r}, interval={!r})".format(self.__class__.__name__, self.queue, self.interval)
 
     def report(self, report):
         """send ``report`` to a progress monitor
@@ -68,22 +66,23 @@ class ProgressReporter:
 
         self.queue.put(report)
 
-        self.last_time[report['taskid']] = time.time()
+        self.last_time[report["taskid"]] = time.time()
 
     def _need_to_report(self, report):
 
-        if report['first']:
+        if report["first"]:
             return True
 
-        if report['last']:
+        if report["last"]:
             return True
 
-        if report['taskid'] not in self.last_time:
+        if report["taskid"] not in self.last_time:
             return True
 
-        if time.time() - self.last_time[report['taskid']] > self.interval:
+        if time.time() - self.last_time[report["taskid"]] > self.interval:
             return True
 
         return False
+
 
 ##__________________________________________________________________||

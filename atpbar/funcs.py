@@ -1,7 +1,7 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
 import atexit
-import multiprocessing
 import contextlib
+import multiprocessing
 
 from .machine import StateMachine
 
@@ -24,6 +24,7 @@ def find_reporter():
     """
     return _machine.find_reporter()
 
+
 ##__________________________________________________________________||
 def register_reporter(reporter):
     """registers a reporter
@@ -45,6 +46,7 @@ def register_reporter(reporter):
     """
     _machine.register_reporter(reporter)
 
+
 ##__________________________________________________________________||
 def flush():
     """flushes progress bars
@@ -58,6 +60,7 @@ def flush():
 
     """
     _machine.flush()
+
 
 ##__________________________________________________________________||
 def disable():
@@ -73,6 +76,7 @@ def disable():
     """
     _machine.disable()
 
+
 ##__________________________________________________________________||
 
 ##__________________________________________________________________||
@@ -87,8 +91,9 @@ def shutdown():
     _machine.shutdown()
 
 
-import multiprocessing.queues # This import prevents the issue
-                              # https://github.com/alphatwirl/atpbar/issues/4
+import multiprocessing.queues  # This import prevents the issue
+
+# https://github.com/alphatwirl/atpbar/issues/4
 
 atexit.register(shutdown)
 
@@ -96,5 +101,6 @@ atexit.register(shutdown)
 @contextlib.contextmanager
 def fetch_reporter():
     yield from _machine.fetch_reporter()
+
 
 ##__________________________________________________________________||

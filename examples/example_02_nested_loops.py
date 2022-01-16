@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # Tai Sakuma <tai.sakuma@gmail.com>
-import time, random
+import random
+import time
 
 from atpbar import atpbar
 
