@@ -91,8 +91,8 @@ def shutdown():
     _machine.shutdown()
 
 
-import multiprocessing.queues  # This import prevents the issue
-
+import multiprocessing.queues  
+# This import prevents the issue
 # https://github.com/alphatwirl/atpbar/issues/4
 
 atexit.register(shutdown)
