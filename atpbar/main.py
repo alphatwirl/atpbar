@@ -1,11 +1,11 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-import uuid
+import contextlib
 import logging
 import time
-
-import contextlib
+import uuid
 
 from .funcs import fetch_reporter
+
 
 ##__________________________________________________________________||
 def atpbar(iterable, name=None, time_track=False):
@@ -29,14 +29,15 @@ def atpbar(iterable, name=None, time_track=False):
         len_ = len(iterable)
     except TypeError:
         logger = logging.getLogger(__name__)
-        logging.warning('length is unknown: {!r}'.format(iterable))
-        logging.warning('atpbar is turned off')
+        logging.warning("length is unknown: {!r}".format(iterable))
+        logging.warning("atpbar is turned off")
         return iterable
 
     if name is None:
         name = repr(iterable)
 
     return Atpbar(iterable, name=name, len_=len_, time_track=time_track)
+
 
 ##__________________________________________________________________||
 class Atpbar:
@@ -70,7 +71,7 @@ class Atpbar:
             self.loop_complete = False
             self._report_start()
             with report_last(pbar=self):
-                for i, e in enumerate(self. iterable):
+                for i, e in enumerate(self.iterable):
                     yield e
                     self._report_progress(i)
                 else:
@@ -80,11 +81,9 @@ class Atpbar:
         if self.reporter is None:
             return
         try:
-            report = dict(
-                taskid=self.id_, name=self.name,
-                done=0, total=self.len_)
+            report = dict(taskid=self.id_, name=self.name, done=0, total=self.len_)
             if self.time_track:
-                report['start_time'] = start_time=time.time()
+                report["start_time"] = start_time = time.time()
             self.reporter.report(report)
         except:
             pass
@@ -93,10 +92,11 @@ class Atpbar:
         if self.reporter is None:
             return
         try:
-            report = dict(taskid=self.id_, done=(i+1))
+            report = dict(taskid=self.id_, done=(i + 1))
             self.reporter.report(report)
         except:
             pass
+
 
 @contextlib.contextmanager
 def report_last(pbar):
@@ -119,5 +119,6 @@ def report_last(pbar):
             pbar.reporter.report(report)
         except:
             pass
+
 
 ##__________________________________________________________________||

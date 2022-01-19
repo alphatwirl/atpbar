@@ -1,6 +1,8 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-import os, time
+import os
 import threading
+import time
+
 
 ##__________________________________________________________________||
 class ProgressReportPickup(threading.Thread):
@@ -15,6 +17,7 @@ class ProgressReportPickup(threading.Thread):
     presentation :
         The presentation of the reports
     """
+
     def __init__(self, queue, presentation):
         super().__init__(daemon=True)
         # The daemon makes the functions registered at atexit called
@@ -22,14 +25,12 @@ class ProgressReportPickup(threading.Thread):
 
         self.queue = queue
         self.presentation = presentation
-        self.last_wait_time = 1.0 # [second]
+        self.last_wait_time = 1.0  # [second]
 
         self.start()
 
     def end(self):
-        """end the thread
-
-        """
+        """end the thread"""
         self.queue.put(None)
         self.join()
 
@@ -45,7 +46,7 @@ class ProgressReportPickup(threading.Thread):
         while True:
             while not self.queue.empty():
                 report = self.queue.get()
-                if report is None: # the end order
+                if report is None:  # the end order
                     end_order_arrived = True
                     continue
                 self._process_report(report)

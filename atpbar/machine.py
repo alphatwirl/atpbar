@@ -1,11 +1,12 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-import threading
 import multiprocessing
+import threading
 
-from .progressreport.reporter import ProgressReporter
-from .progressreport.pickup import ProgressReportPickup
-from .stream import StreamRedirection, register_stream_queue
 from .presentation.create import create_presentation
+from .progressreport.pickup import ProgressReportPickup
+from .progressreport.reporter import ProgressReporter
+from .stream import StreamRedirection, register_stream_queue
+
 
 ##__________________________________________________________________||
 class StateMachine:
@@ -37,10 +38,11 @@ class StateMachine:
             self.state = self.state.prepare_reporter()
         yield from self.state.fetch_reporter(lock=self.lock)
 
+
 ##__________________________________________________________________||
 class State:
-    """The base class of the states
-    """
+    """The base class of the states"""
+
     def prepare_reporter(self):
         return self
 
@@ -58,6 +60,7 @@ class State:
 
     def shutdown(self):
         return self
+
 
 ##__________________________________________________________________||
 class Initial(State):
@@ -78,12 +81,16 @@ class Initial(State):
     def flush(self):
         return Active()
 
+
 class Active(State):
     """Active state
 
     The pickup started and is running, typically, in the main process
     """
-    def __init__(self,):
+
+    def __init__(
+        self,
+    ):
 
         self.queue = multiprocessing.Queue()
         self.reporter = ProgressReporter(queue=self.queue)
@@ -156,6 +163,7 @@ class Active(State):
         self._end_pickup()
         return Initial()
 
+
 ##__________________________________________________________________||
 class Registered(State):
     """Registered state
@@ -179,16 +187,18 @@ class Registered(State):
         self.reporter.notices_from_sub_processes.put(True)
         yield self.reporter
 
+
 class Disabled(State):
-    """Disabled state
-    """
+    """Disabled state"""
+
     def __init__(self):
         self.reporter = None
 
+
 ##__________________________________________________________________||
 def in_main_thread():
-    """test if in the main thread
-    """
+    """test if in the main thread"""
     return threading.current_thread() == threading.main_thread()
+
 
 ##__________________________________________________________________||
