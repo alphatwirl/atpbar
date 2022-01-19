@@ -86,8 +86,7 @@ class TestRunUntilTheEndOrderArrives:
         report1 = mock.MagicMock()
         report2 = mock.MagicMock()
         mock_queue.empty.side_effect = [False, False, False, True]
-        mock_queue.get.side_effect = [report1, None, report2]  # report2 arrives
-        # after the end_order
+        mock_queue.get.side_effect = [report1, None, report2]  # report2 arrives after the end_order
         pickup._run_until_the_end_order_arrives()
         assert [mock.call.present(report1), mock.call.present(report2)] == presentation.mock_calls
         assert 0 == pickup._short_sleep.call_count
