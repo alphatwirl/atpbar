@@ -68,7 +68,8 @@ def test_multiprocessing_from_loop(mock_create_presentation, nprocesses, ntasks,
     presentations = mock_create_presentation.presentations
 
     if nreports_expected_from_tasks == 0:
-        assert 3 == len(presentations)  # in find_reporter(), at the
+        assert 3 == len(presentations)
+        # in find_reporter(), at the
         # end of `atpbar` in the main
         # process, and in flush().
 
