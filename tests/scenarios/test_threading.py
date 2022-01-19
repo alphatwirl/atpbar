@@ -20,14 +20,16 @@ def test_threading_from_loop(mock_create_presentation, nthreads, niterations, ti
 
     def run_with_threading(nthreads=3, niterations=[5, 5, 5], time_starting_task=0):
         def task(n, name, time_starting):
-            time.sleep(time_starting)  # When starting time is long, the loop in
+            time.sleep(time_starting)
+            # When starting time is long, the loop in
             # the main thread might already end by the
             # time the loop in this task starts.
             for i in atpbar(range(n), name=name):
                 time.sleep(0.0001)
 
         threads = []
-        for i in atpbar(range(nthreads)):  # `atpbar` is used here while `atpbar`
+        for i in atpbar(range(nthreads)):
+            # `atpbar` is used here while `atpbar`
             # is also used in threads being
             # launched in this loop. If none of
             # the `atpbar`s in threads has started
@@ -68,7 +70,8 @@ def test_threading_from_loop(mock_create_presentation, nthreads, niterations, ti
     presentations = mock_create_presentation.presentations
 
     if nreports_expected_from_threads == 0:
-        assert 3 == len(presentations)  # when `atpbar` in the main thread
+        assert 3 == len(presentations)
+        # when `atpbar` in the main thread
         # starts and end and when flush() is
         # called
 
