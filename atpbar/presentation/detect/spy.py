@@ -33,8 +33,10 @@ def is_spyder_ide():
     if "SPYDER_ARGS" not in os.environ:
         return False
 
-    min_n_spy_var = 15  # A possible minimum number of the environmental
+    min_n_spy_var = 15
+    # A possible minimum number of the environmental
     # variables that start with "SPY_" on Spyder IDE.
+    
     n_spy_var = len([k for k in os.environ.keys() if k.startswith("SPY_")])
     if n_spy_var < min_n_spy_var:
         return False
