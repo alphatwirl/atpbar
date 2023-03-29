@@ -1,5 +1,5 @@
 # Tai Sakuma <tai.sakuma@gmail.com>
-from .main import atpbar
+from .main import atpbar, Atpbar
 from .funcs import find_reporter, register_reporter, flush, disable
 
 ##__________________________________________________________________||
