@@ -46,7 +46,7 @@ def register_reporter(reporter):
     _machine.register_reporter(reporter)
 
 ##__________________________________________________________________||
-def flush(blocking=True, timeout=None):
+def flush(blocking=True, timeout=-1):
     """flushes progress bars
 
     This function flushes all active progress bars. It returns when
@@ -65,7 +65,7 @@ def flush(blocking=True, timeout=None):
     Success to acquire reporter the lock
 
     """
-    return _machine.flush(block, timeout)
+    return _machine.flush(blocking, timeout)
 
 ##__________________________________________________________________||
 def disable():
