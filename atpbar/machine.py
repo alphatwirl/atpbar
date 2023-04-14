@@ -21,9 +21,13 @@ class StateMachine:
     def register_reporter(self, reporter):
         self.state = self.state.register_reporter(reporter)
 
-    def flush(self):
-        with self.lock:
+    def flush(self, blocking=True, timeout=-1):
+        success = self.lock.acquire(blocking, timeout)
+        if success:
             self.state = self.state.flush()
+            self.lock.release()
+            return True
+        return False
 
     def disable(self):
         self.state = self.state.disable()
