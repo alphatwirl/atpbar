@@ -6,6 +6,8 @@
 
 # atpbar
 
+This is a fork of the official atpbar repo. I added the _blocking_ and _timeout_ option to the `atpbar.flush` function and exported the `Atpbar` class.
+
 _Progress bars_ for threading and multiprocessing tasks on terminal
 and Jupyter Notebook.
 
