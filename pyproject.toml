@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-regex-commit"]
 build-backend = "hatchling.build"
 
 [project]
@@ -37,7 +37,9 @@ tests = [
 Homepage = "https://github.com/alphatwirl/atpbar"
 
 [tool.hatch.version]
-path = "atpbar/__init__.py"
+source = "regex_commit"
+path = "atpbar/__about__.py"
+tag_sign = false
 
 [tool.hatch.build.targets.sdist]
 include = [
