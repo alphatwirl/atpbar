@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "atpbar"
+dynamic = ["version"]
+description = "Progress bars for threading and multiprocessing tasks"
+readme = "README.md"
+license = ""
+authors = [
+    { name = "Tai Sakuma", email = "tai.sakuma@gmail.com" },
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+]
+
+[project.optional-dependencies]
+jupyter = [
+    "ipywidgets>=7.5",
+    "jupyter>=1.0",
+]
+tests = [
+    "pytest-console-scripts>=0.2",
+    "pytest-cov>=2.8",
+    "pytest>=5.4",
+]
+
+[project.urls]
+Homepage = "https://github.com/alphatwirl/atpbar"
+
+[tool.hatch.version]
+path = "atpbar/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/atpbar",
+]
