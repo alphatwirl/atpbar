@@ -1,0 +1,20 @@
+{
+  "[markdown]": {
+    "editor.rulers": [80]
+  },
+  "[python]": {
+    "editor.rulers": [89]
+  },
+  "prettier.printWidth": 79,
+  "rewrap.wrappingColumn": 79,
+  "python.testing.pytestArgs": ["tests"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "isort.check": true,
+  "markdownlint.config": {
+    "MD033": false,
+    "MD036": false,
+    "MD041": false
+  },
+  "cSpell.words": ["funcs"]
+}
