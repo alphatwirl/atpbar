@@ -10,7 +10,7 @@ try:
 except ImportError:
     get_ipython = None
 
-##__________________________________________________________________||
+
 def is_spyder_ide():
     """Tests if on Spyder IDE
 
@@ -41,4 +41,4 @@ def is_spyder_ide():
 
     return True
 
-##__________________________________________________________________||
+

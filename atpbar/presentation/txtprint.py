@@ -3,7 +3,7 @@ import sys, time
 
 from .base import Presentation
 
-##__________________________________________________________________||
+
 class ProgressPrint(Presentation):
     def __init__(self):
         super().__init__()
@@ -59,4 +59,4 @@ class ProgressPrint(Presentation):
     def _time(self):
         return time.time()
 
-##__________________________________________________________________||
+

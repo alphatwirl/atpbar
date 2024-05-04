@@ -7,7 +7,7 @@ import unittest.mock as mock
 
 from atpbar.presentation.detect.spy import is_spyder_ide
 
-##__________________________________________________________________||
+
 @pytest.fixture()
 def mock_spyder_module(monkeypatch):
     ret = mock.Mock()
@@ -67,7 +67,7 @@ def mock_spyder_ide(mock_spyder_module, mock_get_ipython, mock_spyder_env_vars):
 def test_is_spyder_ide_true(mock_spyder_ide):
     assert is_spyder_ide()
 
-##__________________________________________________________________||
+
 @pytest.fixture()
 def mock_del_spyder_env_vars(monkeypatch):
     monkeypatch.delenv('SPYDER_ARGS', raising=False)
@@ -79,4 +79,4 @@ def mock_del_spyder_env_vars(monkeypatch):
 def test_is_spyder_ide_false(mock_del_spyder_env_vars):
     assert not is_spyder_ide()
 
-##__________________________________________________________________||
+

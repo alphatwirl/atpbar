@@ -1,5 +1,5 @@
 
-##__________________________________________________________________||
+
 try:
     import ipywidgets as widgets
 except ImportError:
@@ -18,7 +18,7 @@ except ImportError:
 
 from .spy import is_spyder_ide
 
-##__________________________________________________________________||
+
 def is_jupyter_notebook():
     """Tests if on Jupyter Notebook
 
@@ -46,4 +46,4 @@ def is_jupyter_notebook():
 
     return True
 
-##__________________________________________________________________||
+

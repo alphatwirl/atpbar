@@ -10,7 +10,7 @@ import pytest
 from atpbar import atpbar
 from atpbar import register_reporter, find_reporter, flush
 
-##__________________________________________________________________||
+
 @pytest.mark.parametrize('niterations', [10, 1, 0])
 def test_one_loop(mock_create_presentation, niterations):
 
@@ -35,7 +35,7 @@ def test_one_loop(mock_create_presentation, niterations):
     progressbar1 = presentations[1]
     assert 0 == len(progressbar1.reports)
 
-##__________________________________________________________________||
+
 def test_nested_loops(mock_create_presentation):
 
     for i in atpbar(range(4)):
@@ -54,7 +54,7 @@ def test_nested_loops(mock_create_presentation):
     progressbar1 = presentations[1]
     assert 0 == len(progressbar1.reports)
 
-##__________________________________________________________________||
+
 def run_with_threading(nthreads=3, niterations=[5, 5, 5]):
     def task(n, name):
         for i in atpbar(range(n), name=name):
@@ -98,7 +98,7 @@ def test_threading(mock_create_presentation, nthreads, niterations):
     progressbar1 = presentations[1]
     assert 0 == len(progressbar1.reports)
 
-##__________________________________________________________________||
+
 def run_with_multiprocessing(nprocesses, ntasks, niterations):
     def task(n, name):
         for i in atpbar(range(n), name=name):
@@ -151,4 +151,4 @@ def test_multiprocessing(mock_create_presentation, nprocesses, ntasks, niteratio
     progressbar1 = presentations[1]
     assert 0 == len(progressbar1.reports)
 
-##__________________________________________________________________||
+

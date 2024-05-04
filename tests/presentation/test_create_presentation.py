@@ -16,7 +16,7 @@ except ImportError:
 
 from atpbar.presentation.create import create_presentation
 
-##__________________________________________________________________||
+
 @pytest.fixture(
     params=[True, False]
 )
@@ -31,7 +31,7 @@ def isatty(request, monkeypatch):
     monkeypatch.setattr(module, 'sys', f)
     return ret
 
-##__________________________________________________________________||
+
 if has_jupyter_notebook:
     is_jupyter_notebook_parames = [True, False]
 else:
@@ -46,7 +46,7 @@ def is_jupyter_notebook(request, monkeypatch):
     monkeypatch.setattr(module, 'is_jupyter_notebook', f)
     return ret
 
-##__________________________________________________________________||
+
 @pytest.fixture(
     params=[True, False]
 )
@@ -61,7 +61,7 @@ def del_ProgressBarJupyter(request, monkeypatch):
         monkeypatch.setattr(module, 'ProgressBarJupyter', m, raising=False)
     return ret
 
-##__________________________________________________________________||
+
 def test_create_presentation(isatty, is_jupyter_notebook, del_ProgressBarJupyter):
     actual = create_presentation()
 
@@ -75,4 +75,4 @@ def test_create_presentation(isatty, is_jupyter_notebook, del_ProgressBarJupyter
     else:
         assert 'ProgressPrint' == actual.__class__.__name__
 
-##__________________________________________________________________||
+

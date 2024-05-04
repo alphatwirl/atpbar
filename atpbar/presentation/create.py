@@ -11,7 +11,7 @@ try:
 except ImportError:
     pass
 
-##__________________________________________________________________||
+
 def create_presentation():
     """Create a presentation of progress report, e.g., progress bars
 
@@ -35,4 +35,4 @@ def create_presentation():
 
     return ProgressPrint()
 
-##__________________________________________________________________||
+

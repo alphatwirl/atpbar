@@ -7,7 +7,7 @@ from .progressreport.pickup import ProgressReportPickup
 from .stream import StreamRedirection, register_stream_queue
 from .presentation.create import create_presentation
 
-##__________________________________________________________________||
+
 class StateMachine:
     def __init__(self):
         self.lock = threading.Lock()
@@ -37,7 +37,7 @@ class StateMachine:
             self.state = self.state.prepare_reporter()
         yield from self.state.fetch_reporter(lock=self.lock)
 
-##__________________________________________________________________||
+
 class State:
     """The base class of the states
     """
@@ -59,7 +59,7 @@ class State:
     def shutdown(self):
         return self
 
-##__________________________________________________________________||
+
 class Initial(State):
     """Initial state
 
@@ -156,7 +156,7 @@ class Active(State):
         self._end_pickup()
         return Initial()
 
-##__________________________________________________________________||
+
 class Registered(State):
     """Registered state
 
@@ -185,10 +185,10 @@ class Disabled(State):
     def __init__(self):
         self.reporter = None
 
-##__________________________________________________________________||
+
 def in_main_thread():
     """test if in the main thread
     """
     return threading.current_thread() == threading.main_thread()
 
-##__________________________________________________________________||
+

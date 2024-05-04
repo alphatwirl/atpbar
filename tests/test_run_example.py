@@ -9,7 +9,7 @@ import pytest
 here = Path(__file__).resolve().parent
 example_dir = here.parent.joinpath('examples')
 
-##__________________________________________________________________||
+
 params = [
     'example_01_one_loop.py',
     'example_02_nested_loops.py',
@@ -24,4 +24,4 @@ def test_run_example_script(script_runner, script_name):
     assert ret.success
     assert ret.stderr == ''
 
-##__________________________________________________________________||
+

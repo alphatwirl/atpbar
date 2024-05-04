@@ -8,7 +8,7 @@ import pytest
 from atpbar import atpbar
 from atpbar import register_reporter, find_reporter, flush
 
-##__________________________________________________________________||
+
 def run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task):
 
     def task(n, name, time_starting):
@@ -119,4 +119,4 @@ def test_multiprocessing_from_loop(
     assert 1 == progressbar.nlasts
     assert 4 + 1 == len(progressbar.reports)
 
-##__________________________________________________________________||
+

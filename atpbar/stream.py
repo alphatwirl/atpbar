@@ -3,7 +3,7 @@ import sys
 from enum import Enum
 import threading
 
-##__________________________________________________________________||
+
 class StreamRedirection:
     def __init__(self, queue, presentation):
         self.disabled = not presentation.stdout_stderr_redrection
@@ -38,19 +38,19 @@ class StreamRedirection:
         self.queue.put(None)
         self.pickup.join()
 
-##__________________________________________________________________||
+
 def register_stream_queue(queue):
     if queue is None:
         return
     sys.stdout = Stream(queue, FD.STDOUT)
     sys.stderr = Stream(queue, FD.STDERR)
 
-##__________________________________________________________________||
+
 class FD(Enum):
     STDOUT = 1
     STDERR = 2
 
-##__________________________________________________________________||
+
 class Stream:
     def __init__(self, queue, fd):
         self.fd = fd
@@ -80,7 +80,7 @@ class Stream:
         self.queue.put((self.buffer, self.fd))
         self.buffer = ''
 
-##__________________________________________________________________||
+
 class StreamPickup(threading.Thread):
     def __init__(self, queue, stdout_write, stderr_write):
         super().__init__(daemon=True)
@@ -104,4 +104,4 @@ class StreamPickup(threading.Thread):
         except EOFError:
             pass
 
-##__________________________________________________________________||
+

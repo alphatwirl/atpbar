@@ -6,12 +6,12 @@ import unittest.mock as mock
 
 from atpbar.presentation.base import Presentation
 
-##__________________________________________________________________||
+
 class MockProgressBar(Presentation):
     def _present(self):
         pass
 
-##__________________________________________________________________||
+
 @pytest.fixture()
 def mock_time(monkeypatch):
     ret = mock.Mock()
@@ -24,11 +24,11 @@ def mock_time(monkeypatch):
 def obj(mock_time):
     return MockProgressBar()
 
-##__________________________________________________________________||
+
 def test_repr(obj):
     repr(obj)
 
-##__________________________________________________________________||
+
 def test_present(obj):
     obj.present(dict(taskid=1, last=False))
     assert obj.active()
@@ -43,7 +43,7 @@ def test_present(obj):
     obj.present(dict(taskid=2, last=True))
     assert not obj.active()
 
-##__________________________________________________________________||
+
 params = [
 
     ##
@@ -140,7 +140,7 @@ def test_register_report(
     assert expected_finishing_taskids == obj._finishing_taskids
     assert expected_complete_taskids == obj._complete_taskids
 
-##__________________________________________________________________||
+
 params = [
     pytest.param(
         [ ], [ ], [ ], [ ],
@@ -182,7 +182,7 @@ def test_update_registry(
     assert expected_finishing_taskids == obj._finishing_taskids
     assert expected_complete_taskids == obj._complete_taskids
 
-##__________________________________________________________________||
+
 params = [
     pytest.param([ ], [ ], 4.0, 2.0, 1.0, True),
     pytest.param([1], [ ], 4.0, 2.0, 1.0, True),
@@ -208,4 +208,4 @@ def test_need_to_present(
 
     assert expected == obj._need_to_present()
 
-##__________________________________________________________________||
+

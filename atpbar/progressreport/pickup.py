@@ -2,7 +2,7 @@
 import os, time
 import threading
 
-##__________________________________________________________________||
+
 class ProgressReportPickup(threading.Thread):
     """A pickup of progress reports.
 
@@ -80,4 +80,4 @@ class ProgressReportPickup(threading.Thread):
         time.sleep(0.001)
 
 
-##__________________________________________________________________||
+

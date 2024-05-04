@@ -3,7 +3,7 @@ import pytest
 
 from atpbar.progressreport.complement import ProgressReportComplementer
 
-##__________________________________________________________________||
+
 @pytest.fixture()
 def obj():
     ret = ProgressReportComplementer()
@@ -12,7 +12,7 @@ def obj():
 def test_repr(obj):
     repr(obj)
 
-##__________________________________________________________________||
+
 def test_complement(obj):
 
     report0 = dict(taskid=5355, done=0, total=10, name='task1')
@@ -41,7 +41,7 @@ def test_complement(obj):
     assert expected2 == report2
     assert expected3 == report3
 
-##__________________________________________________________________||
+
 def test_volatile_fileds(obj):
 
     report0 = dict(taskid=5355, done=0, total=10, first=True)
@@ -64,7 +64,7 @@ def test_volatile_fileds(obj):
     assert expected1 == report1
     assert expected2 == report2
 
-##__________________________________________________________________||
+
 def test_first(obj):
 
     report0 = dict(taskid=5355, done=0, total=10)
@@ -93,7 +93,7 @@ def test_first(obj):
     assert obj(report4) is None
     assert expected4 == report4
 
-##__________________________________________________________________||
+
 def test_last(obj):
 
     report0 = dict(taskid=5355, done=0, total=10)
@@ -118,4 +118,4 @@ def test_last(obj):
     assert obj(report3) is None
     assert expected3 == report3
 
-##__________________________________________________________________||
+

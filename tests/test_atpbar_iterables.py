@@ -5,7 +5,7 @@ import unittest.mock as mock
 
 import atpbar
 
-##__________________________________________________________________||
+
 @pytest.fixture()
 def mock_reporter(monkeypatch):
     ret = mock.Mock()
@@ -24,7 +24,7 @@ def test_mock_fetch_reporter(mock_fetch_reporter, mock_reporter):
     with mock_fetch_reporter() as reporter:
         assert reporter is mock_reporter
 
-##__________________________________________________________________||
+
 class Iter:
     def __init__(self, content):
         self.content = content
@@ -46,7 +46,7 @@ class GetItem:
     def __getitem__(self, i):
         return self.content[i]
 
-##__________________________________________________________________||
+
 iterable_classes = [list, Iter, GetItem]
 
 empty = [ ]
@@ -55,14 +55,14 @@ three = [mock.sentinel.item1, mock.sentinel.item2, mock.sentinel.item3]
 contents = [empty, one, three]
 contents_ids = ['empty', 'one', 'three']
 
-##__________________________________________________________________||
+
 @pytest.mark.parametrize('content', contents, ids=contents_ids)
 @pytest.mark.parametrize('iterable_class', iterable_classes)
 def test_iterable(iterable_class, content):
     iterable = iterable_class(content)
     assert content == [e for e in iterable]
 
-##__________________________________________________________________||
+
 @pytest.mark.parametrize('content', contents, ids=contents_ids)
 @pytest.mark.parametrize('iterable_class', iterable_classes)
 def test_atpbar_iterables(mock_reporter, iterable_class, content):
@@ -92,7 +92,7 @@ def test_atpbar_iterables(mock_reporter, iterable_class, content):
             report = args[0]
             assert i + 1 == report['done']
 
-##__________________________________________________________________||
+
 @pytest.mark.parametrize('content', contents, ids=contents_ids)
 @pytest.mark.parametrize('iterable_class', iterable_classes)
 def test_atpbar_enumerate(mock_reporter, iterable_class, content):
@@ -121,4 +121,4 @@ def test_atpbar_enumerate(mock_reporter, iterable_class, content):
             report = args[0]
             assert i + 1 == report['done']
 
-##__________________________________________________________________||
+

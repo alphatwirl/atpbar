@@ -7,7 +7,7 @@ import unittest.mock as mock
 
 from atpbar.progressreport.reporter import ProgressReporter
 
-##__________________________________________________________________||
+
 @pytest.fixture()
 def mock_queue():
     return mock.Mock()
@@ -24,11 +24,11 @@ def obj(mock_queue, mock_time):
     ret = ProgressReporter(mock_queue)
     return ret
 
-##__________________________________________________________________||
+
 def test_repr(obj):
     repr(obj)
 
-##__________________________________________________________________||
+
 class TestReport:
 
     def test_report_need_to_report(self, obj, monkeypatch, mock_queue, mock_time):
@@ -51,7 +51,7 @@ class TestReport:
         assert [ ] == mock_queue.put.call_args_list
         assert { } == obj.last_time
 
-##__________________________________________________________________||
+
 params = [
     pytest.param(dict(taskid=1, first=True, last=False), {}, 10.0, True),
     pytest.param(dict(taskid=1, first=False, last=True), {}, 10.0, True),
@@ -74,4 +74,4 @@ def test_need_to_report(
     mock_time.time.return_value = current_time
     assert expected == obj._need_to_report(report)
 
-##__________________________________________________________________||
+

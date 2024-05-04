@@ -4,7 +4,7 @@ from IPython.display import display
 
 from .base import Presentation
 
-##__________________________________________________________________||
+
 class ProgressBarJupyter(Presentation):
     def __init__(self):
         super().__init__()
@@ -94,4 +94,4 @@ class ProgressBarJupyter(Presentation):
                 self.complete_box_list.append(box)
                 self.container_widget.children = self.complete_box_list + self.active_box_list
 
-##__________________________________________________________________||
+

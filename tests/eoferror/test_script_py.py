@@ -3,7 +3,7 @@ import os
 
 import pytest
 
-##__________________________________________________________________||
+
 @pytest.mark.script_launch_mode('subprocess')
 def test_run(script_runner):
 
@@ -16,4 +16,4 @@ def test_run(script_runner):
    assert '' == ret.stderr
    assert ':       10 /       10 (100.00%):' in ret.stdout
 
-##__________________________________________________________________||
+

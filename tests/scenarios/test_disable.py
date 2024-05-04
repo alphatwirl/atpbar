@@ -9,7 +9,7 @@ import pytest
 from atpbar import atpbar
 from atpbar import register_reporter, find_reporter, flush, disable
 
-##__________________________________________________________________||
+
 @pytest.mark.parametrize('niterations', [10, 1, 0])
 def test_one_loop(mock_create_presentation, niterations):
     disable()
@@ -18,14 +18,14 @@ def test_one_loop(mock_create_presentation, niterations):
     presentations = mock_create_presentation.presentations
     assert 0 == len(presentations)
 
-##__________________________________________________________________||
+
 def test_nested_loops(mock_create_presentation):
     disable()
     for i in atpbar(range(4)):
         for j in atpbar(range(3)):
             pass
 
-##__________________________________________________________________||
+
 def run_with_threading(nthreads=3, niterations=[5, 5, 5]):
     def task(n, name):
         for i in atpbar(range(n), name=name):
@@ -54,7 +54,7 @@ def test_threading(mock_create_presentation, nthreads, niterations):
     presentations = mock_create_presentation.presentations
     assert 0 == len(presentations)
 
-##__________________________________________________________________||
+
 def run_with_multiprocessing(nprocesses, ntasks, niterations):
     def task(n, name):
         for i in atpbar(range(n), name=name):
@@ -97,9 +97,9 @@ def test_multiprocessing(mock_create_presentation, nprocesses, ntasks, niteratio
     presentations = mock_create_presentation.presentations
     assert 0 == len(presentations)
 
-##__________________________________________________________________||
+
 def test_call_twice():
     disable()
     disable()
 
-##__________________________________________________________________||
+

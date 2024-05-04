@@ -7,7 +7,7 @@ import pytest
 from atpbar import atpbar
 from atpbar import flush
 
-##__________________________________________________________________||
+
 @pytest.mark.parametrize('method', ['break', 'exception'])
 @pytest.mark.parametrize('niterations', [10, 1, 0])
 @pytest.mark.parametrize('ndones', [10, 4, 1, 0])
@@ -56,4 +56,4 @@ def test_one_loop_break_exception(mock_create_presentation, niterations, ndones,
     progressbar1 = presentations[1]
     assert 0 == len(progressbar1.reports)
 
-##__________________________________________________________________||
+

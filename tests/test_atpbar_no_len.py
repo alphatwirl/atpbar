@@ -6,7 +6,7 @@ import unittest.mock as mock
 
 import atpbar
 
-##__________________________________________________________________||
+
 @pytest.fixture()
 def mock_reporter(monkeypatch):
     ret = mock.Mock()
@@ -25,7 +25,7 @@ def test_mock_fetch_reporter(mock_fetch_reporter, mock_reporter):
     with mock_fetch_reporter() as reporter:
         assert reporter is mock_reporter
 
-##__________________________________________________________________||
+
 class Iter:
     def __init__(self, content):
         self.content = content
@@ -34,10 +34,10 @@ class Iter:
         for e in self.content:
             yield e
 
-##__________________________________________________________________||
+
 content = [mock.sentinel.item1, mock.sentinel.item2, mock.sentinel.item3]
 
-##__________________________________________________________________||
+
 def test_atpbar_no_len(mock_reporter, caplog):
     iterable = Iter(content)
 
@@ -58,4 +58,4 @@ def test_atpbar_no_len(mock_reporter, caplog):
     assert 'WARNING' == caplog.records[0].levelname
     assert 'length is unknown' in caplog.records[0].msg
 
-##__________________________________________________________________||
+

@@ -3,10 +3,10 @@ import shutil
 
 from .base import Presentation
 
-##__________________________________________________________________||
+
 MINIMUM_TERMINAL_WIDTH = 90
 
-##__________________________________________________________________||
+
 class ProgressBar(Presentation):
     stdout_stderr_redrection = True
 
@@ -115,4 +115,4 @@ class ProgressBar(Presentation):
             self.out.write("\n".join(self.active_bars))
             self.out.flush()
 
-##__________________________________________________________________||
+

@@ -17,7 +17,7 @@ from atpbar.presentation.txtprint import ProgressPrint
 if has_jupyter_notebook:
     from atpbar.presentation.barjupyter import ProgressBarJupyter
 
-##__________________________________________________________________||
+
 classes = [ProgressBar, ProgressPrint]
 
 if has_jupyter_notebook:
@@ -44,7 +44,7 @@ def test_presentation(Class):
     obj.present(dict(name='task1', done=10, total=10, taskid=1, first=False, last=True))
     obj.active()
 
-##__________________________________________________________________||
+
 @pytest.mark.parametrize('Class', classes, ids=classe_ids)
 def test_time_track(Class):
     start_time = time.time()
@@ -56,4 +56,4 @@ def test_time_track(Class):
     obj.present(dict(name='task1', done=10, total=10, taskid=1, first=False, last=True, start_time=start_time))
     obj.active()
 
-##__________________________________________________________________||
+

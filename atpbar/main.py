@@ -7,7 +7,7 @@ import contextlib
 
 from .funcs import fetch_reporter
 
-##__________________________________________________________________||
+
 def atpbar(iterable, name=None, time_track=False):
     """returns an instance of `Atpbar`
 
@@ -38,7 +38,7 @@ def atpbar(iterable, name=None, time_track=False):
 
     return Atpbar(iterable, name=name, len_=len_, time_track=time_track)
 
-##__________________________________________________________________||
+
 class Atpbar:
     """Progress bar
 
@@ -120,4 +120,4 @@ def report_last(pbar):
         except:
             pass
 
-##__________________________________________________________________||
+

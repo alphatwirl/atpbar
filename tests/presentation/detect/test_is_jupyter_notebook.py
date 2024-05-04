@@ -5,7 +5,7 @@ import unittest.mock as mock
 
 from atpbar.presentation.detect.jupy import is_jupyter_notebook
 
-##__________________________________________________________________||
+
 @pytest.fixture()
 def mock_widgets_module(monkeypatch):
     ret = mock.Mock()
@@ -52,10 +52,10 @@ def mock_jupyter_notebook(
 def test_is_jupyter_notebook_true(mock_jupyter_notebook):
     assert is_jupyter_notebook()
 
-##__________________________________________________________________||
+
 def test_is_jupyter_notebook_false(mock_jupyter_notebook, mock_is_spyder_ide):
     mock_is_spyder_ide.return_value = True
     assert not is_jupyter_notebook()
-##__________________________________________________________________||
+
 
 

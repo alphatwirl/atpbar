@@ -5,10 +5,10 @@ import contextlib
 
 from .machine import StateMachine
 
-##__________________________________________________________________||
+
 _machine = StateMachine()
 
-##__________________________________________________________________||
+
 def find_reporter():
     """returns the progress reporter
 
@@ -24,7 +24,7 @@ def find_reporter():
     """
     return _machine.find_reporter()
 
-##__________________________________________________________________||
+
 def register_reporter(reporter):
     """registers a reporter
 
@@ -45,7 +45,7 @@ def register_reporter(reporter):
     """
     _machine.register_reporter(reporter)
 
-##__________________________________________________________________||
+
 def flush():
     """flushes progress bars
 
@@ -59,7 +59,7 @@ def flush():
     """
     _machine.flush()
 
-##__________________________________________________________________||
+
 def disable():
     """disables progress bars
 
@@ -73,9 +73,9 @@ def disable():
     """
     _machine.disable()
 
-##__________________________________________________________________||
 
-##__________________________________________________________________||
+
+
 def shutdown():
     """shutdowns the progress bars
 
@@ -92,9 +92,9 @@ import multiprocessing.queues # This import prevents the issue
 
 atexit.register(shutdown)
 
-##__________________________________________________________________||
+
 @contextlib.contextmanager
 def fetch_reporter():
     yield from _machine.fetch_reporter()
 
-##__________________________________________________________________||
+

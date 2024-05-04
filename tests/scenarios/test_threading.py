@@ -8,7 +8,7 @@ import pytest
 from atpbar import atpbar
 from atpbar import flush
 
-##__________________________________________________________________||
+
 @pytest.mark.parametrize('time_starting_task', [0, 0.01, 0.2])
 @pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
 @pytest.mark.parametrize('nthreads', [3, 1, 0])
@@ -119,4 +119,4 @@ def test_threading_from_loop(mock_create_presentation, nthreads, niterations, ti
     assert 1 == progressbar.nfirsts
     assert 1 == progressbar.nlasts
 
-##__________________________________________________________________||
+

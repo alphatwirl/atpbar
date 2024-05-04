@@ -7,7 +7,7 @@ import unittest.mock as mock
 
 from atpbar.progressreport.pickup import ProgressReportPickup
 
-##__________________________________________________________________||
+
 class TestStart:
 
     @pytest.fixture()
@@ -30,7 +30,7 @@ class TestStart:
         pass
         # it is ok not to execute `pickup.end()`.
 
-##__________________________________________________________________||
+
 class TestRunUntilTheEndOrderArrives:
 
     @pytest.fixture()
@@ -93,7 +93,7 @@ class TestRunUntilTheEndOrderArrives:
         assert [mock.call.present(report1), mock.call.present(report2)] == presentation.mock_calls
         assert 0 == pickup._short_sleep.call_count
 
-##__________________________________________________________________||
+
 class TestRunUntilReportsStopComing:
 
     @pytest.fixture()
@@ -153,4 +153,4 @@ class TestRunUntilReportsStopComing:
         assert [ ] == presentation.present.mock_calls
         assert 1 == pickup._short_sleep.call_count
 
-##__________________________________________________________________||
+

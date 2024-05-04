@@ -2,10 +2,10 @@
 import time
 from .complement import ProgressReportComplementer
 
-##__________________________________________________________________||
+
 DEFAULT_INTERVAL = 0.1 # [second]
 
-##__________________________________________________________________||
+
 class ProgressReporter:
     """A progress reporter
 
@@ -86,4 +86,4 @@ class ProgressReporter:
 
         return False
 
-##__________________________________________________________________||
+

@@ -5,12 +5,12 @@ import threading
 
 from atpbar import atpbar, flush
 
-##__________________________________________________________________||
+
 def task(n, name):
     for i in atpbar(range(n), name=name):
         time.sleep(0.0001)
 
-##__________________________________________________________________||
+
 nthreads = 5
 threads = [ ]
 
@@ -26,4 +26,4 @@ for t in threads:
 
 flush()
 
-##__________________________________________________________________||
+

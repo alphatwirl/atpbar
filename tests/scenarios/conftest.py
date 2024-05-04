@@ -10,7 +10,7 @@ from atpbar.presentation.base import Presentation
 
 from atpbar.funcs import shutdown
 
-##__________________________________________________________________||
+
 class MockProgressBar(Presentation):
     def __init__(self):
         super().__init__()
@@ -65,7 +65,7 @@ def mock_create_presentation(monkeypatch):
     monkeypatch.setattr(module, 'create_presentation', ret)
     return ret
 
-##__________________________________________________________________||
+
 @pytest.fixture(autouse=True)
 def machine(monkeypatch):
     module = sys.modules['atpbar.funcs']
@@ -74,11 +74,11 @@ def machine(monkeypatch):
     yield
     shutdown()
 
-##__________________________________________________________________||
+
 @pytest.fixture(autouse=True)
 def reporter_interval(monkeypatch):
     module = sys.modules['atpbar.progressreport.reporter']
     monkeypatch.setattr(module, 'DEFAULT_INTERVAL', 0)
     yield
 
-##__________________________________________________________________||
+

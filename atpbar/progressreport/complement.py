@@ -1,6 +1,6 @@
 
 
-##__________________________________________________________________||
+
 class ProgressReportComplementer:
     """Complement progress reports
 
@@ -67,4 +67,4 @@ class ProgressReportComplementer:
             report.pop(k, None)
         self.previous_reports[taskid] = report
 
-##__________________________________________________________________||
+

@@ -5,8 +5,8 @@ import atpbar
 # environment in atpbar 1.0.2 as described in
 # https://github.com/alphatwirl/atpbar/issues/4
 
-##__________________________________________________________________||
+
 for i in atpbar.atpbar(range(10)):
     pass
 
-##__________________________________________________________________||
+

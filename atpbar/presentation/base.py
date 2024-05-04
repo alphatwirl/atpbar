@@ -3,7 +3,7 @@ import sys
 import time
 import threading
 
-##__________________________________________________________________||
+
 class Presentation:
     """A base class of the progress presentation.
 
@@ -137,4 +137,4 @@ class Presentation:
         out.write('\n')
         out.flush()
 
-##__________________________________________________________________||
+
