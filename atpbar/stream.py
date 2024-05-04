@@ -4,6 +4,8 @@ from enum import Enum
 from multiprocessing import Queue
 from typing import TypeAlias
 
+from atpbar.presentation import Presentation
+
 
 class FD(Enum):
     STDOUT = 1

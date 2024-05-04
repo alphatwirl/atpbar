@@ -1,7 +1,7 @@
 import multiprocessing
 import threading
 
-from .presentation.create import create_presentation
+from .presentation import create_presentation
 from .progressreport import ProgressReporter, ProgressReportPickup, Report
 from .stream import StreamRedirection, register_stream_queue
 
