@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Tai Sakuma <tai.sakuma@gmail.com>
+
 import time, random
 
 from atpbar import atpbar

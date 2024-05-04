@@ -1,4 +1,4 @@
-# Tai Sakuma <tai.sakuma@gmail.com>
+
 
 ##__________________________________________________________________||
 class ProgressReportComplementer:

@@ -1,4 +1,4 @@
-# Tai Sakuma <tai.sakuma@gmail.com>
+
 import uuid
 import logging
 import time

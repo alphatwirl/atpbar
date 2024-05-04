@@ -1,4 +1,4 @@
-# Tai Sakuma <tai.sakuma@gmail.com>
+
 import time
 from .complement import ProgressReportComplementer
 

@@ -1,4 +1,4 @@
-# Tai Sakuma <tai.sakuma@gmail.com>
+
 import pytest
 
 from atpbar.progressreport.complement import ProgressReportComplementer

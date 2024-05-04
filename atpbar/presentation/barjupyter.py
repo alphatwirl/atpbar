@@ -1,4 +1,4 @@
-# Tai Sakuma <tai.sakuma@gmail.com>
+
 import ipywidgets as widgets
 from IPython.display import display
 
