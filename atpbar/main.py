@@ -36,8 +36,8 @@ def atpbar(
         len_ = len(iterable)  # type: ignore
     except TypeError:
         logger = logging.getLogger(__name__)
-        logging.warning("length is unknown: {!r}".format(iterable))
-        logging.warning("atpbar is turned off")
+        logger.warning("length is unknown: {!r}".format(iterable))
+        logger.warning("atpbar is turned off")
         return iterable
 
     if name is None:
@@ -95,9 +95,9 @@ class Atpbar(Generic[T]):
         try:
             report = dict(taskid=self.id_, name=self.name, done=0, total=self.len_)
             if self.time_track:
-                report["start_time"] = start_time = time.time()
+                report["start_time"] = time.time()
             self.reporter.report(report)
-        except:
+        except BaseException:
             pass
 
     def _report_progress(self, i: int) -> None:
@@ -106,7 +106,7 @@ class Atpbar(Generic[T]):
         try:
             report = dict(taskid=self.id_, done=(i + 1))
             self.reporter.report(report)
-        except:
+        except BaseException:
             pass
 
 
@@ -129,5 +129,5 @@ def report_last(pbar: Atpbar[T]) -> Iterator[None]:
         try:
             report = dict(taskid=pbar.id_, first=False, last=True)
             pbar.reporter.report(report)
-        except:
+        except BaseException:
             pass
