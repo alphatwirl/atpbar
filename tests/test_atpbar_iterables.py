@@ -1,7 +1,6 @@
+import unittest.mock as mock
 
 import pytest
-
-import unittest.mock as mock
 
 import atpbar
 
@@ -11,14 +10,16 @@ def mock_reporter(monkeypatch):
     ret = mock.Mock()
     return ret
 
+
 @pytest.fixture(autouse=True)
 def mock_fetch_reporter(monkeypatch, mock_reporter):
     ret = mock.Mock()
     ret.return_value.__enter__ = mock.Mock()
     ret.return_value.__enter__.return_value = mock_reporter
     ret.return_value.__exit__ = mock.Mock()
-    monkeypatch.setattr(atpbar.main, 'fetch_reporter', ret)
+    monkeypatch.setattr(atpbar.main, "fetch_reporter", ret)
     return ret
+
 
 def test_mock_fetch_reporter(mock_fetch_reporter, mock_reporter):
     with mock_fetch_reporter() as reporter:
@@ -36,6 +37,7 @@ class Iter:
         for e in self.content:
             yield e
 
+
 class GetItem:
     def __init__(self, content):
         self.content = content
@@ -49,27 +51,27 @@ class GetItem:
 
 iterable_classes = [list, Iter, GetItem]
 
-empty = [ ]
+empty = []
 one = [mock.sentinel.item1]
 three = [mock.sentinel.item1, mock.sentinel.item2, mock.sentinel.item3]
 contents = [empty, one, three]
-contents_ids = ['empty', 'one', 'three']
+contents_ids = ["empty", "one", "three"]
 
 
-@pytest.mark.parametrize('content', contents, ids=contents_ids)
-@pytest.mark.parametrize('iterable_class', iterable_classes)
+@pytest.mark.parametrize("content", contents, ids=contents_ids)
+@pytest.mark.parametrize("iterable_class", iterable_classes)
 def test_iterable(iterable_class, content):
     iterable = iterable_class(content)
     assert content == [e for e in iterable]
 
 
-@pytest.mark.parametrize('content', contents, ids=contents_ids)
-@pytest.mark.parametrize('iterable_class', iterable_classes)
+@pytest.mark.parametrize("content", contents, ids=contents_ids)
+@pytest.mark.parametrize("iterable_class", iterable_classes)
 def test_atpbar_iterables(mock_reporter, iterable_class, content):
     iterable = iterable_class(content)
 
     ##
-    returned = [ ]
+    returned = []
     for e in atpbar.atpbar(iterable):
         returned.append(e)
 
@@ -82,24 +84,24 @@ def test_atpbar_iterables(mock_reporter, iterable_class, content):
     # first report
     args, _ = mock_reporter.report.call_args_list[0]
     report = args[0]
-    assert 0 == report['done']
-    assert len(content) == report['total']
+    assert 0 == report["done"]
+    assert len(content) == report["total"]
 
     #
     if content:
         for i, c in enumerate(mock_reporter.report.call_args_list[1:]):
             args, kwargs = c
             report = args[0]
-            assert i + 1 == report['done']
+            assert i + 1 == report["done"]
 
 
-@pytest.mark.parametrize('content', contents, ids=contents_ids)
-@pytest.mark.parametrize('iterable_class', iterable_classes)
+@pytest.mark.parametrize("content", contents, ids=contents_ids)
+@pytest.mark.parametrize("iterable_class", iterable_classes)
 def test_atpbar_enumerate(mock_reporter, iterable_class, content):
     iterable = iterable_class(content)
 
     ##
-    returned = [ ]
+    returned = []
     for i, e in enumerate(atpbar.atpbar(iterable)):
         returned.append(e)
 
@@ -112,13 +114,11 @@ def test_atpbar_enumerate(mock_reporter, iterable_class, content):
     # first report
     args, _ = mock_reporter.report.call_args_list[0]
     report = args[0]
-    assert 0 == report['done']
-    assert len(content) == report['total']
+    assert 0 == report["done"]
+    assert len(content) == report["total"]
     #
     if content:
         for i, c in enumerate(mock_reporter.report.call_args_list[1:]):
             args, kwargs = c
             report = args[0]
-            assert i + 1 == report['done']
-
-
+            assert i + 1 == report["done"]

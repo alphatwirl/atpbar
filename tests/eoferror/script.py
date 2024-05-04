@@ -8,5 +8,3 @@ import atpbar
 
 for i in atpbar.atpbar(range(10)):
     pass
-
-

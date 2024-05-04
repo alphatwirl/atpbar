@@ -1,10 +1,8 @@
-
 import atexit
-import multiprocessing
 import contextlib
+import multiprocessing
 
 from .machine import StateMachine
-
 
 _machine = StateMachine()
 
@@ -74,8 +72,6 @@ def disable():
     _machine.disable()
 
 
-
-
 def shutdown():
     """shutdowns the progress bars
 
@@ -87,8 +83,9 @@ def shutdown():
     _machine.shutdown()
 
 
-import multiprocessing.queues # This import prevents the issue
-                              # https://github.com/alphatwirl/atpbar/issues/4
+# This import prevents the issue
+# https://github.com/alphatwirl/atpbar/issues/4
+import multiprocessing.queues  # noqa: E402 F401
 
 atexit.register(shutdown)
 
@@ -96,5 +93,3 @@ atexit.register(shutdown)
 @contextlib.contextmanager
 def fetch_reporter():
     yield from _machine.fetch_reporter()
-
-

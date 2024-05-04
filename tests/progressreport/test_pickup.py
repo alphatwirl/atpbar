@@ -1,9 +1,8 @@
+import multiprocessing
+import time
+import unittest.mock as mock
 
 import pytest
-import time
-import multiprocessing
-
-import unittest.mock as mock
 
 from atpbar.progressreport.pickup import ProgressReportPickup
 
@@ -36,7 +35,7 @@ class TestRunUntilTheEndOrderArrives:
     @pytest.fixture()
     def mock_thread_start(self, monkeypatch):
         y = mock.Mock()
-        monkeypatch.setattr(ProgressReportPickup, 'start', y)
+        monkeypatch.setattr(ProgressReportPickup, "start", y)
         yield y
 
     @pytest.fixture()
@@ -55,7 +54,7 @@ class TestRunUntilTheEndOrderArrives:
     @pytest.fixture(autouse=True)
     def mock_short_sleep(self, pickup, monkeypatch):
         y = mock.Mock()
-        monkeypatch.setattr(pickup, '_short_sleep', y)
+        monkeypatch.setattr(pickup, "_short_sleep", y)
         yield y
 
     def test_no_report(self, pickup, mock_queue, presentation):
@@ -65,7 +64,6 @@ class TestRunUntilTheEndOrderArrives:
         assert [] == presentation.mock_calls
         assert [mock.call(), mock.call()] == mock_queue.empty.mock_calls
         assert 0 == pickup._short_sleep.call_count
-
 
     def test_one_report(self, pickup, mock_queue, presentation):
         report = mock.MagicMock()
@@ -77,7 +75,12 @@ class TestRunUntilTheEndOrderArrives:
 
     def test_one_report_once_empty(self, pickup, mock_queue, presentation):
         report1 = mock.MagicMock()
-        mock_queue.empty.side_effect = [False, True, False, True] # it becomes empty once
+        mock_queue.empty.side_effect = [
+            False,
+            True,
+            False,
+            True,
+        ]  # it becomes empty once
         mock_queue.get.side_effect = [report1, None]
         pickup._run_until_the_end_order_arrives()
         assert [mock.call.present(report1)] == presentation.mock_calls
@@ -87,10 +90,13 @@ class TestRunUntilTheEndOrderArrives:
         report1 = mock.MagicMock()
         report2 = mock.MagicMock()
         mock_queue.empty.side_effect = [False, False, False, True]
-        mock_queue.get.side_effect = [report1, None, report2] # report2 arrives
-                                                              # after the end_order
+        mock_queue.get.side_effect = [report1, None, report2]  # report2 arrives
+        # after the end_order
         pickup._run_until_the_end_order_arrives()
-        assert [mock.call.present(report1), mock.call.present(report2)] == presentation.mock_calls
+        assert [
+            mock.call.present(report1),
+            mock.call.present(report2),
+        ] == presentation.mock_calls
         assert 0 == pickup._short_sleep.call_count
 
 
@@ -99,7 +105,7 @@ class TestRunUntilReportsStopComing:
     @pytest.fixture()
     def mock_thread_start(self, monkeypatch):
         y = mock.Mock()
-        monkeypatch.setattr(ProgressReportPickup, 'start', y)
+        monkeypatch.setattr(ProgressReportPickup, "start", y)
         yield y
 
     @pytest.fixture()
@@ -117,7 +123,7 @@ class TestRunUntilReportsStopComing:
     @pytest.fixture(autouse=True)
     def mock_short_sleep(self, pickup, monkeypatch):
         y = mock.Mock()
-        monkeypatch.setattr(pickup, '_short_sleep', y)
+        monkeypatch.setattr(pickup, "_short_sleep", y)
         yield y
 
     @pytest.fixture(autouse=True)
@@ -125,7 +131,8 @@ class TestRunUntilReportsStopComing:
         ret = mock.Mock()
         ret.time.return_value = 1000.0
         from atpbar.progressreport import pickup as m
-        monkeypatch.setattr(m, 'time', ret)
+
+        monkeypatch.setattr(m, "time", ret)
         return ret
 
     def test_no_report(self, pickup, mock_time, presentation):
@@ -150,7 +157,5 @@ class TestRunUntilReportsStopComing:
         mock_queue.get.side_effect = [report, None]
         mock_time.time.side_effect = [1000.0, 1000.2, 1003.0]
         pickup._run_until_reports_stop_coming()
-        assert [ ] == presentation.present.mock_calls
+        assert [] == presentation.present.mock_calls
         assert 1 == pickup._short_sleep.call_count
-
-

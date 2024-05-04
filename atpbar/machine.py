@@ -1,11 +1,10 @@
-
-import threading
 import multiprocessing
+import threading
 
-from .progressreport.reporter import ProgressReporter
-from .progressreport.pickup import ProgressReportPickup
-from .stream import StreamRedirection, register_stream_queue
 from .presentation.create import create_presentation
+from .progressreport.pickup import ProgressReportPickup
+from .progressreport.reporter import ProgressReporter
+from .stream import StreamRedirection, register_stream_queue
 
 
 class StateMachine:
@@ -39,8 +38,8 @@ class StateMachine:
 
 
 class State:
-    """The base class of the states
-    """
+    """The base class of the states"""
+
     def prepare_reporter(self):
         return self
 
@@ -78,16 +77,22 @@ class Initial(State):
     def flush(self):
         return Active()
 
+
 class Active(State):
     """Active state
 
     The pickup started and is running, typically, in the main process
     """
-    def __init__(self,):
+
+    def __init__(
+        self,
+    ):
 
         self.queue = multiprocessing.Queue()
         self.reporter = ProgressReporter(queue=self.queue)
-        self.reporter.notices_from_sub_processes = self.notices_from_sub_processes = multiprocessing.Queue()
+        self.reporter.notices_from_sub_processes = self.notices_from_sub_processes = (
+            multiprocessing.Queue()
+        )
 
         self.reporter.stream_queue = self.stream_queue = multiprocessing.Queue()
 
@@ -103,7 +108,9 @@ class Active(State):
         presentation = create_presentation()
         self.pickup = ProgressReportPickup(self.queue, presentation)
 
-        self.stream_redirection = StreamRedirection(queue=self.stream_queue, presentation=presentation)
+        self.stream_redirection = StreamRedirection(
+            queue=self.stream_queue, presentation=presentation
+        )
         self.stream_redirection.start()
 
     def _end_pickup(self):
@@ -179,16 +186,14 @@ class Registered(State):
         self.reporter.notices_from_sub_processes.put(True)
         yield self.reporter
 
+
 class Disabled(State):
-    """Disabled state
-    """
+    """Disabled state"""
+
     def __init__(self):
         self.reporter = None
 
 
 def in_main_thread():
-    """test if in the main thread
-    """
+    """test if in the main thread"""
     return threading.current_thread() == threading.main_thread()
-
-

@@ -1,9 +1,7 @@
-
 import sys
 
-from .detect.jupy import is_jupyter_notebook
-
 from .bartty import ProgressBar
+from .detect.jupy import is_jupyter_notebook
 from .txtprint import ProgressPrint
 
 try:
@@ -34,5 +32,3 @@ def create_presentation():
             pass
 
     return ProgressPrint()
-
-

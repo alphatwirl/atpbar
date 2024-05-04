@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-import time, random
+import random
 import threading
+import time
 
 from atpbar import atpbar, flush
 
@@ -12,10 +13,10 @@ def task(n, name):
 
 
 nthreads = 5
-threads = [ ]
+threads = []
 
 for i in range(nthreads):
-    name = 'thread {}'.format(i)
+    name = "thread {}".format(i)
     n = random.randint(5, 10000)
     t = threading.Thread(target=task, args=(n, name))
     t.start()
@@ -25,5 +26,3 @@ for t in threads:
     t.join()
 
 flush()
-
-

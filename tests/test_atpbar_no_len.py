@@ -1,8 +1,7 @@
-
 import logging
-import pytest
-
 import unittest.mock as mock
+
+import pytest
 
 import atpbar
 
@@ -12,14 +11,16 @@ def mock_reporter(monkeypatch):
     ret = mock.Mock()
     return ret
 
+
 @pytest.fixture(autouse=True)
 def mock_fetch_reporter(monkeypatch, mock_reporter):
     ret = mock.Mock()
     ret.return_value.__enter__ = mock.Mock()
     ret.return_value.__enter__.return_value = mock_reporter
     ret.return_value.__exit__ = mock.Mock()
-    monkeypatch.setattr(atpbar.main, 'fetch_reporter', ret)
+    monkeypatch.setattr(atpbar.main, "fetch_reporter", ret)
     return ret
+
 
 def test_mock_fetch_reporter(mock_fetch_reporter, mock_reporter):
     with mock_fetch_reporter() as reporter:
@@ -42,7 +43,7 @@ def test_atpbar_no_len(mock_reporter, caplog):
     iterable = Iter(content)
 
     ##
-    returned = [ ]
+    returned = []
     with caplog.at_level(logging.WARNING):
         for e in atpbar.atpbar(iterable):
             returned.append(e)
@@ -55,7 +56,5 @@ def test_atpbar_no_len(mock_reporter, caplog):
 
     ##
     assert 2 == len(caplog.records)
-    assert 'WARNING' == caplog.records[0].levelname
-    assert 'length is unknown' in caplog.records[0].msg
-
-
+    assert "WARNING" == caplog.records[0].levelname
+    assert "length is unknown" in caplog.records[0].msg

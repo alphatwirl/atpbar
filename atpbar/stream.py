@@ -1,7 +1,6 @@
-
 import sys
-from enum import Enum
 import threading
+from enum import Enum
 
 
 class StreamRedirection:
@@ -20,7 +19,9 @@ class StreamRedirection:
         if self.disabled:
             return
 
-        self.pickup = StreamPickup(self.queue, self.presentation.stdout_write, self.presentation.stderr_write)
+        self.pickup = StreamPickup(
+            self.queue, self.presentation.stdout_write, self.presentation.stderr_write
+        )
         self.pickup.start()
 
         self.stdout_org = sys.stdout
@@ -55,13 +56,14 @@ class Stream:
     def __init__(self, queue, fd):
         self.fd = fd
         self.queue = queue
-        self.buffer = ''
+        self.buffer = ""
+
     def write(self, s):
         # sys.__stdout__.write(repr(s))
         # sys.__stdout__.write('\n')
 
         try:
-            endswith_n = s.endswith('\n')
+            endswith_n = s.endswith("\n")
         except:
             self.flush()
             self.queue.put((s, self.fd))
@@ -78,7 +80,7 @@ class Stream:
         if not self.buffer:
             return
         self.queue.put((self.buffer, self.fd))
-        self.buffer = ''
+        self.buffer = ""
 
 
 class StreamPickup(threading.Thread):
@@ -87,21 +89,20 @@ class StreamPickup(threading.Thread):
         self.queue = queue
         self.stdout_write = stdout_write
         self.stderr_write = stderr_write
+
     def run(self):
         try:
             while True:
                 m = self.queue.get()
                 if m is None:
-                    break;
+                    break
                 s, f = m
                 if f == FD.STDOUT:
                     self.stdout_write(s)
                 elif f == FD.STDERR:
                     self.stderr_write(s)
                 else:
-                    raise ValueError('unknown fd: {!r}'.format(f))
+                    raise ValueError("unknown fd: {!r}".format(f))
 
         except EOFError:
             pass
-
-

@@ -1,17 +1,18 @@
-
-import time, random
 import collections
+import random
+import time
 
 import pytest
 
-from atpbar import atpbar
-from atpbar import flush
+from atpbar import atpbar, flush
 
 
-@pytest.mark.parametrize('method', ['break', 'exception'])
-@pytest.mark.parametrize('niterations', [10, 1, 0])
-@pytest.mark.parametrize('ndones', [10, 4, 1, 0])
-def test_one_loop_break_exception(mock_create_presentation, niterations, ndones, method):
+@pytest.mark.parametrize("method", ["break", "exception"])
+@pytest.mark.parametrize("niterations", [10, 1, 0])
+@pytest.mark.parametrize("ndones", [10, 4, 1, 0])
+def test_one_loop_break_exception(
+    mock_create_presentation, niterations, ndones, method
+):
     ndones = min(ndones, niterations)
 
     def task_break(ndones, niterations):
@@ -25,7 +26,7 @@ def test_one_loop_break_exception(mock_create_presentation, niterations, ndones,
                 raise Exception()
 
     #
-    if method == 'break':
+    if method == "break":
         task_break(ndones, niterations)
     else:
         if ndones < niterations:
@@ -37,10 +38,10 @@ def test_one_loop_break_exception(mock_create_presentation, niterations, ndones,
     ## print()
     ## print(mock_create_presentation)
 
-    nreports_expected = ndones + 1 + bool(ndones<niterations)
+    nreports_expected = ndones + 1 + bool(ndones < niterations)
     presentations = mock_create_presentation.presentations
 
-    assert 2 == len(presentations) # created when atpbar started and ended
+    assert 2 == len(presentations)  # created when atpbar started and ended
 
     #
     progressbar0 = presentations[0]
@@ -49,11 +50,13 @@ def test_one_loop_break_exception(mock_create_presentation, niterations, ndones,
     assert 1 == progressbar0.nfirsts
     assert 1 == progressbar0.nlasts
     done_total_list_expected = [(ndones, niterations)]
-    done_total_list_actual = [(d['done'], d['total']) for d in progressbar0._report_dict.values()]
-    assert collections.Counter(done_total_list_expected) == collections.Counter(done_total_list_actual)
+    done_total_list_actual = [
+        (d["done"], d["total"]) for d in progressbar0._report_dict.values()
+    ]
+    assert collections.Counter(done_total_list_expected) == collections.Counter(
+        done_total_list_actual
+    )
 
     #
     progressbar1 = presentations[1]
     assert 0 == len(progressbar1.reports)
-
-

@@ -1,6 +1,3 @@
-
-
-
 class ProgressReportComplementer:
     """Complement progress reports
 
@@ -34,12 +31,13 @@ class ProgressReportComplementer:
             if `done` equals `total`, `False` otherwise
 
     """
+
     def __init__(self):
-        self.previous_reports = { }
-        self.volatile_fileds = ('first', 'last')
+        self.previous_reports = {}
+        self.volatile_fileds = ("first", "last")
 
     def __call__(self, report):
-        taskid = report['taskid']
+        taskid = report["taskid"]
         if taskid in self.previous_reports:
             self._complement(taskid, report)
         self._first(report)
@@ -53,18 +51,16 @@ class ProgressReportComplementer:
         report.update(report_copy)
 
     def _first(self, report):
-        if 'first' in report:
+        if "first" in report:
             return
-        report['first'] = (report['done'] == 0)
+        report["first"] = report["done"] == 0
 
     def _last(self, report):
-        if 'last' in report:
+        if "last" in report:
             return
-        report['last'] = (report['done'] >= report['total'])
+        report["last"] = report["done"] >= report["total"]
 
     def _store(self, taskid, report):
         for k in self.volatile_fileds:
             report.pop(k, None)
         self.previous_reports[taskid] = report
-
-
