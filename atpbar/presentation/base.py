@@ -1,14 +1,14 @@
-# Tai Sakuma <tai.sakuma@gmail.com>
 import sys
-import time
 import threading
+import time
 
-##__________________________________________________________________||
+
 class Presentation:
     """A base class of the progress presentation.
 
     A subclass of this class should implement ``_present()``.
     """
+
     stdout_stderr_redrection = False
 
     def __init__(self):
@@ -18,13 +18,13 @@ class Presentation:
 
         self.lock = threading.Lock()
 
-        self._new_taskids = [ ]
-        self._active_taskids = [ ] # in order of arrival
-        self._finishing_taskids = [ ]
-        self._complete_taskids = [ ] # in order of completion
-        self._report_dict = { }
+        self._new_taskids = []
+        self._active_taskids = []  # in order of arrival
+        self._finishing_taskids = []
+        self._complete_taskids = []  # in order of completion
+        self._report_dict = {}
 
-        self.interval = 1.0 # [second]
+        self.interval = 1.0  # [second]
         self.last_time = time.time()
 
     def active(self):
@@ -44,7 +44,7 @@ class Presentation:
 
     def _register_report(self, report):
 
-        taskid = report['taskid']
+        taskid = report["taskid"]
 
         if taskid in self._complete_taskids:
             return False
@@ -54,7 +54,7 @@ class Presentation:
         if taskid in self._finishing_taskids:
             return True
 
-        if report['last']:
+        if report["last"]:
             try:
                 self._active_taskids.remove(taskid)
             except ValueError:
@@ -99,10 +99,11 @@ class Presentation:
         return False
 
     def _get_time_track(self, start_time, percent):
-        """Format seconds as hours, minutes and seconds.
-        """
+        """Format seconds as hours, minutes and seconds."""
         time_elapsed = time.time() - start_time
-        time_remaining = (time_elapsed * (100/percent)) - time_elapsed if percent > 0 else 0
+        time_remaining = (
+            (time_elapsed * (100 / percent)) - time_elapsed if percent > 0 else 0
+        )
 
         return self._time_to_str(time_elapsed), self._time_to_str(time_remaining)
 
@@ -114,9 +115,9 @@ class Presentation:
         m = int(mins % 60)
 
         if h:
-            return '{0:d}:{1:02d}:{2:02d}'.format(h, m, s)
+            return "{0:d}:{1:02d}:{2:02d}".format(h, m, s)
         else:
-            return '{0:02d}:{1:02d}'.format(m, s)
+            return "{0:02d}:{1:02d}".format(m, s)
 
     def stdout_write(self, s):
         with self.lock:
@@ -134,7 +135,5 @@ class Presentation:
 
     def _write(self, s, out):
         out.write(s.rstrip())
-        out.write('\n')
+        out.write("\n")
         out.flush()
-
-##__________________________________________________________________||

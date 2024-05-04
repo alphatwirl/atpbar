@@ -1,9 +1,7 @@
-# Tai Sakuma <tai.sakuma@gmail.com>
 import sys
 
-from .detect.jupy import is_jupyter_notebook
-
 from .bartty import ProgressBar
+from .detect.jupy import is_jupyter_notebook
 from .txtprint import ProgressPrint
 
 try:
@@ -11,7 +9,7 @@ try:
 except ImportError:
     pass
 
-##__________________________________________________________________||
+
 def create_presentation():
     """Create a presentation of progress report, e.g., progress bars
 
@@ -34,5 +32,3 @@ def create_presentation():
             pass
 
     return ProgressPrint()
-
-##__________________________________________________________________||

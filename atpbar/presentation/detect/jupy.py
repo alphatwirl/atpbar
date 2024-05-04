@@ -1,5 +1,3 @@
-
-##__________________________________________________________________||
 try:
     import ipywidgets as widgets
 except ImportError:
@@ -18,7 +16,7 @@ except ImportError:
 
 from .spy import is_spyder_ide
 
-##__________________________________________________________________||
+
 def is_jupyter_notebook():
     """Tests if on Jupyter Notebook
 
@@ -36,7 +34,7 @@ def is_jupyter_notebook():
         return False
 
     try:
-        if 'IPKernelApp' not in get_ipython().config:
+        if "IPKernelApp" not in get_ipython().config:
             return False
     except:
         return False
@@ -45,5 +43,3 @@ def is_jupyter_notebook():
         return False
 
     return True
-
-##__________________________________________________________________||

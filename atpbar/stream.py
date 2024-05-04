@@ -1,9 +1,8 @@
-# Tai Sakuma <tai.sakuma@gmail.com>
 import sys
-from enum import Enum
 import threading
+from enum import Enum
 
-##__________________________________________________________________||
+
 class StreamRedirection:
     def __init__(self, queue, presentation):
         self.disabled = not presentation.stdout_stderr_redrection
@@ -20,7 +19,9 @@ class StreamRedirection:
         if self.disabled:
             return
 
-        self.pickup = StreamPickup(self.queue, self.presentation.stdout_write, self.presentation.stderr_write)
+        self.pickup = StreamPickup(
+            self.queue, self.presentation.stdout_write, self.presentation.stderr_write
+        )
         self.pickup.start()
 
         self.stdout_org = sys.stdout
@@ -38,30 +39,31 @@ class StreamRedirection:
         self.queue.put(None)
         self.pickup.join()
 
-##__________________________________________________________________||
+
 def register_stream_queue(queue):
     if queue is None:
         return
     sys.stdout = Stream(queue, FD.STDOUT)
     sys.stderr = Stream(queue, FD.STDERR)
 
-##__________________________________________________________________||
+
 class FD(Enum):
     STDOUT = 1
     STDERR = 2
 
-##__________________________________________________________________||
+
 class Stream:
     def __init__(self, queue, fd):
         self.fd = fd
         self.queue = queue
-        self.buffer = ''
+        self.buffer = ""
+
     def write(self, s):
         # sys.__stdout__.write(repr(s))
         # sys.__stdout__.write('\n')
 
         try:
-            endswith_n = s.endswith('\n')
+            endswith_n = s.endswith("\n")
         except:
             self.flush()
             self.queue.put((s, self.fd))
@@ -78,30 +80,29 @@ class Stream:
         if not self.buffer:
             return
         self.queue.put((self.buffer, self.fd))
-        self.buffer = ''
+        self.buffer = ""
 
-##__________________________________________________________________||
+
 class StreamPickup(threading.Thread):
     def __init__(self, queue, stdout_write, stderr_write):
         super().__init__(daemon=True)
         self.queue = queue
         self.stdout_write = stdout_write
         self.stderr_write = stderr_write
+
     def run(self):
         try:
             while True:
                 m = self.queue.get()
                 if m is None:
-                    break;
+                    break
                 s, f = m
                 if f == FD.STDOUT:
                     self.stdout_write(s)
                 elif f == FD.STDERR:
                     self.stderr_write(s)
                 else:
-                    raise ValueError('unknown fd: {!r}'.format(f))
+                    raise ValueError("unknown fd: {!r}".format(f))
 
         except EOFError:
             pass
-
-##__________________________________________________________________||

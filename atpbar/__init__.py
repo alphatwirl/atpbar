@@ -6,7 +6,6 @@ __all__ = [
     "disable",
     "__version__",
 ]
-from .main import atpbar
-from .funcs import find_reporter, register_reporter, flush, disable
-
 from .__about__ import __version__
+from .funcs import disable, find_reporter, flush, register_reporter
+from .main import atpbar
