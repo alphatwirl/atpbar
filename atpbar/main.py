@@ -6,7 +6,7 @@ import uuid
 from .funcs import fetch_reporter
 
 
-def atpbar(iterable, name=None, time_track=False):
+def atpbar(iterable, /, name=None, time_track=False):
     """returns an instance of `Atpbar`
 
     Parameters
