@@ -1,17 +1,17 @@
 import os
 
 try:
-    import spyder
+    import spyder  # type: ignore
 except ImportError:
     spyder = None
 
 try:
     from IPython import get_ipython
 except ImportError:
-    get_ipython = None
+    get_ipython = None  # type: ignore
 
 
-def is_spyder_ide():
+def is_spyder_ide() -> bool:
     """Tests if on Spyder IDE
 
     Returns

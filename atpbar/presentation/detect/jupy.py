@@ -6,18 +6,18 @@ except ImportError:
 try:
     from IPython.display import display
 except ImportError:
-    display = None
+    display = None  # type: ignore
 
 try:
     from IPython import get_ipython
 except ImportError:
-    get_ipython = None
+    get_ipython = None  # type: ignore
 
 
 from .spy import is_spyder_ide
 
 
-def is_jupyter_notebook():
+def is_jupyter_notebook() -> bool:
     """Tests if on Jupyter Notebook
 
     Returns

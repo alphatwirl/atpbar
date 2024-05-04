@@ -2,6 +2,7 @@ import sys
 import threading
 import time
 from abc import ABC, abstractmethod
+from typing import TextIO
 from uuid import UUID
 
 from atpbar.progressreport import Report
@@ -127,21 +128,21 @@ class Presentation(ABC):
         else:
             return "{0:02d}:{1:02d}".format(m, s)
 
-    def stdout_write(self, s):
+    def stdout_write(self, s: str) -> None:
         with self.lock:
             self._stdout_write(s)
 
-    def stderr_write(self, s):
+    def stderr_write(self, s: str) -> None:
         with self.lock:
             self._stderr_write(s)
 
-    def _stdout_write(self, s):
+    def _stdout_write(self, s: str) -> None:
         self._write(s, out=self.out)
 
-    def _stderr_write(self, s):
+    def _stderr_write(self, s: str) -> None:
         self._write(s, out=self.err)
 
-    def _write(self, s, out):
+    def _write(self, s: str, out: TextIO) -> None:
         out.write(s.rstrip())
         out.write("\n")
         out.flush()
