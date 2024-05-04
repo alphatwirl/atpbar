@@ -2,6 +2,7 @@ import sys
 import threading
 import time
 from abc import ABC, abstractmethod
+from uuid import UUID
 
 from atpbar.progressreport import Report
 
@@ -21,11 +22,11 @@ class Presentation(ABC):
 
         self.lock = threading.Lock()
 
-        self._new_taskids = []
-        self._active_taskids = []  # in order of arrival
-        self._finishing_taskids = []
-        self._complete_taskids = []  # in order of completion
-        self._report_dict = {}
+        self._new_taskids = list[UUID]()
+        self._active_taskids = list[UUID]()  # in order of arrival
+        self._finishing_taskids = list[UUID]()
+        self._complete_taskids = list[UUID]()  # in order of completion
+        self._report_dict = dict[UUID, Report]()
 
         self.interval = 1.0  # [second]
         self.last_time = time.time()
@@ -35,7 +36,7 @@ class Presentation(ABC):
             return True
         return False
 
-    def present(self, report) -> None:
+    def present(self, report: Report) -> None:
         with self.lock:
             if not self._register_report(report):
                 return
@@ -49,7 +50,7 @@ class Presentation(ABC):
     def _present(self) -> None:
         pass
 
-    def _register_report(self, report) -> bool:
+    def _register_report(self, report: Report) -> bool:
 
         taskid = report["taskid"]
 
