@@ -37,6 +37,7 @@ tag_sign = false
 include = ["/atpbar"]
 
 [tool.black]
+# Doesn't appear to be effective with VSCode extension Black Formatter
 skip-string-normalization = true
 
 [tool.isort]
