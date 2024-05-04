@@ -35,3 +35,9 @@ tag_sign = false
 
 [tool.hatch.build.targets.sdist]
 include = ["/atpbar"]
+
+[tool.black]
+skip-string-normalization = true
+
+[tool.isort]
+profile = "black"
