@@ -11,7 +11,7 @@ class Presentation:
 
     stdout_stderr_redrection = False
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         self.out = sys.stdout
         self.err = sys.stderr
@@ -27,12 +27,12 @@ class Presentation:
         self.interval = 1.0  # [second]
         self.last_time = time.time()
 
-    def active(self):
+    def active(self) -> bool:
         if self._active_taskids:
             return True
         return False
 
-    def present(self, report):
+    def present(self, report) -> None:
         with self.lock:
             if not self._register_report(report):
                 return
@@ -42,7 +42,7 @@ class Presentation:
             self._update_registry()
             self.last_time = time.time()
 
-    def _register_report(self, report):
+    def _register_report(self, report) -> bool:
 
         taskid = report["taskid"]
 
@@ -78,14 +78,14 @@ class Presentation:
         self._new_taskids.append(taskid)
         return True
 
-    def _update_registry(self):
+    def _update_registry(self) -> None:
         self._active_taskids.extend(self._new_taskids)
         del self._new_taskids[:]
 
         self._complete_taskids.extend(self._finishing_taskids)
         del self._finishing_taskids[:]
 
-    def _need_to_present(self):
+    def _need_to_present(self) -> bool:
 
         if self._new_taskids:
             return True
