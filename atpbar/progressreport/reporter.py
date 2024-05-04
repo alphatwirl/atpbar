@@ -1,9 +1,13 @@
 import time
 from multiprocessing import Queue
+from typing import TYPE_CHECKING
 from uuid import UUID
 
 from .complement import ProgressReportComplementer
 from .report import Report
+
+if TYPE_CHECKING:
+    from atpbar.stream import StreamQueue
 
 DEFAULT_INTERVAL = 0.1  # [second]
 
@@ -42,13 +46,18 @@ class ProgressReporter:
     """
 
     def __init__(
-        self, queue: 'Queue[Report]', notices_from_sub_processes: 'Queue[bool]'
+        self,
+        queue: 'Queue[Report]',
+        notices_from_sub_processes: 'Queue[bool]',
+        stream_queue: 'StreamQueue',
     ) -> None:
         self.queue = queue
         self.interval = DEFAULT_INTERVAL  # [second]
         self.last_time = dict[UUID, float]()
         self.complete_report = ProgressReportComplementer()
         self.notices_from_sub_processes = notices_from_sub_processes
+        self.stream_queue = stream_queue
+        self.stream_redirection_enablaed = True
 
     def __repr__(self) -> str:
         return "{}(queue={!r}, interval={!r})".format(

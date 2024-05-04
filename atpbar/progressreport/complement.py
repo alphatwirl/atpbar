@@ -1,3 +1,8 @@
+from uuid import UUID
+
+from .report import Report
+
+
 class ProgressReportComplementer:
     """Complement progress reports
 
@@ -6,37 +11,17 @@ class ProgressReportComplementer:
 
     Parameters
     ----------
-    report : dict
-        A progress report, a dict with the following entries. The
-        `taskid` must be always given. The first report for a task
-        must include `done`, `total`, and 'name'. The `first` and
-        `last` will be automatically determined if not given.
-
-        taskid : immutable
-            The unique task ID.
-        done : int, optional
-            The number of the iterations done so far
-        total : int
-            The total iterations to be done
-        name : str
-            A name of the task. It will be use as the label on the
-            progress bars.
-        first : bool
-            `True` if the first report for the task. If not given,
-            automatically determined from `done`; `True` if `done` is
-            0, `False` otherwise
-        last : bool
-            `True` if the last report for the task. If not given,
-            automatically determined from `done` and `total`; `True`
-            if `done` equals `total`, `False` otherwise
+    report : Report
+        A report must always include `taskid`. The first report for a task must
+        include `done`, `total`, and 'name'. The `first` and `last` will be
+        automatically determined if not given.
 
     """
 
-    def __init__(self):
-        self.previous_reports = {}
-        self.volatile_fileds = ("first", "last")
+    def __init__(self) -> None:
+        self.previous_reports = dict[UUID, Report]()
 
-    def __call__(self, report):
+    def __call__(self, report: Report) -> None:
         taskid = report["taskid"]
         if taskid in self.previous_reports:
             self._complement(taskid, report)
@@ -44,23 +29,23 @@ class ProgressReportComplementer:
         self._last(report)
         self._store(taskid, report.copy())
 
-    def _complement(self, taskid, report):
+    def _complement(self, taskid: UUID, report: Report) -> None:
         report_copy = report.copy()
-        report.clear()
+        report.update(Report(taskid=taskid))
         report.update(self.previous_reports[taskid])
         report.update(report_copy)
 
-    def _first(self, report):
+    def _first(self, report: Report) -> None:
         if "first" in report:
             return
         report["first"] = report["done"] == 0
 
-    def _last(self, report):
+    def _last(self, report: Report) -> None:
         if "last" in report:
             return
         report["last"] = report["done"] >= report["total"]
 
-    def _store(self, taskid, report):
-        for k in self.volatile_fileds:
-            report.pop(k, None)
+    def _store(self, taskid: UUID, report: Report) -> None:
+        report.pop('first', None)
+        report.pop('last', None)
         self.previous_reports[taskid] = report

@@ -4,7 +4,7 @@ from enum import Enum
 from multiprocessing import Queue
 from typing import TypeAlias
 
-from atpbar.presentation import Presentation
+from .presentation import Presentation
 
 
 class FD(Enum):
@@ -16,7 +16,7 @@ StreamQueue: TypeAlias = 'Queue[tuple[str, FD] | None]'
 
 
 class StreamRedirection:
-    def __init__(self, queue: StreamQueue, presentation) -> None:
+    def __init__(self, queue: StreamQueue, presentation: Presentation) -> None:
         self.disabled = not presentation.stdout_stderr_redrection
         if self.disabled:
             return
