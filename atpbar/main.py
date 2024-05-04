@@ -6,6 +6,7 @@ from collections.abc import Iterable, Iterator
 from typing import Generic, Optional, TypeVar
 
 from .funcs import fetch_reporter
+from .progressreport import Report
 
 T = TypeVar('T')
 
@@ -93,7 +94,7 @@ class Atpbar(Generic[T]):
         if self.reporter is None:
             return
         try:
-            report = dict(taskid=self.id_, name=self.name, done=0, total=self.len_)
+            report = Report(taskid=self.id_, name=self.name, done=0, total=self.len_)
             if self.time_track:
                 report["start_time"] = time.time()
             self.reporter.report(report)
@@ -104,7 +105,7 @@ class Atpbar(Generic[T]):
         if self.reporter is None:
             return
         try:
-            report = dict(taskid=self.id_, done=(i + 1))
+            report = Report(taskid=self.id_, done=(i + 1))
             self.reporter.report(report)
         except BaseException:
             pass
@@ -127,7 +128,7 @@ def report_last(pbar: Atpbar[T]) -> Iterator[None]:
         if pbar.reporter is None:
             return
         try:
-            report = dict(taskid=pbar.id_, first=False, last=True)
+            report = Report(taskid=pbar.id_, first=False, last=True)
             pbar.reporter.report(report)
         except BaseException:
             pass
