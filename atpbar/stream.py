@@ -1,10 +1,20 @@
 import sys
 import threading
 from enum import Enum
+from multiprocessing import Queue
+from typing import TypeAlias
+
+
+class FD(Enum):
+    STDOUT = 1
+    STDERR = 2
+
+
+StreamQueue: TypeAlias = 'Queue[tuple[str, FD] | None]'
 
 
 class StreamRedirection:
-    def __init__(self, queue, presentation):
+    def __init__(self, queue: StreamQueue, presentation) -> None:
         self.disabled = not presentation.stdout_stderr_redrection
         if self.disabled:
             return
@@ -15,7 +25,7 @@ class StreamRedirection:
         self.stdout = Stream(self.queue, FD.STDOUT)
         self.stderr = Stream(self.queue, FD.STDERR)
 
-    def start(self):
+    def start(self) -> None:
         if self.disabled:
             return
 
@@ -30,7 +40,7 @@ class StreamRedirection:
         self.stderr_org = sys.stderr
         sys.stderr = self.stderr
 
-    def end(self):
+    def end(self) -> None:
         if self.disabled:
             return
 
@@ -40,25 +50,21 @@ class StreamRedirection:
         self.pickup.join()
 
 
-def register_stream_queue(queue):
+def register_stream_queue(queue: StreamQueue) -> None:
     if queue is None:
         return
     sys.stdout = Stream(queue, FD.STDOUT)
     sys.stderr = Stream(queue, FD.STDERR)
 
 
-class FD(Enum):
-    STDOUT = 1
-    STDERR = 2
-
-
 class Stream:
-    def __init__(self, queue, fd):
+    # TODO: Inherit from io.TextIOBase
+    def __init__(self, queue: StreamQueue, fd: FD) -> None:
         self.fd = fd
         self.queue = queue
         self.buffer = ""
 
-    def write(self, s):
+    def write(self, s: str):
         # sys.__stdout__.write(repr(s))
         # sys.__stdout__.write('\n')
 
@@ -76,7 +82,7 @@ class Stream:
 
         self.buffer += s
 
-    def flush(self):
+    def flush(self) -> None:
         if not self.buffer:
             return
         self.queue.put((self.buffer, self.fd))
@@ -84,13 +90,13 @@ class Stream:
 
 
 class StreamPickup(threading.Thread):
-    def __init__(self, queue, stdout_write, stderr_write):
+    def __init__(self, queue: StreamQueue, stdout_write, stderr_write) -> None:
         super().__init__(daemon=True)
         self.queue = queue
         self.stdout_write = stdout_write
         self.stderr_write = stderr_write
 
-    def run(self):
+    def run(self) -> None:
         try:
             while True:
                 m = self.queue.get()
