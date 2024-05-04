@@ -1,9 +1,12 @@
 import sys
 import threading
 import time
+from abc import ABC, abstractmethod
+
+from atpbar.progressreport import Report
 
 
-class Presentation:
+class Presentation(ABC):
     """A base class of the progress presentation.
 
     A subclass of this class should implement ``_present()``.
@@ -41,6 +44,10 @@ class Presentation:
             self._present()
             self._update_registry()
             self.last_time = time.time()
+
+    @abstractmethod
+    def _present(self) -> None:
+        pass
 
     def _register_report(self, report) -> bool:
 
