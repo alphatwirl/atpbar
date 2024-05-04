@@ -1,13 +1,15 @@
 import atexit
 import contextlib
 import multiprocessing
+from collections.abc import Iterator
 
 from .machine import StateMachine
+from .progressreport import ProgressReporter
 
 _machine = StateMachine()
 
 
-def find_reporter():
+def find_reporter() -> ProgressReporter | None:
     """returns the progress reporter
 
     This function is to be called in the main process of a
@@ -23,7 +25,7 @@ def find_reporter():
     return _machine.find_reporter()
 
 
-def register_reporter(reporter):
+def register_reporter(reporter: ProgressReporter) -> None:
     """registers a reporter
 
     This function is to be called in sub-processes of a
@@ -44,7 +46,7 @@ def register_reporter(reporter):
     _machine.register_reporter(reporter)
 
 
-def flush():
+def flush() -> None:
     """flushes progress bars
 
     This function flushes all active progress bars. It returns when
@@ -58,7 +60,7 @@ def flush():
     _machine.flush()
 
 
-def disable():
+def disable() -> None:
     """disables progress bars
 
     This function needs to be called in the main process before
@@ -72,7 +74,7 @@ def disable():
     _machine.disable()
 
 
-def shutdown():
+def shutdown() -> None:
     """shutdowns the progress bars
 
     Returns
@@ -91,5 +93,5 @@ atexit.register(shutdown)
 
 
 @contextlib.contextmanager
-def fetch_reporter():
+def fetch_reporter() -> Iterator[ProgressReporter | None]:
     yield from _machine.fetch_reporter()

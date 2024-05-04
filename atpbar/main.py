@@ -2,11 +2,21 @@ import contextlib
 import logging
 import time
 import uuid
+from collections.abc import Iterable, Iterator
+from typing import Generic, Optional, TypeVar
 
 from .funcs import fetch_reporter
+from .progressreport import Report
+
+T = TypeVar('T')
 
 
-def atpbar(iterable, /, name=None, time_track=False):
+def atpbar(
+    iterable: Iterable[T],
+    /,
+    name: Optional[str] = None,
+    time_track: Optional[bool] = False,
+) -> Iterable[T]:
     """returns an instance of `Atpbar`
 
     Parameters
@@ -24,11 +34,11 @@ def atpbar(iterable, /, name=None, time_track=False):
 
     """
     try:
-        len_ = len(iterable)
+        len_ = len(iterable)  # type: ignore
     except TypeError:
         logger = logging.getLogger(__name__)
-        logging.warning("length is unknown: {!r}".format(iterable))
-        logging.warning("atpbar is turned off")
+        logger.warning("length is unknown: {!r}".format(iterable))
+        logger.warning("atpbar is turned off")
         return iterable
 
     if name is None:
@@ -37,7 +47,7 @@ def atpbar(iterable, /, name=None, time_track=False):
     return Atpbar(iterable, name=name, len_=len_, time_track=time_track)
 
 
-class Atpbar:
+class Atpbar(Generic[T]):
     """Progress bar
 
     An iterable that wraps another iterable and shows the progress
@@ -55,14 +65,20 @@ class Atpbar:
 
     """
 
-    def __init__(self, iterable, name, len_, time_track=False):
+    def __init__(
+        self,
+        iterable: Iterable[T],
+        name: str,
+        len_: int,
+        time_track: Optional[bool] = False,
+    ):
         self.iterable = iterable
         self.name = name
         self.len_ = len_
         self.id_ = uuid.uuid4()
         self.time_track = time_track
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[T]:
         with fetch_reporter() as reporter:
             self.reporter = reporter
             self.loop_complete = False
@@ -74,29 +90,29 @@ class Atpbar:
                 else:
                     self.loop_complete = True
 
-    def _report_start(self):
+    def _report_start(self) -> None:
         if self.reporter is None:
             return
         try:
-            report = dict(taskid=self.id_, name=self.name, done=0, total=self.len_)
+            report = Report(taskid=self.id_, name=self.name, done=0, total=self.len_)
             if self.time_track:
-                report["start_time"] = start_time = time.time()
+                report["start_time"] = time.time()
             self.reporter.report(report)
-        except:
+        except BaseException:
             pass
 
-    def _report_progress(self, i):
+    def _report_progress(self, i: int) -> None:
         if self.reporter is None:
             return
         try:
-            report = dict(taskid=self.id_, done=(i + 1))
+            report = Report(taskid=self.id_, done=(i + 1))
             self.reporter.report(report)
-        except:
+        except BaseException:
             pass
 
 
 @contextlib.contextmanager
-def report_last(pbar):
+def report_last(pbar: Atpbar[T]) -> Iterator[None]:
     """send a last report
 
     This function sends the last report of the task when the loop ends
@@ -112,7 +128,7 @@ def report_last(pbar):
         if pbar.reporter is None:
             return
         try:
-            report = dict(taskid=pbar.id_, first=False, last=True)
+            report = Report(taskid=pbar.id_, first=False, last=True)
             pbar.reporter.report(report)
-        except:
+        except BaseException:
             pass

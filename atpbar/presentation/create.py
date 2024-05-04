@@ -1,6 +1,7 @@
 import sys
 
 from .bartty import ProgressBar
+from .base import Presentation
 from .detect.jupy import is_jupyter_notebook
 from .txtprint import ProgressPrint
 
@@ -10,7 +11,7 @@ except ImportError:
     pass
 
 
-def create_presentation():
+def create_presentation() -> Presentation:
     """Create a presentation of progress report, e.g., progress bars
 
     Returns
