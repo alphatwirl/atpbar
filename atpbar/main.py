@@ -1,6 +1,5 @@
 import contextlib
 import logging
-import time
 import uuid
 from collections.abc import Iterable, Iterator
 from typing import Generic, Optional, TypeVar
@@ -11,12 +10,7 @@ from .progressreport import Report
 T = TypeVar('T')
 
 
-def atpbar(
-    iterable: Iterable[T],
-    /,
-    name: Optional[str] = None,
-    time_track: Optional[bool] = False,
-) -> Iterable[T]:
+def atpbar(iterable: Iterable[T], /, name: Optional[str] = None) -> Iterable[T]:
     """returns an instance of `Atpbar`
 
     Parameters
@@ -44,7 +38,7 @@ def atpbar(
     if name is None:
         name = repr(iterable)
 
-    return Atpbar(iterable, name=name, len_=len_, time_track=time_track)
+    return Atpbar(iterable, name=name, len_=len_)
 
 
 class Atpbar(Generic[T]):
@@ -65,18 +59,11 @@ class Atpbar(Generic[T]):
 
     """
 
-    def __init__(
-        self,
-        iterable: Iterable[T],
-        name: str,
-        len_: int,
-        time_track: Optional[bool] = False,
-    ):
+    def __init__(self, iterable: Iterable[T], name: str, len_: int):
         self.iterable = iterable
         self.name = name
         self.len_ = len_
         self.id_ = uuid.uuid4()
-        self.time_track = time_track
 
     def __iter__(self) -> Iterator[T]:
         with fetch_reporter() as reporter:
@@ -95,8 +82,6 @@ class Atpbar(Generic[T]):
             return
         try:
             report = Report(taskid=self.id_, name=self.name, done=0, total=self.len_)
-            if self.time_track:
-                report["start_time"] = time.time()
             self.reporter.report(report)
         except BaseException:
             pass

@@ -1,5 +1,3 @@
-import time
-
 import pytest
 
 has_jupyter_notebook = False
@@ -48,7 +46,6 @@ def test_presentation(Class):
 
 @pytest.mark.parametrize("Class", classes, ids=classe_ids)
 def test_time_track(Class):
-    start_time = time.time()
     obj = Class()
     repr(obj)
     obj.active()
@@ -60,7 +57,6 @@ def test_time_track(Class):
             taskid=1,
             first=True,
             last=False,
-            start_time=start_time,
         )
     )
     obj.present(
@@ -71,7 +67,6 @@ def test_time_track(Class):
             taskid=1,
             first=False,
             last=False,
-            start_time=start_time,
         )
     )
     obj.present(
@@ -82,7 +77,6 @@ def test_time_track(Class):
             taskid=1,
             first=False,
             last=True,
-            start_time=start_time,
         )
     )
     obj.active()
