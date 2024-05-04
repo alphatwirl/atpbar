@@ -1,5 +1,4 @@
 import sys
-import time
 from unittest.mock import Mock, call
 
 import pytest
@@ -68,16 +67,8 @@ def test_stdout(obj, mock_queue, monkeypatch):
 
     mock_queue.reset_mock()
 
-    sys.stdout.write(456)
-    assert [call((456, FD.STDOUT))] == mock_queue.put.call_args_list
-
-    mock_queue.reset_mock()
-
     sys.stdout.write("abc")
-    sys.stdout.write(456)
-    assert [
-        call(("abc", FD.STDOUT)),
-        call((456, FD.STDOUT)),
-    ] == mock_queue.put.call_args_list
+    sys.stdout.flush()
+    assert [call(("abc", FD.STDOUT))] == mock_queue.put.call_args_list
 
     mock_queue.reset_mock()
