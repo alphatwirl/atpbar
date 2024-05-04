@@ -22,8 +22,7 @@ show the progresses of iterations of loops in
 [threading](https://docs.python.org/3/library/threading.html) or
 [multiprocessing](https://docs.python.org/3/library/multiprocessing.html)
 tasks. _atpbar_ can display progress bars on terminal and [Jupyter
-Notebook](https://jupyter.org/). _atpbar_ can be used with
-[_Mantichora_](https://github.com/alphatwirl/mantichora).
+Notebook](https://jupyter.org/).
 
 _atpbar_ started its development in 2015 as part of
 [_alphatwirl_](https://github.com/alphatwirl/alphatwirl). _atpbar_
@@ -51,7 +50,6 @@ You can try it on Jupyter Notebook online: [![Binder](https://mybinder.org/badge
         - [Threading](#threading)
         - [Multiprocessing](#multiprocessing)
         - [Multiprocessing.Pool](#multiprocessingpool)
-        - [With Mantichora](#with-mantichora)
     - [**Features**](#features)
         - [A `break` and an exception](#a-break-and-an-exception)
         - [Progress of starting threads and processes with progress bars](#progress-of-starting-threads-and-processes-with-progress-bars)
@@ -284,43 +282,6 @@ Simultaneously growing progress bars will be shown.
 To use `atpbar` with [`multiprocessing.Pool`](https://docs.python.org/3/library/multiprocessing.html#multiprocessing.pool.Pool), use `find_reporter` as the initializer and give the `reporter` as an argument to the initializer.
 
 See the example code in the [issue](https://github.com/alphatwirl/atpbar/issues/21#issuecomment-766468695).
-
-#### With Mantichora
-
-[_Mantichora_](https://github.com/alphatwirl/mantichora) provides a
-simple interface to _multiprocessing_ and _threading_.
-
-With Mantichora, `task()` can be concurrently run with multiprocessing or threading with as simple code as the following example:
-
-```python
-from mantichora import mantichora
-
-def task(name):
-    n = random.randint(1000, 10000)
-    for i in atpbar(range(n), name=name):
-        time.sleep(0.0001)
-
-with mantichora() as mcore:
-    mcore.run(task, 'task 1')
-    mcore.run(task, 'task 2')
-    mcore.run(task, 'task 3')
-    mcore.run(task, 'task 4')
-    mcore.run(task, 'task 5')
-    returns = mcore.returns()
-```
-
-This example uses multiprocessing. To use threading, set the option `mode` to `threading` (the default is
-`multiprocessing`), i.e., `mantichora(mode='threading')`
-
-`atpbar` can be used in the task function.
-
-```
- 100.00% :::::::::::::::::::::::::::::::::::::::: |     2288 /     2288 |:  task 3
- 100.00% :::::::::::::::::::::::::::::::::::::::: |     3964 /     3964 |:  task 4
- 100.00% :::::::::::::::::::::::::::::::::::::::: |     4207 /     4207 |:  task 2
- 100.00% :::::::::::::::::::::::::::::::::::::::: |     8519 /     8519 |:  task 1
- 100.00% :::::::::::::::::::::::::::::::::::::::: |     6595 /     6595 |:  task 5
-```
 
 *****
 
