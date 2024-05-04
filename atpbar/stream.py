@@ -1,8 +1,10 @@
 import sys
 import threading
+from collections.abc import Callable
 from enum import Enum
+from io import TextIOBase
 from multiprocessing import Queue
-from typing import TypeAlias
+from typing import Any, TypeAlias
 
 from .presentation import Presentation
 
@@ -37,10 +39,10 @@ class StreamRedirection:
         self.pickup.start()
 
         self.stdout_org = sys.stdout
-        sys.stdout = self.stdout
+        sys.stdout = self.stdout  # type: ignore
 
         self.stderr_org = sys.stderr
-        sys.stderr = self.stderr
+        sys.stderr = self.stderr  # type: ignore
 
     def end(self) -> None:
         if self.disabled:
@@ -55,18 +57,17 @@ class StreamRedirection:
 def register_stream_queue(queue: StreamQueue) -> None:
     if queue is None:
         return
-    sys.stdout = Stream(queue, FD.STDOUT)
-    sys.stderr = Stream(queue, FD.STDERR)
+    sys.stdout = Stream(queue, FD.STDOUT)  # type: ignore
+    sys.stderr = Stream(queue, FD.STDERR)  # type: ignore
 
 
-class Stream:
-    # TODO: Inherit from io.TextIOBase
+class Stream(TextIOBase):
     def __init__(self, queue: StreamQueue, fd: FD) -> None:
         self.fd = fd
         self.queue = queue
         self.buffer = ""
 
-    def write(self, s: str):
+    def write(self, s: str) -> int:
         # sys.__stdout__.write(repr(s))
         # sys.__stdout__.write('\n')
 
@@ -75,14 +76,15 @@ class Stream:
         except:
             self.flush()
             self.queue.put((s, self.fd))
-            return
+            return len(s)
 
         if endswith_n:
             self.buffer += s
             self.flush()
-            return
+            return len(s)
 
         self.buffer += s
+        return len(s)
 
     def flush(self) -> None:
         if not self.buffer:
@@ -92,7 +94,12 @@ class Stream:
 
 
 class StreamPickup(threading.Thread):
-    def __init__(self, queue: StreamQueue, stdout_write, stderr_write) -> None:
+    def __init__(
+        self,
+        queue: StreamQueue,
+        stdout_write: Callable[[str], Any],
+        stderr_write: Callable[[str], Any],
+    ) -> None:
         super().__init__(daemon=True)
         self.queue = queue
         self.stdout_write = stdout_write
