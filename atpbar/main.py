@@ -15,7 +15,7 @@ def atpbar(
     /,
     name: Optional[str] = None,
     time_track: Optional[bool] = False,
-) -> 'Atpbar[T] | Iterable[T]':
+) -> Iterable[T]:
     """returns an instance of `Atpbar`
 
     Parameters
