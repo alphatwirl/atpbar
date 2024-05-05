@@ -15,6 +15,7 @@ params = [
     "example_02_nested_loops.py",
     "example_03_threading.py",
     "example_04_multiprocessing.py",
+    "example_05_multiprocessing_pool.py",
 ]
 
 
