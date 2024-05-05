@@ -16,5 +16,10 @@
     "MD036": false,
     "MD041": false
   },
-  "cSpell.words": ["funcs"]
+  "cSpell.words": [
+    "funcs",
+    "pbar",
+    "randint",
+    "taskid"
+  ]
 }
