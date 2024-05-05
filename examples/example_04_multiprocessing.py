@@ -44,7 +44,7 @@ def run_with_multiprocessing():
 
     for i in range(n_processes):
         queue.put(None)
-    queue.join()
+        queue.join()
 
     flush()
 
