@@ -17,7 +17,7 @@ def run_with_threading():
 
     for i in range(n_threads):
         name = 'Thread {}'.format(i)
-        n = random.randint(5, 10000)
+        n = random.randint(5, 1000)
         t = threading.Thread(target=task, args=(n, name))
         t.start()
         threads.append(t)

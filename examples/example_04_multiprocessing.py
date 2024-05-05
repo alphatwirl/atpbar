@@ -39,7 +39,7 @@ def run_with_multiprocessing():
     n_tasks = 10
     for i in range(n_tasks):
         name = 'Task {}'.format(i)
-        n = random.randint(5, 10000)
+        n = random.randint(5, 1000)
         queue.put((n, name))
 
     for i in range(n_processes):

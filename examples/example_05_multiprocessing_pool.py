@@ -4,6 +4,8 @@ import multiprocessing
 import random
 import time
 
+multiprocessing.set_start_method('fork', force=True)
+
 from atpbar import atpbar, find_reporter, flush, register_reporter
 
 
@@ -18,7 +20,7 @@ def run_with_multiprocessing_pool():
     reporter = find_reporter()
     n_tasks = 10
 
-    args = [(random.randint(5, 10000), 'Task {}'.format(i)) for i in range(n_tasks)]
+    args = [(random.randint(5, 1000), 'Task {}'.format(i)) for i in range(n_tasks)]
 
     with multiprocessing.Pool(n_processes, register_reporter, (reporter,)) as pool:
         pool.starmap(task, args)
