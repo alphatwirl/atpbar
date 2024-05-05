@@ -1,4 +1,4 @@
-[![PyPI version](https://badge.fury.io/py/atpbar.svg)](https://badge.fury.io/py/atpbar)
+[![PyPI - Version](https://img.shields.io/pypi/v/atpbar.svg)](https://pypi.org/project/atpbar)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/atpbar/badges/version.svg)](https://anaconda.org/conda-forge/atpbar)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.2567283.svg)](https://doi.org/10.5281/zenodo.2567283)
 
@@ -85,7 +85,7 @@ I will show you how to use the atpbar using simple examples.
 
 #### Import libraries
 
-To create simple loops in the examples, we use two python standard
+To create simple loops in the examples, we use two Python standard
 libraries, [time](https://docs.python.org/3/library/time.html) and
 [random](https://docs.python.org/3/library/random.html). Import the
 two packages as well as `atpbar`.
