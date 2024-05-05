@@ -16,6 +16,8 @@ params = [
     "example_03_threading.py",
     "example_04_multiprocessing.py",
     "example_05_multiprocessing_pool.py",
+    "example_06_thread_pool_executor.py",
+    "example_07_process_pool_executor.py",
 ]
 
 
