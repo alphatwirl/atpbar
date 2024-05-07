@@ -1,1 +1,5 @@
-site_name: My Docs
+site_name: atpbar
+repo_url: https://github.com/alphatwirl/atpbar
+repo_name: alphatwirl/atpbar
+theme:
+  name: material
