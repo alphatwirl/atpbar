@@ -24,6 +24,7 @@ classifiers = [
 [project.optional-dependencies]
 jupyter = ["ipywidgets>=8.1"]
 tests = ["pytest-console-scripts>=1.4", "pytest-cov>=5.0", "pytest>=8.2"]
+doc = ["mkdocs-material>=9.5"]
 
 [project.urls]
 Homepage = "https://github.com/alphatwirl/atpbar"
