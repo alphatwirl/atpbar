@@ -5,6 +5,8 @@ Jupyter Notebook.
 
 ![Demo](demo.gif)
 
+## Introduction
+
 _atpbar_ can display multiple progress bars simultaneously growing to show the
 progress of each iteration of loops in
 [threading](https://docs.python.org/3/library/threading.html) or
