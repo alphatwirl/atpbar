@@ -9,7 +9,9 @@ theme:
     repo: fontawesome/brands/github
   features:
     - navigation.instant
+    - navigation.instant.progress
     - navigation.tracking
+    - navigation.expand
     # - announce.dismiss
 nav:
   - Home: index.md
