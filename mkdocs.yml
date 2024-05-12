@@ -20,4 +20,17 @@ theme:
 nav:
   - Home: index.md
   - Quick Start: quick.md
-  - Features: features.md
+  - User Guide:
+      - guide/index.md
+      - threading: guide/threading.md
+      - multiprocessing: guide/multiprocessing.md
+      - multiprocessing.Pool: guide/multiprocessing.Pool.md
+      - ThreadPoolExecutor: guide/ThreadPoolExecutor.md
+      - ProcessPoolExecutor: guide/ProcessPoolExecutor.md
+  - Features:
+      - features/index.md
+      - break and exception: features/break-exception.md
+      - combination: features/combination.md
+      - Jupyter: features/jupyter.md
+      - Non TTY: features/non-tty.md
+      - disable: features/disable.md
