@@ -1,4 +1,5 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/atpbar.svg)](https://pypi.org/project/atpbar)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/atpbar.svg)](https://pypi.org/project/atpbar)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/atpbar/badges/version.svg)](https://anaconda.org/conda-forge/atpbar)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.2567283.svg)](https://doi.org/10.5281/zenodo.2567283)
 
@@ -48,12 +49,6 @@ You can try it on Jupyter Notebook online:
   - [Non TTY device](#non-tty-device)
   - [How to disable progress bars](#how-to-disable-progress-bars)
 - [License](#license)
-
----
-
-## Requirement
-
-- Python 3.10, 3.11, or 3.12
 
 ---
 
