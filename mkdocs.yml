@@ -12,6 +12,10 @@ theme:
     - navigation.instant.progress
     - navigation.tracking
     - navigation.expand
+    - navigation.indexes
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
     # - announce.dismiss
 nav:
   - Home: index.md
