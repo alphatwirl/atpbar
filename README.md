@@ -1,4 +1,5 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/atpbar.svg)](https://pypi.org/project/atpbar)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/atpbar.svg)](https://pypi.org/project/atpbar)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/atpbar/badges/version.svg)](https://anaconda.org/conda-forge/atpbar)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.2567283.svg)](https://doi.org/10.5281/zenodo.2567283)
 
@@ -11,13 +12,7 @@
 _Progress bars_ for threading and multiprocessing tasks on the terminal and
 Jupyter Notebook.
 
-```plaintext
- 100.00% :::::::::::::::::::::::::::::::::::::::: |     7811 /     7811 |:  task 1
- 100.00% :::::::::::::::::::::::::::::::::::::::: |    23258 /    23258 |:  task 0
-  65.62% ::::::::::::::::::::::::::               |     8018 /    12219 |:  task 4
-  60.89% ::::::::::::::::::::::::                 |    31083 /    51048 |:  task 2
-  25.03% ::::::::::                               |    23884 /    95421 |:  task 3
-```
+![Demo](demo.svg)
 
 _atpbar_ can display multiple progress bars simultaneously growing to show the
 progress of each iteration of loops in
@@ -54,12 +49,6 @@ You can try it on Jupyter Notebook online:
   - [Non TTY device](#non-tty-device)
   - [How to disable progress bars](#how-to-disable-progress-bars)
 - [License](#license)
-
----
-
-## Requirement
-
-- Python 3.10, 3.11, or 3.12
 
 ---
 
