@@ -11,13 +11,7 @@
 _Progress bars_ for threading and multiprocessing tasks on the terminal and
 Jupyter Notebook.
 
-```plaintext
- 100.00% :::::::::::::::::::::::::::::::::::::::: |     7811 /     7811 |:  task 1
- 100.00% :::::::::::::::::::::::::::::::::::::::: |    23258 /    23258 |:  task 0
-  65.62% ::::::::::::::::::::::::::               |     8018 /    12219 |:  task 4
-  60.89% ::::::::::::::::::::::::                 |    31083 /    51048 |:  task 2
-  25.03% ::::::::::                               |    23884 /    95421 |:  task 3
-```
+![Demo](demo.svg)
 
 _atpbar_ can display multiple progress bars simultaneously growing to show the
 progress of each iteration of loops in
