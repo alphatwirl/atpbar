@@ -3,7 +3,7 @@
 _Progress bars_ for threading and multiprocessing tasks on the terminal and
 Jupyter Notebook.
 
-![Demo](demo.gif)
+![Demo](demo.svg)
 
 ## Introduction
 
