@@ -60,6 +60,15 @@ def flush() -> None:
     _machine.flush()
 
 
+@contextlib.contextmanager
+def flushing() -> Iterator[None]:
+    '''Flushes progress bars on exit'''
+    try:
+        yield
+    finally:
+        flush()
+
+
 def disable() -> None:
     """disables progress bars
 

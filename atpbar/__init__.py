@@ -3,9 +3,10 @@ __all__ = [
     "find_reporter",
     "register_reporter",
     "flush",
+    "flushing",
     "disable",
     "__version__",
 ]
 from .__about__ import __version__
-from .funcs import disable, find_reporter, flush, register_reporter
+from .funcs import disable, find_reporter, flush, flushing, register_reporter
 from .main import atpbar
