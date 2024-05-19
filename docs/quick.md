@@ -42,7 +42,7 @@ The `atpbar` can wrap an iterable to show a progress bar for the iterations.
 ```python
 n = randint(1000, 10000)
 for _ in atpbar(range(n)):
-    sleep(0.0001)
+    sleep(0.001)
 ```
 
 This example randomly selects the number of iterations and, in each iteration,
@@ -65,7 +65,7 @@ The `atpbar` can show progress bars for nested loops.
 for i in atpbar(range(4), name='Outer'):
     n = randint(1000, 10000)
     for _ in atpbar(range(n), name=f'Inner {i}'):
-        sleep(0.0001)
+        sleep(0.001)
 ```
 
 This example iterates over an outer loop four times. In each iteration, it
@@ -105,7 +105,7 @@ Define a function that will be executed by the threads.
 ```python
 def func(n, name):
     for _ in atpbar(range(n), name=name):
-        sleep(0.0001)
+        sleep(0.001)
 ```
 
 We will submit ten jobs each runs the `func` function to five threads.
