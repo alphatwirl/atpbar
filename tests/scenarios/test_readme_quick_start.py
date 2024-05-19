@@ -1,17 +1,22 @@
+from collections.abc import Callable
 import itertools
 import multiprocessing
-import random
-import sys
 import threading
 import time
 
 import pytest
 
 from atpbar import atpbar, find_reporter, flush, register_reporter
+from atpbar.progress_report import ProgressReporter
+
+from .conftest import MockCreatePresentation
 
 
 @pytest.mark.parametrize("niterations", [10, 1, 0])
-def test_one_loop(mock_create_presentation, niterations):
+def test_one_loop(
+    mock_create_presentation: MockCreatePresentation,
+    niterations: int,
+) -> None:
 
     for i in atpbar(range(niterations)):
         pass
@@ -35,7 +40,7 @@ def test_one_loop(mock_create_presentation, niterations):
     assert 0 == len(progressbar1.reports)
 
 
-def test_nested_loops(mock_create_presentation):
+def test_nested_loops(mock_create_presentation: MockCreatePresentation) -> None:
 
     for i in atpbar(range(4)):
         for j in atpbar(range(3)):
@@ -54,8 +59,8 @@ def test_nested_loops(mock_create_presentation):
     assert 0 == len(progressbar1.reports)
 
 
-def run_with_threading(nthreads=3, niterations=[5, 5, 5]):
-    def task(n, name):
+def run_with_threading(nthreads: int = 3, niterations: list[int] = [5, 5, 5]) -> None:
+    def task(n: int, name: str) -> None:
         for i in atpbar(range(n), name=name):
             time.sleep(0.0001)
 
@@ -73,7 +78,11 @@ def run_with_threading(nthreads=3, niterations=[5, 5, 5]):
 
 @pytest.mark.parametrize("niterations", [[5, 4, 3], [5, 0, 1], [0], [1]])
 @pytest.mark.parametrize("nthreads", [3, 1, 0])
-def test_threading(mock_create_presentation, nthreads, niterations):
+def test_threading(
+    mock_create_presentation: MockCreatePresentation,
+    nthreads: int,
+    niterations: list[int],
+) -> None:
 
     # make niterations as long as nthreads. repeat if necessary
     niterations = list(
@@ -104,12 +113,20 @@ def test_threading(mock_create_presentation, nthreads, niterations):
     assert 0 == len(progressbar1.reports)
 
 
-def run_with_multiprocessing(nprocesses, ntasks, niterations):
-    def task(n, name):
+def run_with_multiprocessing(
+    nprocesses: int,
+    ntasks: int,
+    niterations: list[int],
+) -> None:
+    def task(n: int, name: str) -> None:
         for i in atpbar(range(n), name=name):
             time.sleep(0.0001)
 
-    def worker(reporter, task, queue):
+    def worker(
+        reporter: ProgressReporter,
+        task: Callable[[int, str], None],
+        queue: multiprocessing.JoinableQueue,
+    ) -> None:
         register_reporter(reporter)
         while True:
             args = queue.get()
@@ -120,7 +137,7 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations):
             queue.task_done()
 
     reporter = find_reporter()
-    queue = multiprocessing.JoinableQueue()
+    queue = multiprocessing.JoinableQueue()  # type: ignore
     for i in range(nprocesses):
         p = multiprocessing.Process(target=worker, args=(reporter, task, queue))
         p.start()
@@ -138,7 +155,12 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations):
 @pytest.mark.parametrize("niterations", [[5, 4, 3], [5, 0, 1], [0], [1]])
 @pytest.mark.parametrize("ntasks", [6, 3, 1, 0])
 @pytest.mark.parametrize("nprocesses", [10, 6, 2, 1])
-def test_multiprocessing(mock_create_presentation, nprocesses, ntasks, niterations):
+def test_multiprocessing(
+    mock_create_presentation: MockCreatePresentation,
+    nprocesses: int,
+    ntasks: int,
+    niterations: list[int],
+) -> None:
 
     # make niterations as long as ntasks. repeat if necessary
     niterations = list(
