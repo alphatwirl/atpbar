@@ -24,6 +24,7 @@ classifiers = [
 [project.optional-dependencies]
 jupyter = ["ipywidgets>=8.1"]
 tests = ["pytest-console-scripts>=1.4", "pytest-cov>=5.0", "pytest>=8.2"]
+doc = ["mkdocs-material>=9.5", "pymdown-extensions>=10.8"]
 
 [project.urls]
 Homepage = "https://github.com/alphatwirl/atpbar"
@@ -35,6 +36,16 @@ tag_sign = false
 
 [tool.hatch.build.targets.sdist]
 include = ["/atpbar"]
+
+[tool.pytest.ini_options]
+addopts = """
+--doctest-modules
+--doctest-glob='*.md'
+--ignore=examples/
+--ignore=atpbar/presentation/
+"""
+# doctest_optionflags = ["ELLIPSIS", "NORMALIZE_WHITESPACE",]
+doctest_optionflags = ["ELLIPSIS"]
 
 [tool.black]
 # Doesn't appear to be effective with VSCode extension Black Formatter

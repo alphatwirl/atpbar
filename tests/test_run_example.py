@@ -1,30 +1,26 @@
-"""Test if an example script runs
+'''Test if example scripts run
 
-"""
+'''
 
 from pathlib import Path
 
 import pytest
 
 here = Path(__file__).resolve().parent
-example_dir = here.parent.joinpath("examples")
+example_dir = here.parent / 'examples'
 
-
-params = [
-    "example_01_one_loop.py",
-    "example_02_nested_loops.py",
-    "example_03_threading.py",
-    "example_04_multiprocessing.py",
-    "example_05_multiprocessing_pool.py",
-    "example_06_thread_pool_executor.py",
-    "example_07_process_pool_executor.py",
+exclude = [  # type: ignore
+    'break_exception.py',
 ]
 
+script_paths = list(example_dir.glob('**/*.py'))
+script_paths = [p for p in script_paths if p.name not in exclude]
+print(script_paths)
 
-@pytest.mark.parametrize("script_name", params)
-@pytest.mark.script_launch_mode("subprocess")
-def test_run_example_script(script_runner, script_name):
-    script_path = example_dir.joinpath(script_name)
+
+@pytest.mark.parametrize('script_path', script_paths)
+@pytest.mark.script_launch_mode('subprocess')
+def test_run_example_script(script_runner, script_path):
     ret = script_runner.run(script_path)
     assert ret.success
-    assert ret.stderr == ""
+    assert ret.stderr == ''

@@ -1,0 +1,45 @@
+site_name: atpbar
+repo_url: https://github.com/alphatwirl/atpbar
+repo_name: alphatwirl/atpbar
+theme:
+  name: material
+  custom_dir: docs/overrides
+  icon:
+    logo: fontawesome/solid/bars
+    repo: fontawesome/brands/github
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.expand
+    - navigation.indexes
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    # - announce.dismiss
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+nav:
+  - Home: index.md
+  - Quick Start: quick.md
+  - User Guide:
+      - guide/index.md
+      - concurrent.futures:
+          - ThreadPoolExecutor: guide/thread-pool-executor.md
+          - ProcessPoolExecutor: guide/process-pool-executor.md
+      - threading.Thread: guide/threading-thread.md
+      - multiprocessing:
+          - Process: guide/multiprocessing-process.md
+          - Pool: guide/multiprocessing-pool.md
+      - Disabling progress bars: guide/disable.md
+  - Features:
+      - features/index.md
+      - break and exception: features/break-exception.md
+      - Jupyter: features/jupyter.md
+      - Non TTY: features/non-tty.md
