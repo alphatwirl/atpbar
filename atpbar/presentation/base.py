@@ -14,7 +14,7 @@ class Presentation(ABC):
     A subclass of this class should implement ``_present()``.
     '''
 
-    stdout_stderr_redrection = False
+    stdout_stderr_redirection = False
 
     def __init__(self) -> None:
 

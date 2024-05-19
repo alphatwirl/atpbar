@@ -8,7 +8,7 @@ MINIMUM_TERMINAL_WIDTH = 90
 
 
 class ProgressBar(Presentation):
-    stdout_stderr_redrection = True
+    stdout_stderr_redirection = True
 
     def __init__(self) -> None:
         super().__init__()

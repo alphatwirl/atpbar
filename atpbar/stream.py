@@ -19,7 +19,7 @@ StreamQueue: TypeAlias = 'Queue[tuple[str, FD] | None]'
 
 class StreamRedirection:
     def __init__(self, queue: StreamQueue, presentation: Presentation) -> None:
-        self.disabled = not presentation.stdout_stderr_redrection
+        self.disabled = not presentation.stdout_stderr_redirection
         if self.disabled:
             return
 
