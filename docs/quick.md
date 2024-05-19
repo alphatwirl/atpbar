@@ -93,10 +93,11 @@ from the
 [`concurrent.futures`](https://docs.python.org/3/library/concurrent.futures.html)
 module.
 
-Import `ThreadPoolExecutor`.
+Import `ThreadPoolExecutor` and also `flushing` from `atpbar`.
 
 ```python
 from concurrent.futures import ThreadPoolExecutor
+from atpbar import flushing
 ```
 
 Define a function that will be executed by the threads.
@@ -113,12 +114,15 @@ We will submit ten jobs each runs the `func` function to five threads.
 n_workers = 5
 n_jobs = 10
 
-with ThreadPoolExecutor(max_workers=n_workers) as executor:
+with flushing(), ThreadPoolExecutor(max_workers=n_workers) as executor:
     for i in range(n_jobs):
         n = randint(1000, 10000)
         f = executor.submit(func, n, name=f'Job {i}')
 
 ```
+
+The context manager `flushing()` exits after the progress bars have finished
+updating.
 
 The progress bars will be simultaneously updated for concurrent jobs.
 
