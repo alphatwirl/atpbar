@@ -37,6 +37,15 @@ tag_sign = false
 [tool.hatch.build.targets.sdist]
 include = ["/atpbar"]
 
+[tool.pytest.ini_options]
+addopts = """
+--doctest-modules
+--doctest-glob='*.md'
+--ignore=examples/
+"""
+# doctest_optionflags = ["ELLIPSIS", "NORMALIZE_WHITESPACE",]
+doctest_optionflags = ["ELLIPSIS"]
+
 [tool.black]
 # Doesn't appear to be effective with VSCode extension Black Formatter
 skip-string-normalization = true
