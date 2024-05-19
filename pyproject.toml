@@ -42,6 +42,7 @@ addopts = """
 --doctest-modules
 --doctest-glob='*.md'
 --ignore=examples/
+--ignore=atpbar/presentation/
 """
 # doctest_optionflags = ["ELLIPSIS", "NORMALIZE_WHITESPACE",]
 doctest_optionflags = ["ELLIPSIS"]

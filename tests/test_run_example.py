@@ -10,7 +10,7 @@ here = Path(__file__).resolve().parent
 example_dir = here.parent / 'examples'
 
 exclude = [  # type: ignore
-    # 'multiprocessing_pool.py',
+    'break_exception.py',
 ]
 
 script_paths = list(example_dir.glob('**/*.py'))
