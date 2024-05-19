@@ -136,4 +136,4 @@ The progress bars will be simultaneously updated for concurrent jobs.
 ## For more information
 
 This is the end of the quick start tutorial. For more information, see
-[the Users Guide](/guide).
+[the Users Guide](guide/index.md).
