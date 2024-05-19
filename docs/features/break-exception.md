@@ -9,7 +9,7 @@ For example, the loop in the following code breaks during the 1235th iteration.
 for i in atpbar(range(2000)):
     if i == 1234:
         break
-    time.sleep(0.0001)
+    sleep(0.0001)
 ```
 
 Since `i` starts with `0`, when `i` is `1234`, the loop is in its 1235th
@@ -26,7 +26,7 @@ thrown during the 1235th iteration.
 for i in atpbar(range(2000)):
     if i == 1234:
         raise Exception
-    time.sleep(0.0001)
+    sleep(0.001)
 ```
 
 The progress bar stops at the last complete iteration, 1234.
@@ -38,45 +38,38 @@ Traceback (most recent call last):
 Exception
 ```
 
-This feature works as well with nested loops, threading, and
-multiprocessing. For example, in the following code, the loops in five
-threads break at 1235th iteration.
+This feature works as well with nested loops, threading, and multiprocessing.
+For example, in the following code, the loops in threads break at 1235th
+iteration.
 
 ```python
-from atpbar import flush
-import threading
+def func(n, name):
+    for i in atpbar(range(n), name=name):
+        if i == 1234:
+            break
+        sleep(0.001)
 
-def run_with_threading():
-    def task(n, name):
-        for i in atpbar(range(n), name=name):
-            if i == 1234:
-                break
-            time.sleep(0.0001)
 
-    n_threads = 5
-    threads = []
+n_workers = 5
+n_jobs = 10
 
-    for i in range(n_threads):
-        name = 'Thread {}'.format(i)
-        n = random.randint(3000, 10000)
-        t = threading.Thread(target=task, args=(n, name))
-        t.start()
-        threads.append(t)
-
-    for t in threads:
-        t.join()
-
-    flush()
-
-run_with_threading()
+with flushing(), ThreadPoolExecutor(max_workers=n_workers) as executor:
+    for i in range(n_jobs):
+        n = randint(3000, 10000)
+        f = executor.submit(func, n, name=f'Job {i}')
 ```
 
 All progress bars stop at 1234.
 
-```
-  18.21% :::::::                                  |     1234 /     6777 |:  Thread 0
-  15.08% ::::::                                   |     1234 /     8183 |:  Thread 2
-  15.25% ::::::                                   |     1234 /     8092 |:  Thread 1
-  39.90% :::::::::::::::                          |     1234 /     3093 |:  Thread 4
-  19.67% :::::::                                  |     1234 /     6274 |:  Thread 3
+```plaintext
+  23.97% :::::::::                                |     1234 /     5149 |:  Job 2
+  33.32% :::::::::::::                            |     1234 /     3703 |:  Job 4
+  35.09% ::::::::::::::                           |     1234 /     3517 |:  Job 0
+  13.47% :::::                                    |     1234 /     9162 |:  Job 3
+  27.35% ::::::::::                               |     1234 /     4512 |:  Job 1
+  32.07% ::::::::::::                             |     1234 /     3848 |:  Job 6
+  29.04% :::::::::::                              |     1234 /     4250 |:  Job 5
+  21.01% ::::::::                                 |     1234 /     5872 |:  Job 8
+  13.70% :::::                                    |     1234 /     9006 |:  Job 7
+  36.51% ::::::::::::::                           |     1234 /     3380 |:  Job 9
 ```
