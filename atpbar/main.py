@@ -5,7 +5,7 @@ from collections.abc import Iterable, Iterator
 from typing import Generic, Optional, TypeVar
 
 from .funcs import fetch_reporter
-from .progressreport import Report
+from .progress_report import Report
 
 T = TypeVar('T')
 

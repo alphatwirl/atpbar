@@ -4,7 +4,7 @@ import unittest.mock as mock
 
 import pytest
 
-from atpbar.progressreport.pickup import ProgressReportPickup
+from atpbar.progress_report.pickup import ProgressReportPickup
 
 
 class TestStart:
@@ -130,7 +130,7 @@ class TestRunUntilReportsStopComing:
     def mock_time(self, monkeypatch):
         ret = mock.Mock()
         ret.time.return_value = 1000.0
-        from atpbar.progressreport import pickup as m
+        from atpbar.progress_report import pickup as m
 
         monkeypatch.setattr(m, "time", ret)
         return ret

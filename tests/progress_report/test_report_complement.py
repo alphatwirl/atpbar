@@ -1,6 +1,6 @@
 import pytest
 
-from atpbar.progressreport.complement import ProgressReportComplementer
+from atpbar.progress_report.complement import ProgressReportComplementer
 
 
 @pytest.fixture()

@@ -4,7 +4,7 @@ import pytest
 
 import unittest.mock as mock
 
-from atpbar.progressreport.reporter import ProgressReporter
+from atpbar.progress_report.reporter import ProgressReporter
 
 
 @pytest.fixture()
@@ -15,7 +15,7 @@ def mock_queue():
 @pytest.fixture()
 def mock_time(monkeypatch):
     ret = mock.Mock()
-    module = sys.modules["atpbar.progressreport.reporter"]
+    module = sys.modules["atpbar.progress_report.reporter"]
     monkeypatch.setattr(module, "time", ret)
     return ret
 

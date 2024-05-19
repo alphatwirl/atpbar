@@ -4,7 +4,7 @@ import multiprocessing
 from collections.abc import Iterator
 
 from .machine import StateMachine
-from .progressreport import ProgressReporter
+from .progress_report import ProgressReporter
 
 _machine = StateMachine()
 
