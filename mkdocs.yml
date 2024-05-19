@@ -31,12 +31,12 @@ nav:
   - User Guide:
       - guide/index.md
       - concurrent.futures:
-        - ThreadPoolExecutor: guide/ThreadPoolExecutor.md
-        - ProcessPoolExecutor: guide/ProcessPoolExecutor.md
-      - threading.Thread: guide/threading.md
+          - ThreadPoolExecutor: guide/thread-pool-executor.md
+          - ProcessPoolExecutor: guide/process-pool-executor.md
+      - threading.Thread: guide/threading-thread.md
       - multiprocessing:
-        - Process: guide/multiprocessing.md
-        - Pool: guide/multiprocessing.Pool.md
+          - Process: guide/multiprocessing-process.md
+          - Pool: guide/multiprocessing-pool.md
       - Disabling progress bars: guide/disable.md
   - Features:
       - features/index.md
