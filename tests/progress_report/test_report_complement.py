@@ -54,7 +54,7 @@ def test_complement(obj: ProgressReportComplementer) -> None:
     assert expected3 == report3
 
 
-def test_volatile_fileds(obj: ProgressReportComplementer) -> None:
+def test_volatile_fields(obj: ProgressReportComplementer) -> None:
 
     task_id = uuid.uuid4()
     report0 = Report(taskid=task_id, done=0, total=10, first=True)
