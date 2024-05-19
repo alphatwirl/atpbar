@@ -29,8 +29,14 @@
   ],
   "cSpell.words": [
     "funcs",
+    "initargs",
+    "inlinehilite",
+    "linenums",
     "pbar",
+    "pygments",
     "randint",
+    "starmap",
+    "superfences",
     "taskid"
   ]
 }
