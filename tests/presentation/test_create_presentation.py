@@ -1,8 +1,9 @@
-import os
 import sys
 import unittest.mock as mock
 
 import pytest
+
+from atpbar.presentation.create import create_presentation
 
 has_jupyter_notebook = False
 try:
@@ -13,11 +14,9 @@ try:
 except ImportError:
     pass
 
-from atpbar.presentation.create import create_presentation
-
 
 @pytest.fixture(params=[True, False])
-def isatty(request, monkeypatch):
+def isatty(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch) -> bool:
     ret = request.param
     org_stdout = sys.stdout
     f = mock.Mock(
@@ -38,7 +37,9 @@ else:
 
 
 @pytest.fixture(params=is_jupyter_notebook_parames)
-def is_jupyter_notebook(request, monkeypatch):
+def is_jupyter_notebook(
+    request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch
+) -> bool:
     ret = request.param
     f = mock.Mock()
     f.return_value = ret
@@ -48,7 +49,9 @@ def is_jupyter_notebook(request, monkeypatch):
 
 
 @pytest.fixture(params=[True, False])
-def del_ProgressBarJupyter(request, monkeypatch):
+def del_ProgressBarJupyter(
+    request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch
+) -> bool:
     ret = request.param
     module = sys.modules["atpbar.presentation.create"]
     if ret:
@@ -60,7 +63,11 @@ def del_ProgressBarJupyter(request, monkeypatch):
     return ret
 
 
-def test_create_presentation(isatty, is_jupyter_notebook, del_ProgressBarJupyter):
+def test_create_presentation(
+    isatty: bool,
+    is_jupyter_notebook: bool,
+    del_ProgressBarJupyter: bool,
+) -> None:
     actual = create_presentation()
 
     if isatty:

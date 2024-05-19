@@ -1,5 +1,6 @@
 import sys
 import unittest.mock as mock
+import uuid
 
 import pytest
 
@@ -7,12 +8,12 @@ from atpbar.presentation.base import Presentation
 
 
 class MockProgressBar(Presentation):
-    def _present(self):
+    def _present(self) -> None:
         pass
 
 
 @pytest.fixture()
-def mock_time(monkeypatch):
+def mock_time(monkeypatch: pytest.MonkeyPatch) -> mock.Mock:
     ret = mock.Mock()
     module = sys.modules["atpbar.presentation.base"]
     monkeypatch.setattr(module, "time", ret)
@@ -21,26 +22,28 @@ def mock_time(monkeypatch):
 
 
 @pytest.fixture()
-def obj(mock_time):
+def obj(mock_time: mock.Mock) -> MockProgressBar:
     return MockProgressBar()
 
 
-def test_repr(obj):
+def test_repr(obj: MockProgressBar) -> None:
     repr(obj)
 
 
-def test_present(obj):
-    obj.present(dict(taskid=1, last=False))
+def test_present(obj: Presentation) -> None:
+    i = uuid.uuid4()
+    j = uuid.uuid4()
+    obj.present(dict(taskid=i, last=False))
     assert obj.active()
-    obj.present(dict(taskid=1, last=False))
+    obj.present(dict(taskid=i, last=False))
     assert obj.active()
-    obj.present(dict(taskid=2, last=False))
+    obj.present(dict(taskid=j, last=False))
     assert obj.active()
-    obj.present(dict(taskid=2, last=False))
+    obj.present(dict(taskid=j, last=False))
     assert obj.active()
-    obj.present(dict(taskid=1, last=True))
+    obj.present(dict(taskid=i, last=True))
     assert obj.active()
-    obj.present(dict(taskid=2, last=True))
+    obj.present(dict(taskid=j, last=True))
     assert not obj.active()
 
 
@@ -69,7 +72,7 @@ param_names = (
 
 
 @pytest.mark.parametrize(param_names, params)
-def test_register_report(
+def test_register_report(  # type: ignore
     obj,
     report,
     initial_new_taskids,
@@ -137,7 +140,7 @@ param_names = (
 
 
 @pytest.mark.parametrize(param_names, params)
-def test_update_registry(
+def test_update_registry(  # type: ignore
     obj,
     initial_new_taskids,
     initial_active_taskids,
@@ -174,7 +177,7 @@ param_names = (
 
 
 @pytest.mark.parametrize(param_names, params)
-def test_need_to_present(
+def test_need_to_present(  # type: ignore
     obj,
     mock_time,
     new_taskids,
