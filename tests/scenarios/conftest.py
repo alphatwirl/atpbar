@@ -48,7 +48,7 @@ class MockCreatePresentation:
     '''
 
     def __init__(self) -> None:
-        self.presentations = list[Presentation]()
+        self.presentations = list[MockProgressBar]()
 
     def __str__(self) -> str:
         lines = []
@@ -58,7 +58,7 @@ class MockCreatePresentation:
         )
         return "\n".join(lines)
 
-    def __call__(self) -> Presentation:
+    def __call__(self) -> MockProgressBar:
         ret = MockProgressBar()
         self.presentations.append(ret)
         return ret
