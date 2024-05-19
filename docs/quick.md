@@ -27,10 +27,11 @@ Python 3.10.13 (...)
 
 ### Import packages
 
-Import some packages that we will use in the examples.
+Import `atpbar` and other objects that we will use in the examples.
 
 ```python
-import time, random
+from random import randint
+from time import sleep
 from atpbar import atpbar
 ```
 
@@ -39,9 +40,9 @@ from atpbar import atpbar
 The `atpbar` can wrap an iterable to show a progress bar for the iterations.
 
 ```python
-n = random.randint(1000, 10000)
+n = randint(1000, 10000)
 for _ in atpbar(range(n)):
-    time.sleep(0.0001)
+    sleep(0.0001)
 ```
 
 This example randomly selects the number of iterations and, in each iteration,
@@ -62,9 +63,9 @@ The `atpbar` can show progress bars for nested loops.
 
 ```python
 for i in atpbar(range(4), name='Outer'):
-    n = random.randint(1000, 10000)
+    n = randint(1000, 10000)
     for _ in atpbar(range(n), name=f'Inner {i}'):
-        time.sleep(0.0001)
+        sleep(0.0001)
 ```
 
 This example iterates over an outer loop four times. In each iteration, it
@@ -103,7 +104,7 @@ Define a function that will be executed by the threads.
 ```python
 def func(n, name):
     for _ in atpbar(range(n), name=name):
-        time.sleep(0.0001)
+        sleep(0.0001)
 ```
 
 We will submit ten jobs each runs the `func` function to five threads.
@@ -114,8 +115,9 @@ n_jobs = 10
 
 with ThreadPoolExecutor(max_workers=n_workers) as executor:
     for i in range(n_jobs):
-        n = random.randint(1000, 10000)
+        n = randint(1000, 10000)
         f = executor.submit(func, n, name=f'Job {i}')
+
 ```
 
 The progress bars will be simultaneously updated for concurrent jobs.
