@@ -12,7 +12,7 @@ except ImportError:
 
 
 def create_presentation() -> Presentation:
-    """Create a presentation of progress report, e.g., progress bars
+    '''Create a presentation of progress report, e.g., progress bars
 
     Returns
     -------
@@ -21,7 +21,7 @@ def create_presentation() -> Presentation:
         an instance of ProgressBarJupyter if on Jupyter Notebook
         an instance of ProgressPrint otherwise
 
-    """
+    '''
 
     if sys.stdout.isatty():
         return ProgressBar()

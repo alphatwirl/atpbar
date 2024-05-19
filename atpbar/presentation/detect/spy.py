@@ -12,14 +12,14 @@ except ImportError:
 
 
 def is_spyder_ide() -> bool:
-    """Tests if on Spyder IDE
+    '''Tests if on Spyder IDE
 
     Returns
     -------
     bool
         True if on Spyder IDE
 
-    """
+    '''
 
     if spyder is None:
         return False

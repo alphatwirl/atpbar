@@ -9,10 +9,10 @@ from atpbar.progress_report import Report
 
 
 class Presentation(ABC):
-    """A base class of the progress presentation.
+    '''A base class of the progress presentation.
 
     A subclass of this class should implement ``_present()``.
-    """
+    '''
 
     stdout_stderr_redrection = False
 

@@ -10,7 +10,7 @@ _machine = StateMachine()
 
 
 def find_reporter() -> ProgressReporter | None:
-    """returns the progress reporter
+    '''returns the progress reporter
 
     This function is to be called in the main process of a
     multiprocessing program. The reporter should be registered in
@@ -21,12 +21,12 @@ def find_reporter() -> ProgressReporter | None:
     object
         The progress reporter
 
-    """
+    '''
     return _machine.find_reporter()
 
 
 def register_reporter(reporter: ProgressReporter) -> None:
-    """registers a reporter
+    '''registers a reporter
 
     This function is to be called in sub-processes of a
     multiprocessing program.
@@ -42,12 +42,12 @@ def register_reporter(reporter: ProgressReporter) -> None:
     -------
     None
 
-    """
+    '''
     _machine.register_reporter(reporter)
 
 
 def flush() -> None:
-    """flushes progress bars
+    '''flushes progress bars
 
     This function flushes all active progress bars. It returns when
     the progress bars finish updating.
@@ -56,7 +56,7 @@ def flush() -> None:
     -------
     None
 
-    """
+    '''
     _machine.flush()
 
 
@@ -70,7 +70,7 @@ def flushing() -> Iterator[None]:
 
 
 def disable() -> None:
-    """disables progress bars
+    '''disables progress bars
 
     This function needs to be called in the main process before
     `atpbar()` or `find_reporter()` is used.
@@ -79,18 +79,18 @@ def disable() -> None:
     -------
     None
 
-    """
+    '''
     _machine.disable()
 
 
 def shutdown() -> None:
-    """shutdowns the progress bars
+    '''shutdowns the progress bars
 
     Returns
     -------
     None
 
-    """
+    '''
     _machine.shutdown()
 
 

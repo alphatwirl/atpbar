@@ -38,7 +38,7 @@ class StateMachine:
 
 
 class State:
-    """The base class of the states"""
+    '''The base class of the states'''
 
     def __init__(self) -> None:
         self.reporter: ProgressReporter | None = None
@@ -63,10 +63,10 @@ class State:
 
 
 class Initial(State):
-    """Initial state
+    '''Initial state
 
     The pickup is not running.
-    """
+    '''
 
     def __init__(self) -> None:
         self.reporter = None
@@ -82,10 +82,10 @@ class Initial(State):
 
 
 class Active(State):
-    """Active state
+    '''Active state
 
     The pickup started and is running, typically, in the main process
-    """
+    '''
 
     def __init__(self) -> None:
 
@@ -166,11 +166,11 @@ class Active(State):
 
 
 class Registered(State):
-    """Registered state
+    '''Registered state
 
     Typically, in a sub-process. The reporter, which has been created
     in the main process, is registered in the sub-process
-    """
+    '''
 
     def __init__(self, reporter: ProgressReporter | None) -> None:
         self.reporter = reporter
@@ -189,12 +189,12 @@ class Registered(State):
 
 
 class Disabled(State):
-    """Disabled state"""
+    '''Disabled state'''
 
     def __init__(self) -> None:
         self.reporter = None
 
 
 def in_main_thread() -> bool:
-    """test if in the main thread"""
+    '''test if in the main thread'''
     return current_thread() == main_thread()

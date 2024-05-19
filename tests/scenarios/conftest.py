@@ -1,13 +1,11 @@
 import sys
 import threading
+import unittest.mock as mock
 
 import pytest
 
-import unittest.mock as mock
-
-from atpbar.presentation.base import Presentation
-
 from atpbar.funcs import shutdown
+from atpbar.presentation.base import Presentation
 
 
 class MockProgressBar(Presentation):
@@ -43,10 +41,10 @@ class MockProgressBar(Presentation):
 
 
 class MockCreatePresentation:
-    """A functor to mock `create_presentation()`.
+    '''A functor to mock `create_presentation()`.
 
     It keeps returned values so they can be examined later.
-    """
+    '''
 
     def __init__(self):
         self.presentations = []
