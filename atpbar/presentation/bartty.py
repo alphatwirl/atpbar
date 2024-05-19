@@ -16,7 +16,7 @@ class ProgressBar(Presentation):
         self.width = self._get_width()
 
         self.active_bars = list[str]()
-        self.just_finised_bars = list[str]()
+        self.just_finished_bars = list[str]()
 
     def __repr__(self) -> str:
         return "{}()".format(self.__class__.__name__)
@@ -30,9 +30,9 @@ class ProgressBar(Presentation):
 
     def _present(self) -> None:
         self._erase_active_bars()
-        self._compose_just_finised_bars()
+        self._compose_just_finished_bars()
         self._compose_active_bars()
-        self._draw_just_finised_bars()
+        self._draw_just_finished_bars()
         self._draw_active_bars()
 
     def _write(self, s: str, out: TextIO) -> None:
@@ -59,8 +59,8 @@ class ProgressBar(Presentation):
         self.out.write(code)
         self.out.flush()
 
-    def _compose_just_finised_bars(self) -> None:
-        self.just_finised_bars = [
+    def _compose_just_finished_bars(self) -> None:
+        self.just_finished_bars = [
             self._compose_bar_from_taskid(i) for i in self._finishing_taskids
         ]
 
@@ -101,9 +101,9 @@ class ProgressBar(Presentation):
 
         return ret
 
-    def _draw_just_finised_bars(self) -> None:
-        if self.just_finised_bars:
-            self.out.write("\n".join(self.just_finised_bars) + "\n")
+    def _draw_just_finished_bars(self) -> None:
+        if self.just_finished_bars:
+            self.out.write("\n".join(self.just_finished_bars) + "\n")
             self.out.flush()
 
     def _draw_active_bars(self) -> None:
