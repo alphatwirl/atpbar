@@ -35,4 +35,4 @@ jobs:
           pip install --upgrade mypy
 
       - name: Run mypy
-        run: mypy --show-traceback atpbar/
+        run: mypy --show-traceback atpbar/ tests/
