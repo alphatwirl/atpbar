@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from typing import TextIO
 from uuid import UUID
 
-from atpbar.progressreport import Report
+from atpbar.progress_report import Report
 
 
 class Presentation(ABC):

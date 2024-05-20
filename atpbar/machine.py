@@ -3,7 +3,7 @@ from multiprocessing import Queue
 from threading import Lock, current_thread, main_thread
 
 from .presentation import create_presentation
-from .progressreport import ProgressReporter, ProgressReportPickup, Report
+from .progress_report import ProgressReporter, ProgressReportPickup, Report
 from .stream import StreamQueue, StreamRedirection, register_stream_queue
 
 
