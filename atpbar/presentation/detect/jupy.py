@@ -18,14 +18,14 @@ from .spy import is_spyder_ide
 
 
 def is_jupyter_notebook() -> bool:
-    """Tests if on Jupyter Notebook
+    '''Tests if on Jupyter Notebook
 
     Returns
     -------
     bool
         True if on Jupyter Notebook
 
-    """
+    '''
 
     if widgets is None:
         return False

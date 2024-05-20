@@ -4,7 +4,7 @@ from .report import Report
 
 
 class ProgressReportComplementer:
-    """Complement progress reports
+    '''Complement progress reports
 
     Complement a progress report with the previous report for the same
     task.
@@ -16,7 +16,7 @@ class ProgressReportComplementer:
         include `done`, `total`, and 'name'. The `first` and `last` will be
         automatically determined if not given.
 
-    """
+    '''
 
     def __init__(self) -> None:
         self.previous_reports = dict[UUID, Report]()

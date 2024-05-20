@@ -13,7 +13,7 @@ DEFAULT_INTERVAL = 0.1  # [second]
 
 
 class ProgressReporter:
-    """A progress reporter
+    '''A progress reporter
 
     This class sends progress reports. The reports will be picked up
     by the pickup (`ProgressReportPickup`), which uses the reports,
@@ -43,7 +43,7 @@ class ProgressReporter:
     ----------
     queue : multiprocessing.Queue
         The queue through which this class sends progress reports.
-    """
+    '''
 
     def __init__(
         self,
@@ -65,14 +65,14 @@ class ProgressReporter:
         )
 
     def report(self, report: Report) -> None:
-        """send ``report`` to a progress monitor
+        '''send ``report`` to a progress monitor
 
         Parameters
         ----------
         report : ProgressReport
             a progress report
 
-        """
+        '''
 
         self.complete_report(report)
 

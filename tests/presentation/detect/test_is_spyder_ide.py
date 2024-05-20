@@ -1,6 +1,7 @@
 import os
 import sys
 import unittest.mock as mock
+from collections.abc import Iterator
 
 import pytest
 
@@ -8,7 +9,7 @@ from atpbar.presentation.detect.spy import is_spyder_ide
 
 
 @pytest.fixture()
-def mock_spyder_module(monkeypatch):
+def mock_spyder_module(monkeypatch: pytest.MonkeyPatch) -> Iterator[mock.Mock]:
     ret = mock.Mock()
     module = sys.modules["atpbar.presentation.detect.spy"]
     monkeypatch.setattr(module, "spyder", ret)
@@ -16,7 +17,7 @@ def mock_spyder_module(monkeypatch):
 
 
 @pytest.fixture()
-def mock_get_ipython(monkeypatch):
+def mock_get_ipython(monkeypatch: pytest.MonkeyPatch) -> Iterator[mock.Mock]:
     mock_ipython = mock.Mock()
     mock_ipython.config = {
         "IPKernelApp": {
@@ -32,7 +33,7 @@ def mock_get_ipython(monkeypatch):
 
 
 @pytest.fixture()
-def mock_spyder_env_vars(monkeypatch):
+def mock_spyder_env_vars(monkeypatch: pytest.MonkeyPatch) -> None:
     spyder_envs = [
         ("SPYDER_ARGS", "[]"),
         ("SPY_EXTERNAL_INTERPRETER", "False"),
@@ -62,16 +63,20 @@ def mock_spyder_env_vars(monkeypatch):
 
 
 @pytest.fixture()
-def mock_spyder_ide(mock_spyder_module, mock_get_ipython, mock_spyder_env_vars):
+def mock_spyder_ide(
+    mock_spyder_module: mock.Mock,
+    mock_get_ipython: mock.Mock,
+    mock_spyder_env_vars: None,
+) -> Iterator[None]:
     yield
 
 
-def test_is_spyder_ide_true(mock_spyder_ide):
+def test_is_spyder_ide_true(mock_spyder_ide: None) -> None:
     assert is_spyder_ide()
 
 
 @pytest.fixture()
-def mock_del_spyder_env_vars(monkeypatch):
+def mock_del_spyder_env_vars(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("SPYDER_ARGS", raising=False)
 
     envs_to_delete = [e for e in os.environ.keys() if e.startswith("SPY_")]
@@ -79,5 +84,5 @@ def mock_del_spyder_env_vars(monkeypatch):
         monkeypatch.delenv(e, raising=False)
 
 
-def test_is_spyder_ide_false(mock_del_spyder_env_vars):
+def test_is_spyder_ide_false(mock_del_spyder_env_vars: None) -> None:
     assert not is_spyder_ide()

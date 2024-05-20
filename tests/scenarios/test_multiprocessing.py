@@ -1,21 +1,30 @@
-import time
 import itertools
 import multiprocessing
+import time
+from collections.abc import Callable
 
 import pytest
 
-from atpbar import atpbar
-from atpbar import register_reporter, find_reporter, flush
+from atpbar import atpbar, find_reporter, flush, register_reporter
+from atpbar.progress_report import ProgressReporter
+
+from .conftest import MockCreatePresentation
 
 
-def run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task):
+def run_with_multiprocessing(
+    nprocesses: int, ntasks: int, niterations: list[int], time_starting_task: float
+) -> None:
 
-    def task(n, name, time_starting):
+    def task(n: int, name: str, time_starting: float) -> None:
         time.sleep(time_starting)
         for i in atpbar(range(n), name=name):  # `atpbar` is used here
             time.sleep(0.0001)
 
-    def worker(reporter, task, queue):
+    def worker(
+        reporter: ProgressReporter,
+        task: Callable[[int, str, float], None],
+        queue: multiprocessing.JoinableQueue,
+    ) -> None:
         register_reporter(reporter)
         while True:
             args = queue.get()
@@ -26,7 +35,7 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task
             queue.task_done()
 
     reporter = find_reporter()
-    queue = multiprocessing.JoinableQueue()
+    queue = multiprocessing.JoinableQueue()  # type: ignore
 
     for i in range(nprocesses):
         p = multiprocessing.Process(target=worker, args=(reporter, task, queue))
@@ -51,8 +60,12 @@ def run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task
 @pytest.mark.parametrize("ntasks", [3, 1, 0])
 @pytest.mark.parametrize("nprocesses", [6, 2, 1])
 def test_multiprocessing_from_loop(
-    mock_create_presentation, nprocesses, ntasks, niterations, time_starting_task
-):
+    mock_create_presentation: MockCreatePresentation,
+    nprocesses: int,
+    ntasks: int,
+    niterations: list[int],
+    time_starting_task: float,
+) -> None:
 
     # make niterations as long as ntasks. repeat if necessary
     niterations = list(

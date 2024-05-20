@@ -1,26 +1,30 @@
 import collections
-import random
-import time
+from typing import Literal
 
 import pytest
 
-from atpbar import atpbar, flush
+from atpbar import atpbar
+
+from .conftest import MockCreatePresentation
 
 
 @pytest.mark.parametrize("method", ["break", "exception"])
 @pytest.mark.parametrize("niterations", [10, 1, 0])
 @pytest.mark.parametrize("ndones", [10, 4, 1, 0])
 def test_one_loop_break_exception(
-    mock_create_presentation, niterations, ndones, method
-):
+    mock_create_presentation: MockCreatePresentation,
+    niterations: int,
+    ndones: int,
+    method: Literal['break', 'exception'],
+) -> None:
     ndones = min(ndones, niterations)
 
-    def task_break(ndones, niterations):
+    def task_break(ndones: int, niterations: int) -> None:
         for i in atpbar(range(niterations)):
             if i == ndones:
                 break
 
-    def task_exception(ndones, niterations):
+    def task_exception(ndones: int, niterations: int) -> None:
         for i in atpbar(range(niterations)):
             if i == ndones:
                 raise Exception()

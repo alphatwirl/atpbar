@@ -1,5 +1,4 @@
 import itertools
-import random
 import threading
 import time
 
@@ -7,13 +6,18 @@ import pytest
 
 from atpbar import atpbar, flush
 
+from .conftest import MockCreatePresentation
+
 
 @pytest.mark.parametrize("time_starting_task", [0, 0.01, 0.2])
 @pytest.mark.parametrize("niterations", [[5, 4, 3], [5, 0, 1], [0], [1]])
 @pytest.mark.parametrize("nthreads", [3, 1, 0])
 def test_threading_from_loop(
-    mock_create_presentation, nthreads, niterations, time_starting_task
-):
+    mock_create_presentation: MockCreatePresentation,
+    nthreads: int,
+    niterations: list[int],
+    time_starting_task: float,
+) -> None:
 
     # make niterations as long as nthreads. repeat if necessary
     niterations = list(
@@ -22,9 +26,17 @@ def test_threading_from_loop(
         )
     )[:nthreads]
 
-    def run_with_threading(nthreads=3, niterations=[5, 5, 5], time_starting_task=0):
+    def run_with_threading(
+        nthreads: int = 3,
+        niterations: list[int] = [5, 5, 5],
+        time_starting_task: float = 0,
+    ) -> None:
 
-        def task(n, name, time_starting):
+        def task(
+            n: int,
+            name: str,
+            time_starting: float,
+        ) -> None:
             # When starting time is long, the loop in the main thread might
             # already end by the time the loop in this task starts.
             time.sleep(time_starting)

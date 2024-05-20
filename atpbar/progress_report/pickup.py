@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class ProgressReportPickup(threading.Thread):
-    """A pickup of progress reports.
+    '''A pickup of progress reports.
 
     This class picks up progress reports and presents them.
 
@@ -20,7 +20,7 @@ class ProgressReportPickup(threading.Thread):
         The queue through which this class receives progress reports
     presentation :
         The presentation of the reports
-    """
+    '''
 
     def __init__(self, queue: 'Queue[Report]', presentation: 'Presentation') -> None:
         super().__init__(daemon=True)
@@ -34,7 +34,7 @@ class ProgressReportPickup(threading.Thread):
         self.start()
 
     def end(self) -> None:
-        """end the thread"""
+        '''end the thread'''
         self.queue.put(None)  # type: ignore
         self.join()
 
@@ -76,10 +76,10 @@ class ProgressReportPickup(threading.Thread):
         self.presentation.present(report)
 
     def _short_sleep(self) -> None:
-        """sleep very briefly
+        '''sleep very briefly
 
         used to prevent the empty `while` loop from increasing CPU
         loads
 
-        """
+        '''
         time.sleep(0.001)

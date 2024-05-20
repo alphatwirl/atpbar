@@ -11,7 +11,7 @@ T = TypeVar('T')
 
 
 def atpbar(iterable: Iterable[T], /, name: Optional[str] = None) -> Iterable[T]:
-    """returns an instance of `Atpbar`
+    '''returns an instance of `Atpbar`
 
     Parameters
     ----------
@@ -26,7 +26,7 @@ def atpbar(iterable: Iterable[T], /, name: Optional[str] = None) -> Iterable[T]:
         An instance of `Atpbar` if successfully instantiated.
         Otherwise, the object received as the parameter `iterable`.
 
-    """
+    '''
     try:
         len_ = len(iterable)  # type: ignore
     except TypeError:
@@ -42,7 +42,7 @@ def atpbar(iterable: Iterable[T], /, name: Optional[str] = None) -> Iterable[T]:
 
 
 class Atpbar(Generic[T]):
-    """Progress bar
+    '''Progress bar
 
     An iterable that wraps another iterable and shows the progress
     bars for the iterations. The class is usually instantiated by the
@@ -57,7 +57,7 @@ class Atpbar(Generic[T]):
     len_ : int
         The length of the iterable
 
-    """
+    '''
 
     def __init__(self, iterable: Iterable[T], name: str, len_: int):
         self.iterable = iterable
@@ -98,13 +98,13 @@ class Atpbar(Generic[T]):
 
 @contextlib.contextmanager
 def report_last(pbar: Atpbar[T]) -> Iterator[None]:
-    """send a last report
+    '''send a last report
 
     This function sends the last report of the task when the loop ends
     with `break` or an exception so that the progress bar will be
     updated with the last complete iteration.
 
-    """
+    '''
     try:
         yield
     finally:
