@@ -24,10 +24,10 @@ classes = [ProgressBar, ProgressPrint]
 if has_jupyter_notebook:
     classes.append(ProgressBarJupyter)
 
-classe_ids = [c.__name__ for c in classes]
+class_ids = [c.__name__ for c in classes]
 
 
-@pytest.mark.parametrize("Class", classes, ids=classe_ids)
+@pytest.mark.parametrize("Class", classes, ids=class_ids)
 def test_presentation(Class: type[Presentation]) -> None:
     i = uuid.uuid4()
     j = uuid.uuid4()
@@ -49,7 +49,7 @@ def test_presentation(Class: type[Presentation]) -> None:
     obj.active()
 
 
-@pytest.mark.parametrize("Class", classes, ids=classe_ids)
+@pytest.mark.parametrize("Class", classes, ids=class_ids)
 def test_time_track(Class: type[Presentation]) -> None:
     i = uuid.uuid4()
     obj = Class()
