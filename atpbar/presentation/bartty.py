@@ -45,7 +45,7 @@ class ProgressBar(Presentation):
         self._draw_active_bars()
 
     def _erase_active_bars(self) -> None:
-        nlines = len(self._active_taskids) + len(self._finishing_taskids)
+        nlines = len(self._active_task_ids) + len(self._finishing_task_ids)
         # must be the same as len(self.active_bars)
 
         if nlines == 0:
@@ -61,13 +61,13 @@ class ProgressBar(Presentation):
 
     def _compose_just_finished_bars(self) -> None:
         self.just_finished_bars = [
-            self._compose_bar_from_taskid(i) for i in self._finishing_taskids
+            self._compose_bar_from_taskid(i) for i in self._finishing_task_ids
         ]
 
     def _compose_active_bars(self) -> None:
         self.active_bars = [
             self._compose_bar_from_taskid(i)
-            for i in self._active_taskids + self._new_taskids
+            for i in self._active_task_ids + self._new_task_ids
         ]
 
     def _compose_bar_from_taskid(self, taskid: UUID) -> str:

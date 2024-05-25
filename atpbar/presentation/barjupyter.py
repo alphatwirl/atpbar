@@ -30,7 +30,7 @@ class ProgressBarJupyter(Presentation):
             self.container_widget = widgets.VBox()
             display(self.container_widget)
 
-        for taskid in self._new_taskids:
+        for taskid in self._new_task_ids:
             report = self._report_dict[taskid]
             self._create_widget(report)
 
@@ -54,14 +54,14 @@ class ProgressBarJupyter(Presentation):
 
     def _update_widgets(self) -> None:
         for taskid in (
-            self._finishing_taskids + self._active_taskids + self._new_taskids
+            self._finishing_task_ids + self._active_task_ids + self._new_task_ids
         ):
             report = self._report_dict[taskid]
             self._update_widget(report)
 
         self._reorder_widgets(report)
 
-        if not self._new_taskids and not self._active_taskids:
+        if not self._new_task_ids and not self._active_task_ids:
             self.container_widget = None
             self.active_box_list[:] = []
             self.complete_box_list[:] = []
@@ -93,7 +93,7 @@ class ProgressBarJupyter(Presentation):
         )
 
     def _reorder_widgets(self, report: Report) -> None:
-        for taskid in self._finishing_taskids:
+        for taskid in self._finishing_task_ids:
             box, bar, label = self.widget_dict[taskid]
             if box in self.active_box_list:
                 self.active_box_list.remove(box)

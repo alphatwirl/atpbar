@@ -23,17 +23,17 @@ class Presentation(ABC):
 
         self.lock = threading.Lock()
 
-        self._new_taskids = list[UUID]()
-        self._active_taskids = list[UUID]()  # in order of arrival
-        self._finishing_taskids = list[UUID]()
-        self._complete_taskids = list[UUID]()  # in order of completion
+        self._new_task_ids = list[UUID]()
+        self._active_task_ids = list[UUID]()  # in order of arrival
+        self._finishing_task_ids = list[UUID]()
+        self._complete_task_ids = list[UUID]()  # in order of completion
         self._report_dict = dict[UUID, Report]()
 
         self.interval = 1.0  # [second]
         self.last_time = time.time()
 
     def active(self) -> bool:
-        if self._active_taskids:
+        if self._active_task_ids:
             return True
         return False
 
@@ -55,51 +55,51 @@ class Presentation(ABC):
 
         taskid = report["taskid"]
 
-        if taskid in self._complete_taskids:
+        if taskid in self._complete_task_ids:
             return False
 
         self._report_dict[taskid] = report
 
-        if taskid in self._finishing_taskids:
+        if taskid in self._finishing_task_ids:
             return True
 
         if report["last"]:
             try:
-                self._active_taskids.remove(taskid)
+                self._active_task_ids.remove(taskid)
             except ValueError:
                 pass
 
             try:
-                self._new_taskids.remove(taskid)
+                self._new_task_ids.remove(taskid)
             except ValueError:
                 pass
 
-            self._finishing_taskids.append(taskid)
+            self._finishing_task_ids.append(taskid)
 
             return True
 
-        if taskid in self._active_taskids:
+        if taskid in self._active_task_ids:
             return True
 
-        if taskid in self._new_taskids:
+        if taskid in self._new_task_ids:
             return True
 
-        self._new_taskids.append(taskid)
+        self._new_task_ids.append(taskid)
         return True
 
     def _update_registry(self) -> None:
-        self._active_taskids.extend(self._new_taskids)
-        del self._new_taskids[:]
+        self._active_task_ids.extend(self._new_task_ids)
+        del self._new_task_ids[:]
 
-        self._complete_taskids.extend(self._finishing_taskids)
-        del self._finishing_taskids[:]
+        self._complete_task_ids.extend(self._finishing_task_ids)
+        del self._finishing_task_ids[:]
 
     def _need_to_present(self) -> bool:
 
-        if self._new_taskids:
+        if self._new_task_ids:
             return True
 
-        if self._finishing_taskids:
+        if self._finishing_task_ids:
             return True
 
         if time.time() - self.last_time > self.interval:

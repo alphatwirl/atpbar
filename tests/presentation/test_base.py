@@ -64,10 +64,10 @@ params = [
 ]
 param_names = (
     "report, "
-    "initial_new_taskids, initial_active_taskids, "
-    "initial_finishing_taskids, initial_complete_taskids, "
-    "expected_new_taskids, expected_active_taskids, "
-    "expected_finishing_taskids, expected_complete_taskids, "
+    "initial_new_task_ids, initial_active_task_ids, "
+    "initial_finishing_task_ids, initial_complete_task_ids, "
+    "expected_new_task_ids, expected_active_task_ids, "
+    "expected_finishing_task_ids, expected_complete_task_ids, "
     "expected_return"
 )
 
@@ -76,28 +76,28 @@ param_names = (
 def test_register_report(  # type: ignore
     obj,
     report,
-    initial_new_taskids,
-    initial_active_taskids,
-    initial_finishing_taskids,
-    initial_complete_taskids,
-    expected_new_taskids,
-    expected_active_taskids,
-    expected_finishing_taskids,
-    expected_complete_taskids,
+    initial_new_task_ids,
+    initial_active_task_ids,
+    initial_finishing_task_ids,
+    initial_complete_task_ids,
+    expected_new_task_ids,
+    expected_active_task_ids,
+    expected_finishing_task_ids,
+    expected_complete_task_ids,
     expected_return,
 ):
 
-    obj._new_taskids[:] = initial_new_taskids
-    obj._active_taskids[:] = initial_active_taskids
-    obj._finishing_taskids[:] = initial_finishing_taskids
-    obj._complete_taskids[:] = initial_complete_taskids
+    obj._new_task_ids[:] = initial_new_task_ids
+    obj._active_task_ids[:] = initial_active_task_ids
+    obj._finishing_task_ids[:] = initial_finishing_task_ids
+    obj._complete_task_ids[:] = initial_complete_task_ids
 
     assert expected_return == obj._register_report(report)
 
-    assert expected_new_taskids == obj._new_taskids
-    assert expected_active_taskids == obj._active_taskids
-    assert expected_finishing_taskids == obj._finishing_taskids
-    assert expected_complete_taskids == obj._complete_taskids
+    assert expected_new_task_ids == obj._new_task_ids
+    assert expected_active_task_ids == obj._active_task_ids
+    assert expected_finishing_task_ids == obj._finishing_task_ids
+    assert expected_complete_task_ids == obj._complete_task_ids
 
 
 params = [
@@ -133,37 +133,37 @@ params = [
     ),
 ]
 param_names = (
-    "initial_new_taskids, initial_active_taskids, "
-    "initial_finishing_taskids, initial_complete_taskids, "
-    "expected_new_taskids, expected_active_taskids, "
-    "expected_finishing_taskids, expected_complete_taskids, "
+    "initial_new_task_ids, initial_active_task_ids, "
+    "initial_finishing_task_ids, initial_complete_task_ids, "
+    "expected_new_task_ids, expected_active_task_ids, "
+    "expected_finishing_task_ids, expected_complete_task_ids, "
 )
 
 
 @pytest.mark.parametrize(param_names, params)
 def test_update_registry(  # type: ignore
     obj,
-    initial_new_taskids,
-    initial_active_taskids,
-    initial_finishing_taskids,
-    initial_complete_taskids,
-    expected_new_taskids,
-    expected_active_taskids,
-    expected_finishing_taskids,
-    expected_complete_taskids,
+    initial_new_task_ids,
+    initial_active_task_ids,
+    initial_finishing_task_ids,
+    initial_complete_task_ids,
+    expected_new_task_ids,
+    expected_active_task_ids,
+    expected_finishing_task_ids,
+    expected_complete_task_ids,
 ):
 
-    obj._new_taskids[:] = initial_new_taskids
-    obj._active_taskids[:] = initial_active_taskids
-    obj._finishing_taskids[:] = initial_finishing_taskids
-    obj._complete_taskids[:] = initial_complete_taskids
+    obj._new_task_ids[:] = initial_new_task_ids
+    obj._active_task_ids[:] = initial_active_task_ids
+    obj._finishing_task_ids[:] = initial_finishing_task_ids
+    obj._complete_task_ids[:] = initial_complete_task_ids
 
     obj._update_registry()
 
-    assert expected_new_taskids == obj._new_taskids
-    assert expected_active_taskids == obj._active_taskids
-    assert expected_finishing_taskids == obj._finishing_taskids
-    assert expected_complete_taskids == obj._complete_taskids
+    assert expected_new_task_ids == obj._new_task_ids
+    assert expected_active_task_ids == obj._active_task_ids
+    assert expected_finishing_task_ids == obj._finishing_task_ids
+    assert expected_complete_task_ids == obj._complete_task_ids
 
 
 params = [
@@ -189,8 +189,8 @@ def test_need_to_present(  # type: ignore
     expected,
 ):
 
-    obj._new_taskids[:] = new_taskids
-    obj._finishing_taskids[:] = finishing_taskids
+    obj._new_task_ids[:] = new_taskids
+    obj._finishing_task_ids[:] = finishing_taskids
 
     mock_time.time.return_value = current_time
     obj.last_time = last_time
