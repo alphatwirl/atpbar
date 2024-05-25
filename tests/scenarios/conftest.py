@@ -37,7 +37,7 @@ class MockProgressBar(Presentation):
         self.nfirsts += report["first"]
         self.nlasts += report["last"]
 
-    def _present(self) -> None:
+    def _present(self, report: Report) -> None:
         pass
 
 

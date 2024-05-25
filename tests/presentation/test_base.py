@@ -5,10 +5,11 @@ import uuid
 import pytest
 
 from atpbar.presentation.base import Presentation
+from atpbar.progress_report import Report
 
 
 class MockProgressBar(Presentation):
-    def _present(self) -> None:
+    def _present(self, report: Report) -> None:
         pass
 
 

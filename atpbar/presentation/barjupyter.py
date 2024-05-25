@@ -21,7 +21,7 @@ class ProgressBarJupyter(Presentation):
     def __repr__(self) -> str:
         return "{}()".format(self.__class__.__name__)
 
-    def _present(self) -> None:
+    def _present(self, report: Report) -> None:
         self._create_widgets()
         self._update_widgets()
 

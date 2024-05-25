@@ -28,7 +28,7 @@ class ProgressBar(Presentation):
         except AttributeError:
             return MINIMUM_TERMINAL_WIDTH
 
-    def _present(self) -> None:
+    def _present(self, report: Report) -> None:
         self._erase_active_bars()
         self._compose_just_finished_bars()
         self._compose_active_bars()

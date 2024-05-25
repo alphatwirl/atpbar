@@ -43,12 +43,12 @@ class Presentation(ABC):
                 return
             if not self._need_to_present():
                 return
-            self._present()
+            self._present(report)
             self._update_registry()
             self.last_time = time.time()
 
     @abstractmethod
-    def _present(self) -> None:
+    def _present(self, report: Report) -> None:
         pass
 
     def _register_report(self, report: Report) -> bool:
