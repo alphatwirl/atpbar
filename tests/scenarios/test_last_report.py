@@ -51,7 +51,7 @@ def test_one_loop_break_exception(
     progressbar0 = presentations[0]
     assert nreports_expected == len(progressbar0.reports)
     assert 1 == len(progressbar0.task_ids)
-    assert 1 == progressbar0.nfirsts
+    assert 1 == progressbar0.n_firsts
     assert 1 == progressbar0.nlasts
     done_total_list_expected = [(ndones, niterations)]
     done_total_list_actual = [

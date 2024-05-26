@@ -92,7 +92,7 @@ def test_multiprocessing_from_loop(
         assert nreports_expected == len(progressbar0.reports)
         # one report from `atpbar` in the main thread
 
-        assert 1 == progressbar0.nfirsts
+        assert 1 == progressbar0.n_firsts
         assert 1 == progressbar0.nlasts
         assert 1 == len(progressbar0.task_ids)
 
@@ -104,7 +104,7 @@ def test_multiprocessing_from_loop(
 
             progressbar0 = presentations[0]
             assert ntasks + 1 == len(progressbar0.task_ids)
-            assert ntasks + 1 == progressbar0.nfirsts
+            assert ntasks + 1 == progressbar0.n_firsts
             assert ntasks + 1 == progressbar0.nlasts
             assert nreports_expected == len(progressbar0.reports)
 
@@ -118,7 +118,7 @@ def test_multiprocessing_from_loop(
             progressbar1 = presentations[1]
 
             assert ntasks + 1 == len(progressbar0.task_ids) + len(progressbar1.task_ids)
-            assert ntasks + 1 == progressbar0.nfirsts + progressbar1.nfirsts
+            assert ntasks + 1 == progressbar0.n_firsts + progressbar1.n_firsts
             assert ntasks + 1 == progressbar0.nlasts + progressbar1.nlasts
             assert nreports_expected == len(progressbar0.reports) + len(
                 progressbar1.reports
@@ -132,6 +132,6 @@ def test_multiprocessing_from_loop(
     assert npresentations + 1 == len(presentations)
     progressbar = presentations[-2]
     assert 1 == len(progressbar.task_ids)
-    assert 1 == progressbar.nfirsts
+    assert 1 == progressbar.n_firsts
     assert 1 == progressbar.nlasts
     assert 4 + 1 == len(progressbar.reports)
