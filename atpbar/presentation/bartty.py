@@ -19,7 +19,7 @@ class ProgressBar(Presentation):
         self.just_finished_bars = list[str]()
 
     def __repr__(self) -> str:
-        return "{}()".format(self.__class__.__name__)
+        return '{}()'.format(self.__class__.__name__)
 
     def _get_width(self) -> int:
         try:
@@ -40,7 +40,7 @@ class ProgressBar(Presentation):
             return
         self._erase_active_bars()
         out.write(s.rstrip())
-        out.write("\n")
+        out.write('\n')
         out.flush()
         self._draw_active_bars()
 
@@ -51,7 +51,7 @@ class ProgressBar(Presentation):
         if n_lines == 0:
             return
 
-        code = "\033[1G" + "\033[A" * (n_lines - 1) + "\033[0J"
+        code = '\033[1G' + '\033[A' * (n_lines - 1) + '\033[0J'
         # '\033[1G' move the cursor to the beginning of the line
         # '\033[A' move the cursor up
         # '\033[0J' clear from cursor to end of screen
@@ -76,37 +76,37 @@ class ProgressBar(Presentation):
 
     def _compose_bar_from_report(self, report: Report) -> str:
 
-        percent = float(report["done"]) / report["total"] if report["total"] > 0 else 1
+        percent = float(report['done']) / report['total'] if report['total'] > 0 else 1
         # e.g., 0.7143369818769065
 
-        bar = (":" * int(percent * 40)).ljust(40, " ")
-        # e.g., "::::::::::::::::::::::::::::            "
+        bar = (':' * int(percent * 40)).ljust(40, ' ')
+        # e.g., '::::::::::::::::::::::::::::            '
 
         percent = round(percent * 100, 2)
         # e.g., 71.43
 
-        format = " {percent:6.2f}% {bar:s} | {done:8d} / {total:8d} |:  {name} "
+        format = ' {percent:6.2f}% {bar:s} | {done:8d} / {total:8d} |:  {name} '
 
         ret = format.format(
             percent=percent,
             bar=bar,
-            done=report["done"],
-            total=report["total"],
-            name=report["name"],
+            done=report['done'],
+            total=report['total'],
+            name=report['name'],
         )
-        # e.g., "  71.43% ::::::::::::::::::::::::::::             |     3981 /     5573 |:  task name "
+        # e.g., '  71.43% ::::::::::::::::::::::::::::             |     3981 /     5573 |:  task name '
 
-        ret = ret[: self.width].ljust(self.width, " ")
-        # e.g., "  71.43% ::::::::::::::::::::::::::::             |     3981 /     5573 |:  task na"
+        ret = ret[: self.width].ljust(self.width, ' ')
+        # e.g., '  71.43% ::::::::::::::::::::::::::::             |     3981 /     5573 |:  task na'
 
         return ret
 
     def _draw_just_finished_bars(self) -> None:
         if self.just_finished_bars:
-            self.out.write("\n".join(self.just_finished_bars) + "\n")
+            self.out.write('\n'.join(self.just_finished_bars) + '\n')
             self.out.flush()
 
     def _draw_active_bars(self) -> None:
         if self.active_bars:
-            self.out.write("\n".join(self.active_bars))
+            self.out.write('\n'.join(self.active_bars))
             self.out.flush()

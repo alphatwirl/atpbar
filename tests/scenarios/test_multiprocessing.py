@@ -42,7 +42,7 @@ def run_with_multiprocessing(
         p.start()
 
     for i in atpbar(range(ntasks)):  # `atpbar` is used here
-        name = "task {}".format(i)
+        name = 'task {}'.format(i)
         n = niterations[i]
         queue.put((n, name, time_starting_task))
         time.sleep(0.01)
@@ -55,10 +55,10 @@ def run_with_multiprocessing(
 
 
 @pytest.mark.xfail()
-@pytest.mark.parametrize("time_starting_task", [0, 0.01, 0.2])
-@pytest.mark.parametrize("niterations", [[5, 4, 3], [5, 0, 1], [0], [1]])
-@pytest.mark.parametrize("ntasks", [3, 1, 0])
-@pytest.mark.parametrize("nprocesses", [6, 2, 1])
+@pytest.mark.parametrize('time_starting_task', [0, 0.01, 0.2])
+@pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
+@pytest.mark.parametrize('ntasks', [3, 1, 0])
+@pytest.mark.parametrize('nprocesses', [6, 2, 1])
 def test_multiprocessing_from_loop(
     mock_create_presentation: MockCreatePresentation,
     nprocesses: int,

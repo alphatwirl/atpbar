@@ -12,7 +12,7 @@ from atpbar.progress_report import ProgressReporter
 from .conftest import MockCreatePresentation
 
 
-@pytest.mark.parametrize("niterations", [10, 1, 0])
+@pytest.mark.parametrize('niterations', [10, 1, 0])
 def test_one_loop(
     mock_create_presentation: MockCreatePresentation, niterations: int
 ) -> None:
@@ -37,7 +37,7 @@ def run_with_threading(nthreads: int = 3, niterations: list[int] = [5, 5, 5]) ->
 
     threads = []
     for i in range(nthreads):
-        name = "thread {}".format(i)
+        name = 'thread {}'.format(i)
         n = niterations[i]
         t = threading.Thread(target=task, args=(n, name))
         t.start()
@@ -47,8 +47,8 @@ def run_with_threading(nthreads: int = 3, niterations: list[int] = [5, 5, 5]) ->
     flush()
 
 
-@pytest.mark.parametrize("niterations", [[5, 4, 3], [5, 0, 1], [0], [1]])
-@pytest.mark.parametrize("nthreads", [3, 1, 0])
+@pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
+@pytest.mark.parametrize('nthreads', [3, 1, 0])
 def test_threading(
     mock_create_presentation: MockCreatePresentation,
     nthreads: int,
@@ -96,7 +96,7 @@ def run_with_multiprocessing(
         p = multiprocessing.Process(target=worker, args=(reporter, task, queue))
         p.start()
     for i in range(ntasks):
-        name = "task {}".format(i)
+        name = 'task {}'.format(i)
         n = niterations[i]
         queue.put((n, name))
     for i in range(nprocesses):
@@ -106,9 +106,9 @@ def run_with_multiprocessing(
 
 
 @pytest.mark.xfail()
-@pytest.mark.parametrize("niterations", [[5, 4, 3], [5, 0, 1], [0], [1]])
-@pytest.mark.parametrize("ntasks", [3, 1, 0])
-@pytest.mark.parametrize("nprocesses", [4, 1])
+@pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
+@pytest.mark.parametrize('ntasks', [3, 1, 0])
+@pytest.mark.parametrize('nprocesses', [4, 1])
 def test_multiprocessing(
     mock_create_presentation: MockCreatePresentation,
     nprocesses: int,

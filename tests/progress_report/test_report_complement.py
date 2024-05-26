@@ -19,16 +19,16 @@ def test_repr(obj: ProgressReportComplementer) -> None:
 def test_complement(obj: ProgressReportComplementer) -> None:
 
     task_id = uuid.uuid4()
-    report0 = Report(taskid=task_id, done=0, total=10, name="task1")
+    report0 = Report(taskid=task_id, done=0, total=10, name='task1')
     expected0 = Report(
-        taskid=task_id, done=0, total=10, first=True, last=False, name="task1"
+        taskid=task_id, done=0, total=10, first=True, last=False, name='task1'
     )
     obj(report0)
     assert expected0 == report0
 
     report1 = Report(taskid=task_id, done=1, total=12)
     expected1 = Report(
-        taskid=task_id, done=1, total=12, first=False, last=False, name="task1"
+        taskid=task_id, done=1, total=12, first=False, last=False, name='task1'
     )
     obj(report1)
     assert expected0 == report0
@@ -36,7 +36,7 @@ def test_complement(obj: ProgressReportComplementer) -> None:
 
     report2 = Report(taskid=task_id, done=2)
     expected2 = Report(
-        taskid=task_id, done=2, total=12, first=False, last=False, name="task1"
+        taskid=task_id, done=2, total=12, first=False, last=False, name='task1'
     )
     obj(report2)
     assert expected0 == report0
@@ -45,7 +45,7 @@ def test_complement(obj: ProgressReportComplementer) -> None:
 
     report3 = Report(taskid=task_id, done=12)
     expected3 = Report(
-        taskid=task_id, done=12, total=12, first=False, last=True, name="task1"
+        taskid=task_id, done=12, total=12, first=False, last=True, name='task1'
     )
     obj(report3)
     assert expected0 == report0

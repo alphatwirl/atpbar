@@ -16,8 +16,8 @@ def mock_queue() -> mock.Mock:
 @pytest.fixture()
 def mock_time(monkeypatch: pytest.MonkeyPatch) -> mock.Mock:
     ret = mock.Mock()
-    module = sys.modules["atpbar.progress_report.reporter"]
-    monkeypatch.setattr(module, "time", ret)
+    module = sys.modules['atpbar.progress_report.reporter']
+    monkeypatch.setattr(module, 'time', ret)
     return ret
 
 
@@ -45,7 +45,7 @@ class TestReport:
         current_time = 15324.345
         taskid = uuid.uuid4()
         mock_time.time.return_value = current_time
-        monkeypatch.setattr(obj, "_need_to_report", mock.Mock(return_value=True))
+        monkeypatch.setattr(obj, '_need_to_report', mock.Mock(return_value=True))
         report = Report(taskid=taskid, done=0, total=10)
         obj.report(report)
         assert [mock.call(report)] == mock_queue.put.call_args_list
@@ -61,7 +61,7 @@ class TestReport:
         current_time = 15324.345
         taskid = uuid.uuid4()
         mock_time.time.return_value = current_time
-        monkeypatch.setattr(obj, "_need_to_report", mock.Mock(return_value=False))
+        monkeypatch.setattr(obj, '_need_to_report', mock.Mock(return_value=False))
         report = Report(taskid=taskid, done=0, total=10)
         obj.report(report)
         assert [] == mock_queue.put.call_args_list

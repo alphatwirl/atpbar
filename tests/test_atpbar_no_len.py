@@ -24,7 +24,7 @@ def mock_fetch_reporter(
     ret.return_value.__enter__ = mock.Mock()
     ret.return_value.__enter__.return_value = mock_reporter
     ret.return_value.__exit__ = mock.Mock()
-    monkeypatch.setattr(atpbar.main, "fetch_reporter", ret)
+    monkeypatch.setattr(atpbar.main, 'fetch_reporter', ret)
     return ret
 
 
@@ -66,5 +66,5 @@ def test_atpbar_no_len(
 
     ##
     assert 2 == len(caplog.records)
-    assert "WARNING" == caplog.records[0].levelname
-    assert "length is unknown" in caplog.records[0].msg
+    assert 'WARNING' == caplog.records[0].levelname
+    assert 'length is unknown' in caplog.records[0].msg

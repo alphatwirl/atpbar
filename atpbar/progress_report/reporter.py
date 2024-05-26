@@ -60,7 +60,7 @@ class ProgressReporter:
         self.stream_redirection_enablaed = True
 
     def __repr__(self) -> str:
-        return "{}(queue={!r}, interval={!r})".format(
+        return '{}(queue={!r}, interval={!r})'.format(
             self.__class__.__name__, self.queue, self.interval
         )
 
@@ -81,20 +81,20 @@ class ProgressReporter:
 
         self.queue.put(report)
 
-        self.last_time[report["taskid"]] = time.time()
+        self.last_time[report['taskid']] = time.time()
 
     def _need_to_report(self, report: Report) -> bool:
 
-        if report["first"]:
+        if report['first']:
             return True
 
-        if report["last"]:
+        if report['last']:
             return True
 
-        if report["taskid"] not in self.last_time:
+        if report['taskid'] not in self.last_time:
             return True
 
-        if time.time() - self.last_time[report["taskid"]] > self.interval:
+        if time.time() - self.last_time[report['taskid']] > self.interval:
             return True
 
         return False

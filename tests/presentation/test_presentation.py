@@ -27,29 +27,29 @@ if has_jupyter_notebook:
 class_ids = [c.__name__ for c in classes]
 
 
-@pytest.mark.parametrize("Class", classes, ids=class_ids)
+@pytest.mark.parametrize('Class', classes, ids=class_ids)
 def test_presentation(Class: type[Presentation]) -> None:
     i = uuid.uuid4()
     j = uuid.uuid4()
     obj = Class()
     repr(obj)
     obj.active()
-    obj.present(dict(name="task1", done=0, total=10, taskid=i, first=True, last=False))
-    obj.present(dict(name="task1", done=2, total=10, taskid=i, first=False, last=False))
+    obj.present(dict(name='task1', done=0, total=10, taskid=i, first=True, last=False))
+    obj.present(dict(name='task1', done=2, total=10, taskid=i, first=False, last=False))
     obj.active()
-    obj.present(dict(name="task1", done=0, total=5, taskid=j, first=True, last=False))
-    obj.present(dict(name="task1", done=3, total=5, taskid=j, first=False, last=False))
+    obj.present(dict(name='task1', done=0, total=5, taskid=j, first=True, last=False))
+    obj.present(dict(name='task1', done=3, total=5, taskid=j, first=False, last=False))
     obj.active()
-    obj.present(dict(name="task1", done=10, total=10, taskid=i, first=False, last=True))
+    obj.present(dict(name='task1', done=10, total=10, taskid=i, first=False, last=True))
     obj.active()
-    obj.present(dict(name="task1", done=5, total=5, taskid=j, first=False, last=True))
+    obj.present(dict(name='task1', done=5, total=5, taskid=j, first=False, last=True))
     obj.active()
     obj.active()
-    obj.present(dict(name="task1", done=10, total=10, taskid=i, first=False, last=True))
+    obj.present(dict(name='task1', done=10, total=10, taskid=i, first=False, last=True))
     obj.active()
 
 
-@pytest.mark.parametrize("Class", classes, ids=class_ids)
+@pytest.mark.parametrize('Class', classes, ids=class_ids)
 def test_time_track(Class: type[Presentation]) -> None:
     i = uuid.uuid4()
     obj = Class()
@@ -57,7 +57,7 @@ def test_time_track(Class: type[Presentation]) -> None:
     obj.active()
     obj.present(
         dict(
-            name="task1",
+            name='task1',
             done=0,
             total=10,
             taskid=i,
@@ -67,7 +67,7 @@ def test_time_track(Class: type[Presentation]) -> None:
     )
     obj.present(
         dict(
-            name="task1",
+            name='task1',
             done=2,
             total=10,
             taskid=i,
@@ -77,7 +77,7 @@ def test_time_track(Class: type[Presentation]) -> None:
     )
     obj.present(
         dict(
-            name="task1",
+            name='task1',
             done=10,
             total=10,
             taskid=i,

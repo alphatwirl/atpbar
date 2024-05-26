@@ -53,7 +53,7 @@ class Presentation(ABC):
 
     def _register_report(self, report: Report) -> bool:
 
-        taskid = report["taskid"]
+        taskid = report['taskid']
 
         if taskid in self._complete_task_ids:
             return False
@@ -63,7 +63,7 @@ class Presentation(ABC):
         if taskid in self._finishing_task_ids:
             return True
 
-        if report["last"]:
+        if report['last']:
             try:
                 self._active_task_ids.remove(taskid)
             except ValueError:
@@ -123,5 +123,5 @@ class Presentation(ABC):
 
     def _write(self, s: str, out: TextIO) -> None:
         out.write(s.rstrip())
-        out.write("\n")
+        out.write('\n')
         out.flush()
