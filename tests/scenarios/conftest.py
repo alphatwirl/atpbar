@@ -15,7 +15,7 @@ class MockProgressBar(Presentation):
         self.reports = list[Report]()
         self.task_ids = set[UUID]()
         self.n_firsts = 0
-        self.nlasts = 0
+        self.n_lasts = 0
 
     def __str__(self) -> str:
         lines = []
@@ -24,7 +24,7 @@ class MockProgressBar(Presentation):
             len(self.reports),
             len(self.task_ids),
             self.n_firsts,
-            self.nlasts,
+            self.n_lasts,
         )
         lines.append(l)
         lines.extend(["  {}".format(r) for r in self.reports])
@@ -35,7 +35,7 @@ class MockProgressBar(Presentation):
         self.reports.append(report)
         self.task_ids.add(report["taskid"])
         self.n_firsts += report["first"]
-        self.nlasts += report["last"]
+        self.n_lasts += report["last"]
 
     def _present(self, report: Report) -> None:
         pass

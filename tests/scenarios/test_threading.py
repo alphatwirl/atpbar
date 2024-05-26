@@ -90,7 +90,7 @@ def test_threading_from_loop(
 
         assert 1 == len(progressbar0.task_ids)
         assert 1 == progressbar0.n_firsts
-        assert 1 == progressbar0.nlasts
+        assert 1 == progressbar0.n_lasts
 
     else:
 
@@ -100,7 +100,7 @@ def test_threading_from_loop(
             assert nreports_expected == len(progressbar0.reports)
             assert nthreads + 1 == len(progressbar0.task_ids)
             assert nthreads + 1 == progressbar0.n_firsts
-            assert nthreads + 1 == progressbar0.nlasts
+            assert nthreads + 1 == progressbar0.n_lasts
 
             progressbar1 = presentations[1]
             assert 0 == len(progressbar1.reports)
@@ -116,7 +116,7 @@ def test_threading_from_loop(
             )
             assert nthreads + 1 == len(progressbar0.task_ids) + len(progressbar1.task_ids)
             assert nthreads + 1 == progressbar0.n_firsts + progressbar1.n_firsts
-            assert nthreads + 1 == progressbar0.nlasts + progressbar1.nlasts
+            assert nthreads + 1 == progressbar0.n_lasts + progressbar1.n_lasts
 
             progressbar2 = presentations[2]
             assert 0 == len(progressbar2.reports)
@@ -131,4 +131,4 @@ def test_threading_from_loop(
     assert 4 + 1 == len(progressbar.reports)
     assert 1 == len(progressbar.task_ids)
     assert 1 == progressbar.n_firsts
-    assert 1 == progressbar.nlasts
+    assert 1 == progressbar.n_lasts

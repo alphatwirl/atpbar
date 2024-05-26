@@ -33,7 +33,7 @@ def test_one_loop(
     assert nreports_expected == len(progressbar0.reports)
     assert 1 == len(progressbar0.task_ids)
     assert 1 == progressbar0.n_firsts
-    assert 1 == progressbar0.nlasts
+    assert 1 == progressbar0.n_lasts
 
     #
     progressbar1 = presentations[1]
@@ -53,7 +53,7 @@ def test_nested_loops(mock_create_presentation: MockCreatePresentation) -> None:
     assert (3 + 1) * 4 + 4 + 1 == len(progressbar0.reports)
     assert 5 == len(progressbar0.task_ids)
     assert 5 == progressbar0.n_firsts
-    assert 5 == progressbar0.nlasts
+    assert 5 == progressbar0.n_lasts
 
     progressbar1 = presentations[1]
     assert 0 == len(progressbar1.reports)
@@ -107,7 +107,7 @@ def test_threading(
     assert nreports_expected == len(progressbar0.reports)
     assert nthreads == len(progressbar0.task_ids)
     assert nthreads == progressbar0.n_firsts
-    assert nthreads == progressbar0.nlasts
+    assert nthreads == progressbar0.n_lasts
 
     progressbar1 = presentations[1]
     assert 0 == len(progressbar1.reports)
@@ -178,7 +178,7 @@ def test_multiprocessing(
     assert nreports_expected == len(progressbar0.reports)
     assert ntasks == len(progressbar0.task_ids)
     assert ntasks == progressbar0.n_firsts
-    assert ntasks == progressbar0.nlasts
+    assert ntasks == progressbar0.n_lasts
 
     progressbar1 = presentations[1]
     assert 0 == len(progressbar1.reports)
