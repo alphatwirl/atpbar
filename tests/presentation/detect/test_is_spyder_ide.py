@@ -1,5 +1,4 @@
 import os
-import sys
 import unittest.mock as mock
 from collections.abc import Iterator
 
@@ -10,14 +9,17 @@ from atpbar.presentation.detect.spy import is_spyder_ide
 
 @pytest.fixture()
 def mock_spyder_module(monkeypatch: pytest.MonkeyPatch) -> Iterator[mock.Mock]:
+    from atpbar.presentation.detect import spy
+
     ret = mock.Mock()
-    module = sys.modules['atpbar.presentation.detect.spy']
-    monkeypatch.setattr(module, 'spyder', ret)
+    monkeypatch.setattr(spy, 'spyder', ret)
     yield ret
 
 
 @pytest.fixture()
 def mock_get_ipython(monkeypatch: pytest.MonkeyPatch) -> Iterator[mock.Mock]:
+    from atpbar.presentation.detect import spy
+
     mock_ipython = mock.Mock()
     mock_ipython.config = {
         'IPKernelApp': {
@@ -27,8 +29,7 @@ def mock_get_ipython(monkeypatch: pytest.MonkeyPatch) -> Iterator[mock.Mock]:
     ret = mock.Mock()
     ret.return_value = mock_ipython
 
-    module = sys.modules['atpbar.presentation.detect.spy']
-    monkeypatch.setattr(module, 'get_ipython', ret)
+    monkeypatch.setattr(spy, 'get_ipython', ret)
     yield ret
 
 

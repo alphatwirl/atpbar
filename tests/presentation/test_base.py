@@ -1,4 +1,4 @@
-import sys
+import time
 import unittest.mock as mock
 import uuid
 
@@ -15,11 +15,12 @@ class MockProgressBar(Presentation):
 
 @pytest.fixture()
 def mock_time(monkeypatch: pytest.MonkeyPatch) -> mock.Mock:
-    ret = mock.Mock()
-    module = sys.modules['atpbar.presentation.base']
-    monkeypatch.setattr(module, 'time', ret)
-    ret.time.return_value = 1533374055.904203
-    return ret
+    from atpbar.presentation import base
+
+    m = mock.Mock(wraps=time)
+    m.time.return_value = 1533374055.904203
+    monkeypatch.setattr(base, 'time', m)
+    return m
 
 
 @pytest.fixture()

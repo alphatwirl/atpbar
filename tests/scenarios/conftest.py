@@ -1,4 +1,3 @@
-import sys
 from collections.abc import Iterator
 from uuid import UUID
 
@@ -66,23 +65,28 @@ class MockCreatePresentation:
 
 @pytest.fixture(autouse=True)
 def mock_create_presentation(monkeypatch: pytest.MonkeyPatch) -> MockCreatePresentation:
+    from atpbar import machine
+
     ret = MockCreatePresentation()
-    module = sys.modules['atpbar.machine']
-    monkeypatch.setattr(module, 'create_presentation', ret)
+    monkeypatch.setattr(machine, 'create_presentation', ret)
     return ret
 
 
 @pytest.fixture(autouse=True)
 def machine(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
-    module = sys.modules['atpbar.funcs']
-    y = module.StateMachine()
-    monkeypatch.setattr(module, '_machine', y)
-    yield
-    shutdown()
+    from atpbar import funcs
+
+    y = funcs.StateMachine()
+    monkeypatch.setattr(funcs, '_machine', y)
+    try:
+        yield
+    finally:
+        shutdown()
 
 
 @pytest.fixture(autouse=True)
 def reporter_interval(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
-    module = sys.modules['atpbar.progress_report.reporter']
-    monkeypatch.setattr(module, 'DEFAULT_INTERVAL', 0)
+    from atpbar.progress_report import reporter
+
+    monkeypatch.setattr(reporter, 'DEFAULT_INTERVAL', 0)
     yield

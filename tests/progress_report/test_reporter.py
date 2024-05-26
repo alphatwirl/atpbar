@@ -1,4 +1,4 @@
-import sys
+import time
 import unittest.mock as mock
 import uuid
 from typing import Any
@@ -15,10 +15,11 @@ def mock_queue() -> mock.Mock:
 
 @pytest.fixture()
 def mock_time(monkeypatch: pytest.MonkeyPatch) -> mock.Mock:
-    ret = mock.Mock()
-    module = sys.modules['atpbar.progress_report.reporter']
-    monkeypatch.setattr(module, 'time', ret)
-    return ret
+    from atpbar.progress_report import reporter
+
+    m = mock.Mock(wraps=time)
+    monkeypatch.setattr(reporter, 'time', m)
+    return m
 
 
 @pytest.fixture()
