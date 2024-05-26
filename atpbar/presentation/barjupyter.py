@@ -74,6 +74,7 @@ class ProgressBarJupyter(Presentation):
         percent_fmt = "{:6.2f}%".format(percent)
 
         box = self.widget_dict[report["taskid"]][0]
+        box  # to silence not-used warning
 
         bar = self.widget_dict[report["taskid"]][1]
         bar.value = report["done"]
