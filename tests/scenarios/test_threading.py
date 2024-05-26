@@ -88,7 +88,7 @@ def test_threading_from_loop(
         assert nreports_expected == len(progressbar0.reports)
         # one report from `atpbar` in the main thread
 
-        assert 1 == len(progressbar0.taskids)
+        assert 1 == len(progressbar0.task_ids)
         assert 1 == progressbar0.nfirsts
         assert 1 == progressbar0.nlasts
 
@@ -98,7 +98,7 @@ def test_threading_from_loop(
 
             progressbar0 = presentations[0]
             assert nreports_expected == len(progressbar0.reports)
-            assert nthreads + 1 == len(progressbar0.taskids)
+            assert nthreads + 1 == len(progressbar0.task_ids)
             assert nthreads + 1 == progressbar0.nfirsts
             assert nthreads + 1 == progressbar0.nlasts
 
@@ -114,7 +114,7 @@ def test_threading_from_loop(
             assert nreports_expected == len(progressbar0.reports) + len(
                 progressbar1.reports
             )
-            assert nthreads + 1 == len(progressbar0.taskids) + len(progressbar1.taskids)
+            assert nthreads + 1 == len(progressbar0.task_ids) + len(progressbar1.task_ids)
             assert nthreads + 1 == progressbar0.nfirsts + progressbar1.nfirsts
             assert nthreads + 1 == progressbar0.nlasts + progressbar1.nlasts
 
@@ -129,6 +129,6 @@ def test_threading_from_loop(
     assert npresentations + 1 == len(presentations)
     progressbar = presentations[-2]
     assert 4 + 1 == len(progressbar.reports)
-    assert 1 == len(progressbar.taskids)
+    assert 1 == len(progressbar.task_ids)
     assert 1 == progressbar.nfirsts
     assert 1 == progressbar.nlasts

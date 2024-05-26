@@ -173,7 +173,7 @@ params = [
     pytest.param([], [], 4.0, 2.0, 3.0, False),
 ]
 param_names = (
-    "new_taskids, finishing_taskids, " "current_time, last_time, interval, expected"
+    "new_task_ids, finishing_task_ids, " "current_time, last_time, interval, expected"
 )
 
 
@@ -181,16 +181,16 @@ param_names = (
 def test_need_to_present(  # type: ignore
     obj,
     mock_time,
-    new_taskids,
-    finishing_taskids,
+    new_task_ids,
+    finishing_task_ids,
     current_time,
     last_time,
     interval,
     expected,
 ):
 
-    obj._new_task_ids[:] = new_taskids
-    obj._finishing_task_ids[:] = finishing_taskids
+    obj._new_task_ids[:] = new_task_ids
+    obj._finishing_task_ids[:] = finishing_task_ids
 
     mock_time.time.return_value = current_time
     obj.last_time = last_time
