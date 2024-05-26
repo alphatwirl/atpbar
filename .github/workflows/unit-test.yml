@@ -3,10 +3,10 @@ name: Run unit test
 on:
   push:
     branches:
-      - "**"
+      - main
   pull_request:
     branches:
-      - "**"
+      - main
 
 concurrency:
   group: unit-test-${{ github.head_ref }}
@@ -46,7 +46,17 @@ jobs:
       - name: Run tests
         run: pytest -vv --cov --cov-report=xml
 
+      - name: Check Codecov token # e.g., Dependabot doesn't have the CODECOV_TOKEN
+        id: check_codecov_token
+        run: |
+          if [ -n "${{ secrets.CODECOV_TOKEN }}" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Upload coverage to Codecov
+        if: steps.check_codecov_token.outputs.exists == 'true'
         uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: true
