@@ -92,9 +92,9 @@ def test_multiprocessing_from_loop(
         assert nreports_expected == len(progressbar0.reports)
         # one report from `atpbar` in the main thread
 
-        assert 1 == progressbar0.nfirsts
-        assert 1 == progressbar0.nlasts
-        assert 1 == len(progressbar0.taskids)
+        assert 1 == progressbar0.n_firsts
+        assert 1 == progressbar0.n_lasts
+        assert 1 == len(progressbar0.task_ids)
 
     else:
         if 2 == len(presentations):
@@ -103,9 +103,9 @@ def test_multiprocessing_from_loop(
             assert 0 == len(progressbar1.reports)
 
             progressbar0 = presentations[0]
-            assert ntasks + 1 == len(progressbar0.taskids)
-            assert ntasks + 1 == progressbar0.nfirsts
-            assert ntasks + 1 == progressbar0.nlasts
+            assert ntasks + 1 == len(progressbar0.task_ids)
+            assert ntasks + 1 == progressbar0.n_firsts
+            assert ntasks + 1 == progressbar0.n_lasts
             assert nreports_expected == len(progressbar0.reports)
 
         else:
@@ -117,9 +117,9 @@ def test_multiprocessing_from_loop(
             progressbar0 = presentations[0]
             progressbar1 = presentations[1]
 
-            assert ntasks + 1 == len(progressbar0.taskids) + len(progressbar1.taskids)
-            assert ntasks + 1 == progressbar0.nfirsts + progressbar1.nfirsts
-            assert ntasks + 1 == progressbar0.nlasts + progressbar1.nlasts
+            assert ntasks + 1 == len(progressbar0.task_ids) + len(progressbar1.task_ids)
+            assert ntasks + 1 == progressbar0.n_firsts + progressbar1.n_firsts
+            assert ntasks + 1 == progressbar0.n_lasts + progressbar1.n_lasts
             assert nreports_expected == len(progressbar0.reports) + len(
                 progressbar1.reports
             )
@@ -131,7 +131,7 @@ def test_multiprocessing_from_loop(
         pass
     assert npresentations + 1 == len(presentations)
     progressbar = presentations[-2]
-    assert 1 == len(progressbar.taskids)
-    assert 1 == progressbar.nfirsts
-    assert 1 == progressbar.nlasts
+    assert 1 == len(progressbar.task_ids)
+    assert 1 == progressbar.n_firsts
+    assert 1 == progressbar.n_lasts
     assert 4 + 1 == len(progressbar.reports)

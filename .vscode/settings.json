@@ -29,9 +29,11 @@
   ],
   "cSpell.words": [
     "autouse",
+    "capsys",
     "funcs",
     "initargs",
     "inlinehilite",
+    "ipywidgets",
     "linenums",
     "pbar",
     "pygments",

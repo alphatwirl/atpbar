@@ -28,7 +28,7 @@ class ProgressBar(Presentation):
         except AttributeError:
             return MINIMUM_TERMINAL_WIDTH
 
-    def _present(self) -> None:
+    def _present(self, report: Report) -> None:
         self._erase_active_bars()
         self._compose_just_finished_bars()
         self._compose_active_bars()
@@ -45,13 +45,13 @@ class ProgressBar(Presentation):
         self._draw_active_bars()
 
     def _erase_active_bars(self) -> None:
-        nlines = len(self._active_taskids) + len(self._finishing_taskids)
+        n_lines = len(self._active_task_ids) + len(self._finishing_task_ids)
         # must be the same as len(self.active_bars)
 
-        if nlines == 0:
+        if n_lines == 0:
             return
 
-        code = "\033[1G" + "\033[A" * (nlines - 1) + "\033[0J"
+        code = "\033[1G" + "\033[A" * (n_lines - 1) + "\033[0J"
         # '\033[1G' move the cursor to the beginning of the line
         # '\033[A' move the cursor up
         # '\033[0J' clear from cursor to end of screen
@@ -61,13 +61,13 @@ class ProgressBar(Presentation):
 
     def _compose_just_finished_bars(self) -> None:
         self.just_finished_bars = [
-            self._compose_bar_from_taskid(i) for i in self._finishing_taskids
+            self._compose_bar_from_taskid(i) for i in self._finishing_task_ids
         ]
 
     def _compose_active_bars(self) -> None:
         self.active_bars = [
             self._compose_bar_from_taskid(i)
-            for i in self._active_taskids + self._new_taskids
+            for i in self._active_task_ids + self._new_task_ids
         ]
 
     def _compose_bar_from_taskid(self, taskid: UUID) -> str:

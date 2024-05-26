@@ -21,7 +21,7 @@ class ProgressBarJupyter(Presentation):
     def __repr__(self) -> str:
         return "{}()".format(self.__class__.__name__)
 
-    def _present(self) -> None:
+    def _present(self, report: Report) -> None:
         self._create_widgets()
         self._update_widgets()
 
@@ -30,7 +30,7 @@ class ProgressBarJupyter(Presentation):
             self.container_widget = widgets.VBox()
             display(self.container_widget)
 
-        for taskid in self._new_taskids:
+        for taskid in self._new_task_ids:
             report = self._report_dict[taskid]
             self._create_widget(report)
 
@@ -54,14 +54,14 @@ class ProgressBarJupyter(Presentation):
 
     def _update_widgets(self) -> None:
         for taskid in (
-            self._finishing_taskids + self._active_taskids + self._new_taskids
+            self._finishing_task_ids + self._active_task_ids + self._new_task_ids
         ):
             report = self._report_dict[taskid]
             self._update_widget(report)
 
         self._reorder_widgets(report)
 
-        if not self._new_taskids and not self._active_taskids:
+        if not self._new_task_ids and not self._active_task_ids:
             self.container_widget = None
             self.active_box_list[:] = []
             self.complete_box_list[:] = []
@@ -74,6 +74,7 @@ class ProgressBarJupyter(Presentation):
         percent_fmt = "{:6.2f}%".format(percent)
 
         box = self.widget_dict[report["taskid"]][0]
+        box  # to silence not-used warning
 
         bar = self.widget_dict[report["taskid"]][1]
         bar.value = report["done"]
@@ -93,7 +94,7 @@ class ProgressBarJupyter(Presentation):
         )
 
     def _reorder_widgets(self, report: Report) -> None:
-        for taskid in self._finishing_taskids:
+        for taskid in self._finishing_task_ids:
             box, bar, label = self.widget_dict[taskid]
             if box in self.active_box_list:
                 self.active_box_list.remove(box)
