@@ -31,8 +31,8 @@ def atpbar(iterable: Iterable[T], /, name: Optional[str] = None) -> Iterable[T]:
         len_ = len(iterable)  # type: ignore
     except TypeError:
         logger = logging.getLogger(__name__)
-        logger.warning("length is unknown: {!r}".format(iterable))
-        logger.warning("atpbar is turned off")
+        logger.warning('length is unknown: {!r}'.format(iterable))
+        logger.warning('atpbar is turned off')
         return iterable
 
     if name is None:

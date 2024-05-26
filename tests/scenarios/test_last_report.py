@@ -8,9 +8,9 @@ from atpbar import atpbar
 from .conftest import MockCreatePresentation
 
 
-@pytest.mark.parametrize("method", ["break", "exception"])
-@pytest.mark.parametrize("niterations", [10, 1, 0])
-@pytest.mark.parametrize("ndones", [10, 4, 1, 0])
+@pytest.mark.parametrize('method', ['break', 'exception'])
+@pytest.mark.parametrize('niterations', [10, 1, 0])
+@pytest.mark.parametrize('ndones', [10, 4, 1, 0])
 def test_one_loop_break_exception(
     mock_create_presentation: MockCreatePresentation,
     niterations: int,
@@ -30,7 +30,7 @@ def test_one_loop_break_exception(
                 raise Exception()
 
     #
-    if method == "break":
+    if method == 'break':
         task_break(ndones, niterations)
     else:
         if ndones < niterations:
@@ -55,7 +55,7 @@ def test_one_loop_break_exception(
     assert 1 == progressbar0.n_lasts
     done_total_list_expected = [(ndones, niterations)]
     done_total_list_actual = [
-        (d["done"], d["total"]) for d in progressbar0._report_dict.values()
+        (d['done'], d['total']) for d in progressbar0._report_dict.values()
     ]
     assert collections.Counter(done_total_list_expected) == collections.Counter(
         done_total_list_actual

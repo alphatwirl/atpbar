@@ -9,9 +9,9 @@ from atpbar import atpbar, flush
 from .conftest import MockCreatePresentation
 
 
-@pytest.mark.parametrize("time_starting_task", [0, 0.01, 0.2])
-@pytest.mark.parametrize("n_iterations", [[5, 4, 3], [5, 0, 1], [0], [1]])
-@pytest.mark.parametrize("n_threads", [3, 1, 0])
+@pytest.mark.parametrize('time_starting_task', [0, 0.01, 0.2])
+@pytest.mark.parametrize('n_iterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
+@pytest.mark.parametrize('n_threads', [3, 1, 0])
 def test_threading_from_loop(
     mock_create_presentation: MockCreatePresentation,
     n_threads: int,
@@ -52,7 +52,7 @@ def test_threading_from_loop(
         # progress bar for this loop and the `atpbar` will not wait.
         for i in atpbar(range(n_threads)):
 
-            name = "thread {}".format(i)
+            name = 'thread {}'.format(i)
             n = n_iterations[i]
             t = threading.Thread(target=task, args=(n, name, time_starting_task))
             t.start()

@@ -10,16 +10,16 @@ from atpbar.presentation.detect.jupy import is_jupyter_notebook
 @pytest.fixture()
 def mock_widgets_module(monkeypatch: pytest.MonkeyPatch) -> Iterator[mock.Mock]:
     ret = mock.Mock()
-    module = sys.modules["atpbar.presentation.detect.jupy"]
-    monkeypatch.setattr(module, "widgets", ret)
+    module = sys.modules['atpbar.presentation.detect.jupy']
+    monkeypatch.setattr(module, 'widgets', ret)
     yield ret
 
 
 @pytest.fixture()
 def mock_display_module(monkeypatch: pytest.MonkeyPatch) -> Iterator[mock.Mock]:
     ret = mock.Mock()
-    module = sys.modules["atpbar.presentation.detect.jupy"]
-    monkeypatch.setattr(module, "display", ret)
+    module = sys.modules['atpbar.presentation.detect.jupy']
+    monkeypatch.setattr(module, 'display', ret)
     yield ret
 
 
@@ -27,23 +27,23 @@ def mock_display_module(monkeypatch: pytest.MonkeyPatch) -> Iterator[mock.Mock]:
 def mock_get_ipython(monkeypatch: pytest.MonkeyPatch) -> Iterator[mock.Mock]:
     mock_ipython = mock.Mock()
     mock_ipython.config = {
-        "IPKernelApp": {
-            "connection_file": "/some/path/kernel.json",
+        'IPKernelApp': {
+            'connection_file': '/some/path/kernel.json',
         },
     }
     ret = mock.Mock()
     ret.return_value = mock_ipython
 
-    module = sys.modules["atpbar.presentation.detect.jupy"]
-    monkeypatch.setattr(module, "get_ipython", ret)
+    module = sys.modules['atpbar.presentation.detect.jupy']
+    monkeypatch.setattr(module, 'get_ipython', ret)
     yield ret
 
 
 @pytest.fixture()
 def mock_is_spyder_ide(monkeypatch: pytest.MonkeyPatch) -> Iterator[mock.Mock]:
     ret = mock.Mock()
-    module = sys.modules["atpbar.presentation.detect.jupy"]
-    monkeypatch.setattr(module, "is_spyder_ide", ret)
+    module = sys.modules['atpbar.presentation.detect.jupy']
+    monkeypatch.setattr(module, 'is_spyder_ide', ret)
     yield ret
 
 

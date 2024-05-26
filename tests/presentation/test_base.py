@@ -16,8 +16,8 @@ class MockProgressBar(Presentation):
 @pytest.fixture()
 def mock_time(monkeypatch: pytest.MonkeyPatch) -> mock.Mock:
     ret = mock.Mock()
-    module = sys.modules["atpbar.presentation.base"]
-    monkeypatch.setattr(module, "time", ret)
+    module = sys.modules['atpbar.presentation.base']
+    monkeypatch.setattr(module, 'time', ret)
     ret.time.return_value = 1533374055.904203
     return ret
 
@@ -63,12 +63,12 @@ params = [
     pytest.param(dict(taskid=1, last=True), [], [], [], [1], [], [], [], [1], False),
 ]
 param_names = (
-    "report, "
-    "initial_new_task_ids, initial_active_task_ids, "
-    "initial_finishing_task_ids, initial_complete_task_ids, "
-    "expected_new_task_ids, expected_active_task_ids, "
-    "expected_finishing_task_ids, expected_complete_task_ids, "
-    "expected_return"
+    'report, '
+    'initial_new_task_ids, initial_active_task_ids, '
+    'initial_finishing_task_ids, initial_complete_task_ids, '
+    'expected_new_task_ids, expected_active_task_ids, '
+    'expected_finishing_task_ids, expected_complete_task_ids, '
+    'expected_return'
 )
 
 
@@ -133,10 +133,10 @@ params = [
     ),
 ]
 param_names = (
-    "initial_new_task_ids, initial_active_task_ids, "
-    "initial_finishing_task_ids, initial_complete_task_ids, "
-    "expected_new_task_ids, expected_active_task_ids, "
-    "expected_finishing_task_ids, expected_complete_task_ids, "
+    'initial_new_task_ids, initial_active_task_ids, '
+    'initial_finishing_task_ids, initial_complete_task_ids, '
+    'expected_new_task_ids, expected_active_task_ids, '
+    'expected_finishing_task_ids, expected_complete_task_ids, '
 )
 
 
@@ -173,7 +173,7 @@ params = [
     pytest.param([], [], 4.0, 2.0, 3.0, False),
 ]
 param_names = (
-    "new_task_ids, finishing_task_ids, " "current_time, last_time, interval, expected"
+    'new_task_ids, finishing_task_ids, ' 'current_time, last_time, interval, expected'
 )
 
 

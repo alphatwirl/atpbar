@@ -19,7 +19,7 @@ class ProgressBarJupyter(Presentation):
         ]()
 
     def __repr__(self) -> str:
-        return "{}()".format(self.__class__.__name__)
+        return '{}()'.format(self.__class__.__name__)
 
     def _present(self, report: Report) -> None:
         self._create_widgets()
@@ -36,21 +36,21 @@ class ProgressBarJupyter(Presentation):
 
     def _create_widget(self, report: Report) -> None:
         bar = widgets.IntProgress(
-            value=report["done"],
+            value=report['done'],
             min=0,
-            max=report["total"],
-            description="",
-            bar_style="",  # 'success', 'info', 'warning', 'danger' or ''
-            orientation="horizontal",
+            max=report['total'],
+            description='',
+            bar_style='',  # 'success', 'info', 'warning', 'danger' or ''
+            orientation='horizontal',
         )
-        label = widgets.HTML(value="")
+        label = widgets.HTML(value='')
         box = widgets.HBox([bar, label])
         self.active_box_list.append(box)
         if self.container_widget is not None:
             self.container_widget.children = (
                 self.complete_box_list + self.active_box_list
             )
-        self.widget_dict[report["taskid"]] = (box, bar, label)
+        self.widget_dict[report['taskid']] = (box, bar, label)
 
     def _update_widgets(self) -> None:
         for taskid in (
@@ -69,28 +69,28 @@ class ProgressBarJupyter(Presentation):
 
     def _update_widget(self, report: Report) -> None:
 
-        percent = float(report["done"]) / report["total"] if report["total"] > 0 else 1
+        percent = float(report['done']) / report['total'] if report['total'] > 0 else 1
         percent = round(percent * 100, 2)
-        percent_fmt = "{:6.2f}%".format(percent)
+        percent_fmt = '{:6.2f}%'.format(percent)
 
-        box = self.widget_dict[report["taskid"]][0]
+        box = self.widget_dict[report['taskid']][0]
         box  # to silence not-used warning
 
-        bar = self.widget_dict[report["taskid"]][1]
-        bar.value = report["done"]
-        bar.max = report["total"]
+        bar = self.widget_dict[report['taskid']][1]
+        bar.value = report['done']
+        bar.max = report['total']
         bar.description = percent_fmt
-        if report["last"]:
-            bar.bar_style = "success"
+        if report['last']:
+            bar.bar_style = 'success'
 
-        label = self.widget_dict[report["taskid"]][2]
+        label = self.widget_dict[report['taskid']][2]
         name_field_length = 32
-        percent = float(report["done"]) / report["total"] if report["total"] > 0 else 1
-        bar = (":" * int(percent * 40)).ljust(40, " ")
+        percent = float(report['done']) / report['total'] if report['total'] > 0 else 1
+        bar = (':' * int(percent * 40)).ljust(40, ' ')
         percent = round(percent * 100, 2)
-        name = report["name"][0:name_field_length]
-        label.value = "<pre> | {:8d} / {:8d} |: {:<{}s}</pre>".format(
-            report["done"], report["total"], name, name_field_length
+        name = report['name'][0:name_field_length]
+        label.value = '<pre> | {:8d} / {:8d} |: {:<{}s}</pre>'.format(
+            report['done'], report['total'], name, name_field_length
         )
 
     def _reorder_widgets(self, report: Report) -> None:

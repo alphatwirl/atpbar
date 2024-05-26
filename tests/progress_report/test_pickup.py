@@ -146,7 +146,7 @@ class TestRunUntilReportsStopComing:
     @pytest.fixture()
     def mock_thread_start(self, monkeypatch: pytest.MonkeyPatch) -> Iterator[mock.Mock]:
         y = mock.Mock()
-        monkeypatch.setattr(ProgressReportPickup, "start", y)
+        monkeypatch.setattr(ProgressReportPickup, 'start', y)
         yield y
 
     @pytest.fixture()
@@ -173,7 +173,7 @@ class TestRunUntilReportsStopComing:
         monkeypatch: pytest.MonkeyPatch,
     ) -> Iterator[mock.Mock]:
         y = mock.Mock()
-        monkeypatch.setattr(pickup, "_short_sleep", y)
+        monkeypatch.setattr(pickup, '_short_sleep', y)
         yield y
 
     @pytest.fixture(autouse=True)
@@ -182,7 +182,7 @@ class TestRunUntilReportsStopComing:
         ret.time.return_value = 1000.0
         from atpbar.progress_report import pickup as m
 
-        monkeypatch.setattr(m, "time", ret)
+        monkeypatch.setattr(m, 'time', ret)
         return ret
 
     def test_no_report(

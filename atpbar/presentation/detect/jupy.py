@@ -34,7 +34,7 @@ def is_jupyter_notebook() -> bool:
         return False
 
     try:
-        if "IPKernelApp" not in get_ipython().config:
+        if 'IPKernelApp' not in get_ipython().config:
             return False
     except:
         return False

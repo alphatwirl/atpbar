@@ -11,7 +11,7 @@ class ProgressPrint(Presentation):
         self.last_time_map = dict[UUID, float]()
 
     def __repr__(self) -> str:
-        return "{}()".format(self.__class__.__name__)
+        return '{}()'.format(self.__class__.__name__)
 
     def present(self, report: Report) -> None:
 
@@ -23,35 +23,35 @@ class ProgressPrint(Presentation):
 
         self._present(report)
 
-        self.last_time_map[report["taskid"]] = self._time()
+        self.last_time_map[report['taskid']] = self._time()
 
     def _present(self, report: Report) -> None:
-        time_ = time.strftime("%m/%d %H:%M", time.localtime(time.time()))
-        percent = float(report["done"]) / report["total"] if report["total"] > 0 else 1
+        time_ = time.strftime('%m/%d %H:%M', time.localtime(time.time()))
+        percent = float(report['done']) / report['total'] if report['total'] > 0 else 1
         percent = round(percent * 100, 2)
-        line = "{time} : {done:8d} / {total:8d} ({percent:6.2f}%): {name} ".format(
+        line = '{time} : {done:8d} / {total:8d} ({percent:6.2f}%): {name} '.format(
             time=time_,
-            done=report["done"],
-            total=report["total"],
+            done=report['done'],
+            total=report['total'],
             percent=percent,
-            name=report["name"],
+            name=report['name'],
         )
-        line = "{}\n".format(line)
+        line = '{}\n'.format(line)
         self.out.write(line)
         self.out.flush()
 
     def _need_to_present_(self, report: Report) -> bool:
 
-        if report["first"]:
+        if report['first']:
             return True
 
-        if report["last"]:
+        if report['last']:
             return True
 
-        if report["taskid"] not in self.last_time_map:
+        if report['taskid'] not in self.last_time_map:
             return True
 
-        if self._time() - self.last_time_map[report["taskid"]] > self.interval:
+        if self._time() - self.last_time_map[report['taskid']] > self.interval:
             return True
 
         return False

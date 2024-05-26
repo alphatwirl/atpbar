@@ -22,7 +22,7 @@ class ProgressReportComplementer:
         self.previous_reports = dict[UUID, Report]()
 
     def __call__(self, report: Report) -> None:
-        taskid = report["taskid"]
+        taskid = report['taskid']
         if taskid in self.previous_reports:
             self._complement(taskid, report)
         self._first(report)
@@ -36,14 +36,14 @@ class ProgressReportComplementer:
         report.update(report_copy)
 
     def _first(self, report: Report) -> None:
-        if "first" in report:
+        if 'first' in report:
             return
-        report["first"] = report["done"] == 0
+        report['first'] = report['done'] == 0
 
     def _last(self, report: Report) -> None:
-        if "last" in report:
+        if 'last' in report:
             return
-        report["last"] = report["done"] >= report["total"]
+        report['last'] = report['done'] >= report['total']
 
     def _store(self, taskid: UUID, report: Report) -> None:
         report.pop('first', None)
