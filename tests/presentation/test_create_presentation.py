@@ -17,16 +17,14 @@ except ImportError:
 
 @pytest.fixture(params=[True, False])
 def isatty(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch) -> bool:
+    from atpbar.presentation import create
+
     ret = request.param
     org_stdout = sys.stdout
-    f = mock.Mock(
-        **{
-            'stdout.isatty.return_value': ret,
-            'stdout.write.side_effect': lambda x: org_stdout.write(x),
-        }
-    )
-    module = sys.modules['atpbar.presentation.create']
-    monkeypatch.setattr(module, 'sys', f)
+    m = mock.Mock(wraps=sys)
+    m.stdout.isatty.return_value = ret
+    m.stdout.write.side_effect = lambda x: org_stdout.write(x)
+    monkeypatch.setattr(create, 'sys', m)
     return ret
 
 
@@ -40,11 +38,12 @@ else:
 def is_jupyter_notebook(
     request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch
 ) -> bool:
+    from atpbar.presentation import create
+
     ret = request.param
-    f = mock.Mock()
-    f.return_value = ret
-    module = sys.modules['atpbar.presentation.create']
-    monkeypatch.setattr(module, 'is_jupyter_notebook', f)
+    m = mock.Mock(wraps=create.is_jupyter_notebook)
+    m.return_value = ret
+    monkeypatch.setattr(create, 'is_jupyter_notebook', m)
     return ret
 
 
@@ -52,14 +51,15 @@ def is_jupyter_notebook(
 def del_ProgressBarJupyter(
     request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch
 ) -> bool:
+    from atpbar.presentation import create
+
     ret = request.param
-    module = sys.modules['atpbar.presentation.create']
     if ret:
-        monkeypatch.delattr(module, 'ProgressBarJupyter', raising=False)
+        monkeypatch.delattr(create, 'ProgressBarJupyter', raising=False)
     else:
         m = mock.Mock()
         m().__class__.__name__ = 'ProgressBarJupyter'
-        monkeypatch.setattr(module, 'ProgressBarJupyter', m, raising=False)
+        monkeypatch.setattr(create, 'ProgressBarJupyter', m, raising=False)
     return ret
 
 
