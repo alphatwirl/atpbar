@@ -7,8 +7,8 @@ from atpbar.presentation.create import create_presentation
 
 has_jupyter_notebook = False
 try:
-    import ipywidgets as widgets
-    from IPython.display import display
+    import ipywidgets as widgets  # noqa: F401
+    from IPython.display import display  # noqa: F401
 
     has_jupyter_notebook = True
 except ImportError:
