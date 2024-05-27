@@ -29,12 +29,12 @@ def isatty(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch) -> b
 
 
 if has_jupyter_notebook:
-    is_jupyter_notebook_parames = [True, False]
+    is_jupyter_notebook_params = [True, False]
 else:
-    is_jupyter_notebook_parames = [False]
+    is_jupyter_notebook_params = [False]
 
 
-@pytest.fixture(params=is_jupyter_notebook_parames)
+@pytest.fixture(params=is_jupyter_notebook_params)
 def is_jupyter_notebook(
     request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch
 ) -> bool:

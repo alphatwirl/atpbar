@@ -57,7 +57,7 @@ class ProgressReporter:
         self.complete_report = ProgressReportComplementer()
         self.notices_from_sub_processes = notices_from_sub_processes
         self.stream_queue = stream_queue
-        self.stream_redirection_enablaed = True
+        self.stream_redirection_enabled = True
 
     def __repr__(self) -> str:
         return '{}(queue={!r}, interval={!r})'.format(

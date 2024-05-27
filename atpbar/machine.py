@@ -103,7 +103,7 @@ class Active(State):
         self._start_pickup()
 
         if self.stream_redirection.disabled:
-            self.reporter.stream_redirection_enablaed = False
+            self.reporter.stream_redirection_enabled = False
 
     def _start_pickup(self) -> None:
         presentation = create_presentation()
@@ -176,7 +176,7 @@ class Registered(State):
         self.reporter = reporter
         if reporter is None:
             return
-        if reporter.stream_redirection_enablaed:
+        if reporter.stream_redirection_enabled:
             register_stream_queue(reporter.stream_queue)
 
     def fetch_reporter(self, lock: Lock) -> Iterator[ProgressReporter | None]:
