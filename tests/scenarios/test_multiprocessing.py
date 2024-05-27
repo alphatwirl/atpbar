@@ -12,7 +12,7 @@ from .conftest import MockCreatePresentation
 
 
 def run_with_multiprocessing(
-    nprocesses: int, ntasks: int, niterations: list[int], time_starting_task: float
+    n_processes: int, n_tasks: int, n_iterations: list[int], time_starting_task: float
 ) -> None:
 
     def task(n: int, name: str, time_starting: float) -> None:
@@ -37,17 +37,17 @@ def run_with_multiprocessing(
     reporter = find_reporter()
     queue = multiprocessing.JoinableQueue()  # type: ignore
 
-    for i in range(nprocesses):
+    for i in range(n_processes):
         p = multiprocessing.Process(target=worker, args=(reporter, task, queue))
         p.start()
 
-    for i in atpbar(range(ntasks)):  # `atpbar` is used here
+    for i in atpbar(range(n_tasks)):  # `atpbar` is used here
         name = 'task {}'.format(i)
-        n = niterations[i]
+        n = n_iterations[i]
         queue.put((n, name, time_starting_task))
         time.sleep(0.01)
 
-    for i in range(nprocesses):
+    for i in range(n_processes):
         queue.put(None)
         queue.join()
 
@@ -56,40 +56,42 @@ def run_with_multiprocessing(
 
 @pytest.mark.xfail()
 @pytest.mark.parametrize('time_starting_task', [0, 0.01, 0.2])
-@pytest.mark.parametrize('niterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
-@pytest.mark.parametrize('ntasks', [3, 1, 0])
-@pytest.mark.parametrize('nprocesses', [6, 2, 1])
+@pytest.mark.parametrize('n_iterations', [[5, 4, 3], [5, 0, 1], [0], [1]])
+@pytest.mark.parametrize('n_tasks', [3, 1, 0])
+@pytest.mark.parametrize('n_processes', [6, 2, 1])
 def test_multiprocessing_from_loop(
     mock_create_presentation: MockCreatePresentation,
-    nprocesses: int,
-    ntasks: int,
-    niterations: list[int],
+    n_processes: int,
+    n_tasks: int,
+    n_iterations: list[int],
     time_starting_task: float,
 ) -> None:
 
-    # make niterations as long as ntasks. repeat if necessary
-    niterations = list(
-        itertools.chain(*itertools.repeat(niterations, ntasks // len(niterations) + 1))
-    )[:ntasks]
+    # make n_iterations as long as n_tasks. repeat if necessary
+    n_iterations = list(
+        itertools.chain(
+            *itertools.repeat(n_iterations, n_tasks // len(n_iterations) + 1)
+        )
+    )[:n_tasks]
 
-    run_with_multiprocessing(nprocesses, ntasks, niterations, time_starting_task)
+    run_with_multiprocessing(n_processes, n_tasks, n_iterations, time_starting_task)
 
     ## print()
     ## print(mock_create_presentation)
 
-    nreports_expected_from_main = ntasks + 1
-    nreports_expected_from_tasks = sum(niterations) + ntasks
-    nreports_expected = nreports_expected_from_main + nreports_expected_from_tasks
+    n_reports_expected_from_main = n_tasks + 1
+    n_reports_expected_from_tasks = sum(n_iterations) + n_tasks
+    n_reports_expected = n_reports_expected_from_main + n_reports_expected_from_tasks
 
     presentations = mock_create_presentation.presentations
 
-    if nreports_expected_from_tasks == 0:
+    if n_reports_expected_from_tasks == 0:
         assert 3 == len(presentations)  # in find_reporter(), at the
         # end of `atpbar` in the main
         # process, and in flush().
 
         progressbar0 = presentations[0]
-        assert nreports_expected == len(progressbar0.reports)
+        assert n_reports_expected == len(progressbar0.reports)
         # one report from `atpbar` in the main thread
 
         assert 1 == progressbar0.n_firsts
@@ -103,10 +105,10 @@ def test_multiprocessing_from_loop(
             assert 0 == len(progressbar1.reports)
 
             progressbar0 = presentations[0]
-            assert ntasks + 1 == len(progressbar0.task_ids)
-            assert ntasks + 1 == progressbar0.n_firsts
-            assert ntasks + 1 == progressbar0.n_lasts
-            assert nreports_expected == len(progressbar0.reports)
+            assert n_tasks + 1 == len(progressbar0.task_ids)
+            assert n_tasks + 1 == progressbar0.n_firsts
+            assert n_tasks + 1 == progressbar0.n_lasts
+            assert n_reports_expected == len(progressbar0.reports)
 
         else:
             assert 3 == len(presentations)
@@ -117,19 +119,21 @@ def test_multiprocessing_from_loop(
             progressbar0 = presentations[0]
             progressbar1 = presentations[1]
 
-            assert ntasks + 1 == len(progressbar0.task_ids) + len(progressbar1.task_ids)
-            assert ntasks + 1 == progressbar0.n_firsts + progressbar1.n_firsts
-            assert ntasks + 1 == progressbar0.n_lasts + progressbar1.n_lasts
-            assert nreports_expected == len(progressbar0.reports) + len(
+            assert n_tasks + 1 == len(progressbar0.task_ids) + len(
+                progressbar1.task_ids
+            )
+            assert n_tasks + 1 == progressbar0.n_firsts + progressbar1.n_firsts
+            assert n_tasks + 1 == progressbar0.n_lasts + progressbar1.n_lasts
+            assert n_reports_expected == len(progressbar0.reports) + len(
                 progressbar1.reports
             )
 
     # At this point the pickup shouldn't be owned. Therefore, a new
     # `atpbar` in the main thread should own it.
-    npresentations = len(presentations)
+    n_presentations = len(presentations)
     for i in atpbar(range(4)):
         pass
-    assert npresentations + 1 == len(presentations)
+    assert n_presentations + 1 == len(presentations)
     progressbar = presentations[-2]
     assert 1 == len(progressbar.task_ids)
     assert 1 == progressbar.n_firsts
