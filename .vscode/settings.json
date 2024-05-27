@@ -29,6 +29,7 @@
   ],
   "cSpell.words": [
     "autouse",
+    "caplog",
     "capsys",
     "funcs",
     "initargs",
@@ -38,6 +39,7 @@
     "pbar",
     "pygments",
     "randint",
+    "spyder",
     "starmap",
     "superfences",
     "taskid"
