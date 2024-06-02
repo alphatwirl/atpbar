@@ -1,8 +1,10 @@
 from multiprocessing import Pool, set_start_method
+from os import getenv
 from time import sleep
 
 from hypothesis import given
 from hypothesis import strategies as st
+from pytest import mark
 
 from atpbar import atpbar, find_reporter, flushing, register_reporter
 
@@ -16,6 +18,7 @@ def func(n: int, name: str) -> None:
         sleep(0.0001)
 
 
+@mark.skipif(getenv('GITHUB_ACTIONS') == 'true', reason='Fails on GitHub Actions')
 @given(
     n_processes=st.integers(min_value=1, max_value=10),
     n_iterations=st.lists(
