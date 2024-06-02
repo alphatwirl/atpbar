@@ -1,11 +1,13 @@
 from collections.abc import Iterator
+from contextlib import contextmanager
 from uuid import UUID
 
-import pytest
+from pytest import MonkeyPatch
 
-from atpbar.funcs import shutdown
+from atpbar import funcs, machine
+from atpbar.funcs import StateMachine, shutdown
 from atpbar.presentation.base import Presentation
-from atpbar.progress_report import Report
+from atpbar.progress_report import Report, reporter
 
 
 class MockProgressBar(Presentation):
@@ -63,30 +65,38 @@ class MockCreatePresentation:
         return ret
 
 
-@pytest.fixture(autouse=True)
-def mock_create_presentation(monkeypatch: pytest.MonkeyPatch) -> MockCreatePresentation:
-    from atpbar import machine
+@contextmanager
+def monkeypatch_machine() -> Iterator[StateMachine]:
+    with MonkeyPatch.context() as m:
+        _machine = StateMachine()
+        m.setattr(funcs, '_machine', _machine)
+        try:
+            yield _machine
+        finally:
+            shutdown()
 
-    ret = MockCreatePresentation()
-    monkeypatch.setattr(machine, 'create_presentation', ret)
-    return ret
 
-
-@pytest.fixture(autouse=True)
-def machine(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
-    from atpbar import funcs
-
-    y = funcs.StateMachine()
-    monkeypatch.setattr(funcs, '_machine', y)
-    try:
+@contextmanager
+def monkeypatch_reporter_interval() -> Iterator[None]:
+    interval = 0
+    with MonkeyPatch.context() as m:
+        m.setattr(reporter, 'DEFAULT_INTERVAL', interval)
         yield
-    finally:
-        shutdown()
 
 
-@pytest.fixture(autouse=True)
-def reporter_interval(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
-    from atpbar.progress_report import reporter
+@contextmanager
+def mock_create_presentation() -> Iterator[MockCreatePresentation]:
+    y = MockCreatePresentation()
+    with MonkeyPatch.context() as m:
+        m.setattr(machine, 'create_presentation', y)
+        yield y
 
-    monkeypatch.setattr(reporter, 'DEFAULT_INTERVAL', 0)
-    yield
+
+@contextmanager
+def mock_presentations() -> Iterator[list[MockProgressBar]]:
+    with (
+        monkeypatch_machine(),
+        monkeypatch_reporter_interval(),
+        mock_create_presentation() as y,
+    ):
+        yield y.presentations
