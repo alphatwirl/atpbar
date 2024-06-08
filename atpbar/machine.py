@@ -6,6 +6,36 @@ from .presentation import create_presentation
 from .progress_report import ProgressReporter, ProgressReportPickup, Report
 from .stream import StreamQueue, StreamRedirection, register_stream_queue
 
+'''Finite state machine
+
+State Diagram:
+
+     .----------------------------------------------.
+     |                                              |
+     |               .-------------.                |
+     |    .--------->|   Initial   |                |
+     |    |          '-------------'                |
+     |    |                 | prepare_reporter()    |
+     |  shutdown()          | flush()               |
+     |    |                 v                       |
+     |    |          .-------------.                |
+     |    '----------|   Active    |                |
+     |               '-------------'                |
+     '----------------------------------------------'
+              |                               |
+              |--------------------------.    |-------------.
+         register_reporter()             |    | disable()   |
+              |                          |    |             |
+              v                          |    v             |
+        .-------------.              .-------------.        |
+        | Registered  |              |  Disabled   |        |
+        '-------------'              '-------------'        |
+              |                                             |
+              '---------------------------------------------'
+
+
+'''
+
 
 class StateMachine:
     def __init__(self) -> None:
