@@ -1,3 +1,4 @@
+import abc
 from collections.abc import Iterator
 from contextlib import AbstractContextManager, contextmanager
 from multiprocessing import Queue
@@ -68,7 +69,7 @@ class StateMachine:
         return self.state.fetch_reporter(lock=self.lock)
 
 
-class State:
+class State(abc.ABC):
     '''The base class of the states'''
 
     def __init__(self) -> None:
@@ -83,9 +84,10 @@ class State:
     def disable(self) -> 'State':
         return Disabled()
 
-    @contextmanager
-    def fetch_reporter(self, lock: Lock) -> Iterator[ProgressReporter | None]:
-        yield None
+    @abc.abstractmethod
+    def fetch_reporter(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]: ...
 
     def flush(self) -> 'State':
         return self
@@ -228,6 +230,10 @@ class Disabled(State):
 
     def __init__(self) -> None:
         self.reporter = None
+
+    @contextmanager
+    def fetch_reporter(self, lock: Lock) -> Iterator[None]:
+        yield None
 
 
 def in_main_thread() -> bool:
