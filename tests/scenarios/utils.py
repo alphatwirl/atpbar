@@ -68,7 +68,7 @@ class MockCreatePresentation:
 @contextmanager
 def monkeypatch_machine() -> Iterator[StateMachine]:
     with MonkeyPatch.context() as m:
-        _machine = StateMachine(callback=callback.Callback())
+        _machine = StateMachine(callback=callback.CallbackImp())
         m.setattr(funcs, '_machine', _machine)
         try:
             yield _machine

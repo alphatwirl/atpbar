@@ -3,11 +3,11 @@ import contextlib
 import multiprocessing
 from collections.abc import Iterator
 
-from .callback import Callback
+from .callback import CallbackImp
 from .machine import StateMachine
 from .progress_report import ProgressReporter
 
-_machine = StateMachine(callback=Callback())
+_machine = StateMachine(callback=CallbackImp())
 
 
 def find_reporter() -> ProgressReporter | None:

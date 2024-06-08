@@ -2,8 +2,8 @@ import abc
 from collections.abc import Iterator
 from contextlib import AbstractContextManager, contextmanager
 from threading import Lock
+from typing import Protocol
 
-from .callback import Callback
 from .progress_report import ProgressReporter
 
 '''Finite state machine
@@ -35,6 +35,34 @@ State Diagram:
 
 
 '''
+
+
+class Callback(Protocol):
+    reporter: ProgressReporter | None
+
+    def __init__(self) -> None: ...
+
+    def on_active(self) -> None: ...
+
+    def fetch_reporter_in_active(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]: ...
+
+    def flush_in_active(self) -> None: ...
+
+    def shutdown_in_active(self) -> None: ...
+
+    def on_registered(self, reporter: ProgressReporter | None) -> None: ...
+
+    def fetch_reporter_in_registered(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]: ...
+
+    def on_disabled(self) -> None: ...
+
+    def fetch_reporter_in_disabled(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]: ...
 
 
 class StateMachine:

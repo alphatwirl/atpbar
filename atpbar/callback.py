@@ -8,7 +8,7 @@ from .progress_report import ProgressReporter, ProgressReportPickup, Report
 from .stream import StreamQueue, StreamRedirection, register_stream_queue
 
 
-class Callback:
+class CallbackImp:
 
     def __init__(self) -> None:
         self.reporter: ProgressReporter | None = None
