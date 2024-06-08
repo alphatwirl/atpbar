@@ -38,9 +38,8 @@ State Diagram:
 
 
 class StateMachine:
-    def __init__(self) -> None:
+    def __init__(self, callback: Callback) -> None:
         self.lock = Lock()
-        callback = Callback()
         self.state: State = Initial(callback=callback)
 
     def find_reporter(self) -> ProgressReporter | None:
