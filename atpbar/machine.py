@@ -1,4 +1,5 @@
 from collections.abc import Iterator
+from contextlib import AbstractContextManager, contextmanager
 from multiprocessing import Queue
 from threading import Lock, current_thread, main_thread
 
@@ -61,10 +62,10 @@ class StateMachine:
         with self.lock:
             self.state = self.state.shutdown()
 
-    def fetch_reporter(self) -> Iterator[ProgressReporter | None]:
+    def fetch_reporter(self) -> AbstractContextManager[ProgressReporter | None]:
         with self.lock:
             self.state = self.state.prepare_reporter()
-        yield from self.state.fetch_reporter(lock=self.lock)
+        return self.state.fetch_reporter(lock=self.lock)
 
 
 class State:
@@ -82,6 +83,7 @@ class State:
     def disable(self) -> 'State':
         return Disabled()
 
+    @contextmanager
     def fetch_reporter(self, lock: Lock) -> Iterator[ProgressReporter | None]:
         yield None
 
@@ -104,6 +106,7 @@ class Initial(State):
     def prepare_reporter(self) -> State:
         return Active()
 
+    @contextmanager
     def fetch_reporter(self, lock: Lock) -> Iterator[ProgressReporter | None]:
         yield self.reporter
 
@@ -153,6 +156,7 @@ class Active(State):
         self._end_pickup()
         self._start_pickup()
 
+    @contextmanager
     def fetch_reporter(self, lock: Lock) -> Iterator[ProgressReporter | None]:
 
         if not in_main_thread():
@@ -209,6 +213,7 @@ class Registered(State):
         if reporter.stream_redirection_enabled:
             register_stream_queue(reporter.stream_queue)
 
+    @contextmanager
     def fetch_reporter(self, lock: Lock) -> Iterator[ProgressReporter | None]:
         if self.reporter is None:
             yield self.reporter

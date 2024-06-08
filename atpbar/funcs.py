@@ -101,6 +101,5 @@ import multiprocessing.queues  # noqa: E402 F401
 atexit.register(shutdown)
 
 
-@contextlib.contextmanager
-def fetch_reporter() -> Iterator[ProgressReporter | None]:
-    yield from _machine.fetch_reporter()
+def fetch_reporter() -> contextlib.AbstractContextManager[ProgressReporter | None]:
+    return _machine.fetch_reporter()
