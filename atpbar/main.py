@@ -73,7 +73,7 @@ class Atpbar(Generic[T]):
             self.reporter = reporter
             self.loop_complete = False
             self._report_start()
-            with report_last(pbar=self):
+            with self._report_last():
                 for i, e in enumerate(self.iterable):
                     yield e
                     self._report_progress(i)
@@ -94,23 +94,22 @@ class Atpbar(Generic[T]):
         except BaseException:
             pass
 
+    @contextlib.contextmanager
+    def _report_last(self) -> Iterator[None]:
+        '''send a last report
 
-@contextlib.contextmanager
-def report_last(pbar: Atpbar[T]) -> Iterator[None]:
-    '''send a last report
+        This function sends the last report of the task when the loop ends with
+        `break` or an exception so that the progress bar will be updated with
+        the last complete iteration.
 
-    This function sends the last report of the task when the loop ends
-    with `break` or an exception so that the progress bar will be
-    updated with the last complete iteration.
-
-    '''
-    try:
-        yield
-    finally:
-        if pbar.loop_complete:
-            return
+        '''
         try:
-            report = Report(task_id=pbar.id_, first=False, last=True)
-            pbar.reporter.report(report)
-        except BaseException:
-            pass
+            yield
+        finally:
+            if self.loop_complete:
+                return
+            try:
+                report = Report(task_id=self.id_, first=False, last=True)
+                self.reporter.report(report)
+            except BaseException:
+                pass
