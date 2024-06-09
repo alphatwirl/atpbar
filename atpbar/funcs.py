@@ -3,10 +3,11 @@ import contextlib
 import multiprocessing
 from collections.abc import Iterator
 
+from .callback import CallbackImp
 from .machine import StateMachine
 from .progress_report import ProgressReporter
 
-_machine = StateMachine()
+_machine = StateMachine(callback=CallbackImp())
 
 
 def find_reporter() -> ProgressReporter | None:
@@ -101,6 +102,5 @@ import multiprocessing.queues  # noqa: E402 F401
 atexit.register(shutdown)
 
 
-@contextlib.contextmanager
-def fetch_reporter() -> Iterator[ProgressReporter | None]:
-    yield from _machine.fetch_reporter()
+def fetch_reporter() -> contextlib.AbstractContextManager[ProgressReporter | None]:
+    return _machine.fetch_reporter()

@@ -1,16 +1,86 @@
+import abc
 from collections.abc import Iterator
-from multiprocessing import Queue
-from threading import Lock, current_thread, main_thread
+from contextlib import AbstractContextManager, contextmanager
+from threading import Lock
+from typing import Protocol
 
-from .presentation import create_presentation
-from .progress_report import ProgressReporter, ProgressReportPickup, Report
-from .stream import StreamQueue, StreamRedirection, register_stream_queue
+from .progress_report import ProgressReporter
+
+'''Finite state machine
+
+State Diagram:
+
+     .----------------------------------------------.
+     |                                              |
+     |               .-------------.                |
+     |    .--------->|   Initial   |                |
+     |    |          '-------------'                |
+     |    |                 | prepare_reporter()    |
+     |  shutdown()          | flush()               |
+     |    |                 v                       |
+     |    |          .-------------.                |
+     |    '----------|   Active    |<---------.     |
+     |               '-------------'          |     |
+     |                      |on_yielded()     |     |
+     |                      |                 |     |
+     |                      v          on_resumed() |
+     |               .-------------.          |     |
+     |               |   Yielded   |----------'     |
+     |               '-------------'                |
+     '----------------------------------------------'
+              |                               |
+              |--------------------------.    |-------------.
+         register_reporter()             |    | disable()   |
+              |                          |    |             |
+              v                          |    v             |
+        .-------------.              .-------------.        |
+        | Registered  |              |  Disabled   |        |
+        '-------------'              '-------------'        |
+              |                                             |
+              '---------------------------------------------'
+
+
+'''
+
+
+class Callback(Protocol):
+    reporter: ProgressReporter | None
+    _machine: 'StateMachine'
+
+    def __init__(self) -> None: ...
+
+    def on_active(self) -> None: ...
+
+    def fetch_reporter_in_active(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]: ...
+
+    def fetch_reporter_in_yielded(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]: ...
+
+    def flush_in_active(self) -> None: ...
+
+    def shutdown_in_active(self) -> None: ...
+
+    def on_registered(self, reporter: ProgressReporter | None) -> None: ...
+
+    def fetch_reporter_in_registered(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]: ...
+
+    def on_disabled(self) -> None: ...
+
+    def fetch_reporter_in_disabled(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]: ...
 
 
 class StateMachine:
-    def __init__(self) -> None:
+    def __init__(self, callback: Callback) -> None:
+        callback._machine = self
         self.lock = Lock()
-        self.state: State = Initial()
+        self.state: State = Initial(callback=callback)
 
     def find_reporter(self) -> ProgressReporter | None:
         with self.lock:
@@ -31,29 +101,47 @@ class StateMachine:
         with self.lock:
             self.state = self.state.shutdown()
 
-    def fetch_reporter(self) -> Iterator[ProgressReporter | None]:
+    def fetch_reporter(self) -> AbstractContextManager[ProgressReporter | None]:
         with self.lock:
             self.state = self.state.prepare_reporter()
-        yield from self.state.fetch_reporter(lock=self.lock)
+        return self.state.fetch_reporter(lock=self.lock)
+
+    def on_yielded(self) -> None:
+        self.state = self.state.on_yielded()
+
+    def on_resumed(self) -> None:
+        self.state = self.state.on_resumed()
 
 
-class State:
+class State(abc.ABC):
     '''The base class of the states'''
 
-    def __init__(self) -> None:
-        self.reporter: ProgressReporter | None = None
+    def __init__(self, callback: Callback) -> None:
+        self._callback = callback
+
+    @property
+    def reporter(self) -> ProgressReporter | None:
+        return self._callback.reporter
 
     def prepare_reporter(self) -> 'State':
         return self
 
     def register_reporter(self, reporter: ProgressReporter) -> 'State':
-        return Registered(reporter=reporter)
+        return Registered(callback=self._callback, reporter=reporter)
 
     def disable(self) -> 'State':
-        return Disabled()
+        return Disabled(callback=self._callback)
 
-    def fetch_reporter(self, lock: Lock) -> Iterator[ProgressReporter | None]:
-        yield None
+    @abc.abstractmethod
+    def fetch_reporter(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]: ...
+
+    def on_yielded(self) -> 'State':
+        return self
+
+    def on_resumed(self) -> 'State':
+        return self
 
     def flush(self) -> 'State':
         return self
@@ -68,17 +156,18 @@ class Initial(State):
     The pickup is not running.
     '''
 
-    def __init__(self) -> None:
-        self.reporter = None
+    def __init__(self, callback: Callback) -> None:
+        super().__init__(callback)
 
     def prepare_reporter(self) -> State:
-        return Active()
+        return Active(callback=self._callback)
 
+    @contextmanager
     def fetch_reporter(self, lock: Lock) -> Iterator[ProgressReporter | None]:
         yield self.reporter
 
     def flush(self) -> State:
-        return Active()
+        return Active(callback=self._callback)
 
 
 class Active(State):
@@ -87,82 +176,44 @@ class Active(State):
     The pickup started and is running, typically, in the main process
     '''
 
-    def __init__(self) -> None:
+    def __init__(self, callback: Callback) -> None:
+        super().__init__(callback)
+        self._callback.on_active()
 
-        self.queue: Queue[Report] = Queue()
-        self.notices_from_sub_processes: Queue[bool] = Queue()
-        self.stream_queue: StreamQueue = Queue()
-        self.reporter = ProgressReporter(
-            queue=self.queue,
-            notices_from_sub_processes=self.notices_from_sub_processes,
-            stream_queue=self.stream_queue,
-        )
+    def fetch_reporter(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]:
+        return self._callback.fetch_reporter_in_active(lock=lock)
 
-        self.reporter_yielded = False
-
-        self._start_pickup()
-
-        if self.stream_redirection.disabled:
-            self.reporter.stream_redirection_enabled = False
-
-    def _start_pickup(self) -> None:
-        presentation = create_presentation()
-        self.pickup = ProgressReportPickup(self.queue, presentation)
-
-        self.stream_redirection = StreamRedirection(
-            queue=self.stream_queue, presentation=presentation
-        )
-        self.stream_redirection.start()
-
-    def _end_pickup(self) -> None:
-        self.pickup.end()
-
-        self.stream_redirection.end()
-
-    def _restart_pickup(self) -> None:
-        self._end_pickup()
-        self._start_pickup()
-
-    def fetch_reporter(self, lock: Lock) -> Iterator[ProgressReporter | None]:
-
-        if not in_main_thread():
-            self.to_restart_pickup = False
-            yield self.reporter
-            return
-
-        if self.reporter_yielded:
-            # called from an inner loop
-            yield self.reporter
-            return
-
-        self.reporter_yielded = True
-        self.to_restart_pickup = True
-
-        while not self.notices_from_sub_processes.empty():
-            _ = self.notices_from_sub_processes.get()
-
-        try:
-            yield self.reporter
-        finally:
-            self.reporter_yielded = False
-
-            while not self.notices_from_sub_processes.empty():
-                _ = self.notices_from_sub_processes.get()
-                self.to_restart_pickup = False
-
-            if not self.to_restart_pickup:
-                return
-
-            with lock:
-                self._restart_pickup()
+    def on_yielded(self) -> State:
+        return Yielded(callback=self._callback, active=self)
 
     def flush(self) -> State:
-        self._restart_pickup()
+        self._callback.flush_in_active()
         return self
 
     def shutdown(self) -> State:
-        self._end_pickup()
-        return Initial()
+        self._callback.shutdown_in_active()
+        return Initial(callback=self._callback)
+
+
+class Yielded(State):
+    '''Yielded state
+
+    The state during yielded from Active.fetch_reporter(). Inner loops of nested loops.
+    '''
+
+    def __init__(self, callback: Callback, active: Active) -> None:
+        super().__init__(callback)
+        self._active = active
+
+    def fetch_reporter(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]:
+        return self._callback.fetch_reporter_in_yielded(lock=lock)
+
+    def on_resumed(self) -> State:
+        return self._active
 
 
 class Registered(State):
@@ -172,29 +223,24 @@ class Registered(State):
     in the main process, is registered in the sub-process
     '''
 
-    def __init__(self, reporter: ProgressReporter | None) -> None:
-        self.reporter = reporter
-        if reporter is None:
-            return
-        if reporter.stream_redirection_enabled:
-            register_stream_queue(reporter.stream_queue)
+    def __init__(self, callback: Callback, reporter: ProgressReporter | None) -> None:
+        super().__init__(callback)
+        self._callback.on_registered(reporter)
 
-    def fetch_reporter(self, lock: Lock) -> Iterator[ProgressReporter | None]:
-        if self.reporter is None:
-            yield self.reporter
-            return
-
-        self.reporter.notices_from_sub_processes.put(True)
-        yield self.reporter
+    def fetch_reporter(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]:
+        return self._callback.fetch_reporter_in_registered(lock=lock)
 
 
 class Disabled(State):
     '''Disabled state'''
 
-    def __init__(self) -> None:
-        self.reporter = None
+    def __init__(self, callback: Callback) -> None:
+        super().__init__(callback)
+        self._callback.on_disabled()
 
-
-def in_main_thread() -> bool:
-    '''test if in the main thread'''
-    return current_thread() == main_thread()
+    def fetch_reporter(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]:
+        return self._callback.fetch_reporter_in_disabled(lock=lock)

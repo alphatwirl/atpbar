@@ -17,11 +17,12 @@ n_threads = 5
 
 with flushing():
     threads = []
-    for i in range(n_threads):
+    for i in atpbar(range(n_threads)):
         n = randint(5, 1000)
         # n = randint(1000, 10000)
         t = Thread(target=func, args=(n, f'Thread {i}'))
         t.start()
         threads.append(t)
+        sleep(0.01)
     for t in threads:
         t.join()

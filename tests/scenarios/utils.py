@@ -4,7 +4,7 @@ from uuid import UUID
 
 from pytest import MonkeyPatch
 
-from atpbar import funcs, machine
+from atpbar import callback, funcs
 from atpbar.funcs import StateMachine, shutdown
 from atpbar.presentation.base import Presentation
 from atpbar.progress_report import Report, reporter
@@ -68,7 +68,7 @@ class MockCreatePresentation:
 @contextmanager
 def monkeypatch_machine() -> Iterator[StateMachine]:
     with MonkeyPatch.context() as m:
-        _machine = StateMachine()
+        _machine = StateMachine(callback=callback.CallbackImp())
         m.setattr(funcs, '_machine', _machine)
         try:
             yield _machine
@@ -88,7 +88,7 @@ def monkeypatch_reporter_interval() -> Iterator[None]:
 def mock_create_presentation() -> Iterator[MockCreatePresentation]:
     y = MockCreatePresentation()
     with MonkeyPatch.context() as m:
-        m.setattr(machine, 'create_presentation', y)
+        m.setattr(callback, 'create_presentation', y)
         yield y
 
 
