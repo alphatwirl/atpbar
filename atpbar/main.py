@@ -67,6 +67,9 @@ class Atpbar(Generic[T]):
 
     def __iter__(self) -> Iterator[T]:
         with fetch_reporter() as reporter:
+            if reporter is None:
+                yield from self.iterable
+                return
             self.reporter = reporter
             self.loop_complete = False
             self._report_start()
@@ -78,8 +81,6 @@ class Atpbar(Generic[T]):
                     self.loop_complete = True
 
     def _report_start(self) -> None:
-        if self.reporter is None:
-            return
         try:
             report = Report(task_id=self.id_, name=self.name, done=0, total=self.len_)
             self.reporter.report(report)
@@ -87,8 +88,6 @@ class Atpbar(Generic[T]):
             pass
 
     def _report_progress(self, i: int) -> None:
-        if self.reporter is None:
-            return
         try:
             report = Report(task_id=self.id_, done=(i + 1))
             self.reporter.report(report)
@@ -109,8 +108,6 @@ def report_last(pbar: Atpbar[T]) -> Iterator[None]:
         yield
     finally:
         if pbar.loop_complete:
-            return
-        if pbar.reporter is None:
             return
         try:
             report = Report(task_id=pbar.id_, first=False, last=True)
