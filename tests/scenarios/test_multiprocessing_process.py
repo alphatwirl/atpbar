@@ -5,13 +5,14 @@ from hypothesis import given
 from hypothesis import strategies as st
 
 from atpbar import atpbar, disable, find_reporter, flushing, register_reporter
+from atpbar.progress_report import ProgressReporter
 
 from .utils import mock_presentations
 
 set_start_method('fork', force=True)
 
 
-def func(n: int, name: str, reporter) -> None:
+def func(n: int, name: str, reporter: ProgressReporter) -> None:
     register_reporter(reporter)
     for _ in atpbar(range(n), name=name):
         sleep(0.0001)
