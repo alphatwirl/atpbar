@@ -3,6 +3,7 @@ from contextlib import contextmanager
 from multiprocessing import Queue
 from threading import Lock, current_thread, main_thread
 
+from .machine import StateMachine
 from .presentation import create_presentation
 from .progress_report import ProgressReporter, ProgressReportPickup, Report
 from .stream import StreamQueue, StreamRedirection, register_stream_queue
@@ -12,6 +13,7 @@ class CallbackImp:
 
     def __init__(self) -> None:
         self.reporter: ProgressReporter | None = None
+        self._machine: StateMachine  # to be set by the StateMachine
 
     def on_active(self) -> None:
 
@@ -57,21 +59,17 @@ class CallbackImp:
             yield self.reporter
             return
 
-        if self.reporter_yielded:
-            # called from an inner loop
-            yield self.reporter
-            return
-
-        self.reporter_yielded = True
         self.to_restart_pickup = True
 
         while not self.notices_from_sub_processes.empty():
             _ = self.notices_from_sub_processes.get()
 
+        self._machine.on_yielded()
+
         try:
             yield self.reporter
         finally:
-            self.reporter_yielded = False
+            self._machine.on_resumed()
 
             while not self.notices_from_sub_processes.empty():
                 _ = self.notices_from_sub_processes.get()
@@ -88,6 +86,18 @@ class CallbackImp:
 
     def shutdown_in_active(self) -> None:
         self._end_pickup()
+
+    @contextmanager
+    def fetch_reporter_in_yielded(
+        self, lock: Lock
+    ) -> Iterator[ProgressReporter | None]:
+
+        if not in_main_thread():
+            self.to_restart_pickup = False
+            yield self.reporter
+            return
+
+        yield self.reporter
 
     def on_registered(self, reporter: ProgressReporter | None) -> None:
         self.reporter = reporter

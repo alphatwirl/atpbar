@@ -19,7 +19,13 @@ State Diagram:
      |  shutdown()          | flush()               |
      |    |                 v                       |
      |    |          .-------------.                |
-     |    '----------|   Active    |                |
+     |    '----------|   Active    |<---------.     |
+     |               '-------------'          |     |
+     |                      |on_yielded()     |     |
+     |                      |                 |     |
+     |                      v          on_resumed() |
+     |               .-------------.          |     |
+     |               |   Yielded   |----------'     |
      |               '-------------'                |
      '----------------------------------------------'
               |                               |
@@ -39,12 +45,17 @@ State Diagram:
 
 class Callback(Protocol):
     reporter: ProgressReporter | None
+    _machine: 'StateMachine'
 
     def __init__(self) -> None: ...
 
     def on_active(self) -> None: ...
 
     def fetch_reporter_in_active(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]: ...
+
+    def fetch_reporter_in_yielded(
         self, lock: Lock
     ) -> AbstractContextManager[ProgressReporter | None]: ...
 
@@ -67,6 +78,7 @@ class Callback(Protocol):
 
 class StateMachine:
     def __init__(self, callback: Callback) -> None:
+        callback._machine = self
         self.lock = Lock()
         self.state: State = Initial(callback=callback)
 
@@ -94,6 +106,12 @@ class StateMachine:
             self.state = self.state.prepare_reporter()
         return self.state.fetch_reporter(lock=self.lock)
 
+    def on_yielded(self) -> None:
+        self.state = self.state.on_yielded()
+
+    def on_resumed(self) -> None:
+        self.state = self.state.on_resumed()
+
 
 class State(abc.ABC):
     '''The base class of the states'''
@@ -118,6 +136,12 @@ class State(abc.ABC):
     def fetch_reporter(
         self, lock: Lock
     ) -> AbstractContextManager[ProgressReporter | None]: ...
+
+    def on_yielded(self) -> 'State':
+        return self
+
+    def on_resumed(self) -> 'State':
+        return self
 
     def flush(self) -> 'State':
         return self
@@ -161,6 +185,9 @@ class Active(State):
     ) -> AbstractContextManager[ProgressReporter | None]:
         return self._callback.fetch_reporter_in_active(lock=lock)
 
+    def on_yielded(self) -> State:
+        return Yielded(callback=self._callback, active=self)
+
     def flush(self) -> State:
         self._callback.flush_in_active()
         return self
@@ -168,6 +195,25 @@ class Active(State):
     def shutdown(self) -> State:
         self._callback.shutdown_in_active()
         return Initial(callback=self._callback)
+
+
+class Yielded(State):
+    '''Yielded state
+
+    The state during yielded from Active.fetch_reporter(). Inner loops of nested loops.
+    '''
+
+    def __init__(self, callback: Callback, active: Active) -> None:
+        super().__init__(callback)
+        self._active = active
+
+    def fetch_reporter(
+        self, lock: Lock
+    ) -> AbstractContextManager[ProgressReporter | None]:
+        return self._callback.fetch_reporter_in_yielded(lock=lock)
+
+    def on_resumed(self) -> State:
+        return self._active
 
 
 class Registered(State):
