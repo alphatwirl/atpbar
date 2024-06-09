@@ -20,11 +20,12 @@ n_processes = 5
 
 with flushing():
     processes = []
-    for i in range(n_processes):
+    for i in atpbar(range(n_processes)):
         n = randint(5, 1000)
         # n = randint(1000, 10000)
         p = Process(target=func, args=(n, f'Job {i}', find_reporter()))
         p.start()
         processes.append(p)
+        sleep(0.01)
     for p in processes:
         p.join()
