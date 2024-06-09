@@ -81,18 +81,12 @@ class Atpbar(Generic[T]):
                     self.loop_complete = True
 
     def _report_start(self) -> None:
-        try:
-            report = Report(task_id=self.id_, name=self.name, done=0, total=self.len_)
-            self.reporter.report(report)
-        except BaseException:
-            pass
+        report = Report(task_id=self.id_, name=self.name, done=0, total=self.len_)
+        self._submit(report)
 
     def _report_progress(self, i: int) -> None:
-        try:
-            report = Report(task_id=self.id_, done=(i + 1))
-            self.reporter.report(report)
-        except BaseException:
-            pass
+        report = Report(task_id=self.id_, done=(i + 1))
+        self._submit(report)
 
     @contextlib.contextmanager
     def _report_last(self) -> Iterator[None]:
@@ -108,8 +102,11 @@ class Atpbar(Generic[T]):
         finally:
             if self.loop_complete:
                 return
-            try:
-                report = Report(task_id=self.id_, first=False, last=True)
-                self.reporter.report(report)
-            except BaseException:
-                pass
+            report = Report(task_id=self.id_, first=False, last=True)
+            self._submit(report)
+
+    def _submit(self, report: Report) -> None:
+        try:
+            self.reporter.report(report)
+        except BaseException:
+            pass
