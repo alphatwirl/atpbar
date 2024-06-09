@@ -34,18 +34,24 @@ def test_presentation(Class: type[Presentation]) -> None:
     obj = Class()
     repr(obj)
     obj.active()
-    obj.present(dict(name='task1', done=0, total=10, taskid=i, first=True, last=False))
-    obj.present(dict(name='task1', done=2, total=10, taskid=i, first=False, last=False))
+    obj.present(dict(name='task1', done=0, total=10, task_id=i, first=True, last=False))
+    obj.present(
+        dict(name='task1', done=2, total=10, task_id=i, first=False, last=False)
+    )
     obj.active()
-    obj.present(dict(name='task1', done=0, total=5, taskid=j, first=True, last=False))
-    obj.present(dict(name='task1', done=3, total=5, taskid=j, first=False, last=False))
+    obj.present(dict(name='task1', done=0, total=5, task_id=j, first=True, last=False))
+    obj.present(dict(name='task1', done=3, total=5, task_id=j, first=False, last=False))
     obj.active()
-    obj.present(dict(name='task1', done=10, total=10, taskid=i, first=False, last=True))
+    obj.present(
+        dict(name='task1', done=10, total=10, task_id=i, first=False, last=True)
+    )
     obj.active()
-    obj.present(dict(name='task1', done=5, total=5, taskid=j, first=False, last=True))
+    obj.present(dict(name='task1', done=5, total=5, task_id=j, first=False, last=True))
     obj.active()
     obj.active()
-    obj.present(dict(name='task1', done=10, total=10, taskid=i, first=False, last=True))
+    obj.present(
+        dict(name='task1', done=10, total=10, task_id=i, first=False, last=True)
+    )
     obj.active()
 
 
@@ -60,7 +66,7 @@ def test_time_track(Class: type[Presentation]) -> None:
             name='task1',
             done=0,
             total=10,
-            taskid=i,
+            task_id=i,
             first=True,
             last=False,
         )
@@ -70,7 +76,7 @@ def test_time_track(Class: type[Presentation]) -> None:
             name='task1',
             done=2,
             total=10,
-            taskid=i,
+            task_id=i,
             first=False,
             last=False,
         )
@@ -80,7 +86,7 @@ def test_time_track(Class: type[Presentation]) -> None:
             name='task1',
             done=10,
             total=10,
-            taskid=i,
+            task_id=i,
             first=False,
             last=True,
         )

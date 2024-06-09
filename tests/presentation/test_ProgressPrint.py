@@ -24,7 +24,7 @@ def test_repr() -> None:
 def test_report(capsys: pytest.CaptureFixture) -> None:
     obj = ProgressPrint()
     i = uuid.uuid4()
-    report = Report(taskid=i, name='task1', done=0, total=10, first=True, last=False)
+    report = Report(task_id=i, name='task1', done=0, total=10, first=True, last=False)
     obj.present(report)
     captured = capsys.readouterr()
     stdout_lines = captured.out.strip().split('\n')

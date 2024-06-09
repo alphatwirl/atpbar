@@ -61,17 +61,17 @@ class ProgressBar(Presentation):
 
     def _compose_just_finished_bars(self) -> None:
         self.just_finished_bars = [
-            self._compose_bar_from_taskid(i) for i in self._finishing_task_ids
+            self._compose_bar_from_task_id(i) for i in self._finishing_task_ids
         ]
 
     def _compose_active_bars(self) -> None:
         self.active_bars = [
-            self._compose_bar_from_taskid(i)
+            self._compose_bar_from_task_id(i)
             for i in self._active_task_ids + self._new_task_ids
         ]
 
-    def _compose_bar_from_taskid(self, taskid: UUID) -> str:
-        report = self._report_dict[taskid]
+    def _compose_bar_from_task_id(self, task_id: UUID) -> str:
+        report = self._report_dict[task_id]
         return self._compose_bar_from_report(report)
 
     def _compose_bar_from_report(self, report: Report) -> str:

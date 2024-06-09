@@ -34,7 +34,7 @@ class MockProgressBar(Presentation):
     def present(self, report: Report) -> None:
         super().present(report)
         self.reports.append(report)
-        self.task_ids.add(report['taskid'])
+        self.task_ids.add(report['task_id'])
         self.n_firsts += report['first']
         self.n_lasts += report['last']
 
