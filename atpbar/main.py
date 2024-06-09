@@ -81,7 +81,7 @@ class Atpbar(Generic[T]):
         if self.reporter is None:
             return
         try:
-            report = Report(taskid=self.id_, name=self.name, done=0, total=self.len_)
+            report = Report(task_id=self.id_, name=self.name, done=0, total=self.len_)
             self.reporter.report(report)
         except BaseException:
             pass
@@ -90,7 +90,7 @@ class Atpbar(Generic[T]):
         if self.reporter is None:
             return
         try:
-            report = Report(taskid=self.id_, done=(i + 1))
+            report = Report(task_id=self.id_, done=(i + 1))
             self.reporter.report(report)
         except BaseException:
             pass
@@ -113,7 +113,7 @@ def report_last(pbar: Atpbar[T]) -> Iterator[None]:
         if pbar.reporter is None:
             return
         try:
-            report = Report(taskid=pbar.id_, first=False, last=True)
+            report = Report(task_id=pbar.id_, first=False, last=True)
             pbar.reporter.report(report)
         except BaseException:
             pass

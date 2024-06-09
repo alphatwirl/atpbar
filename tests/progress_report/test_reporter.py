@@ -44,13 +44,13 @@ class TestReport:
         mock_time: mock.Mock,
     ) -> None:
         current_time = 15324.345
-        taskid = uuid.uuid4()
+        task_id = uuid.uuid4()
         mock_time.time.return_value = current_time
         monkeypatch.setattr(obj, '_need_to_report', mock.Mock(return_value=True))
-        report = Report(taskid=taskid, done=0, total=10)
+        report = Report(task_id=task_id, done=0, total=10)
         obj.report(report)
         assert [mock.call(report)] == mock_queue.put.call_args_list
-        assert {taskid: current_time} == obj.last_time
+        assert {task_id: current_time} == obj.last_time
 
     def test_report_no_need_to_report(
         self,
@@ -60,10 +60,10 @@ class TestReport:
         mock_time: mock.Mock,
     ) -> None:
         current_time = 15324.345
-        taskid = uuid.uuid4()
+        task_id = uuid.uuid4()
         mock_time.time.return_value = current_time
         monkeypatch.setattr(obj, '_need_to_report', mock.Mock(return_value=False))
-        report = Report(taskid=taskid, done=0, total=10)
+        report = Report(task_id=task_id, done=0, total=10)
         obj.report(report)
         assert [] == mock_queue.put.call_args_list
         assert {} == obj.last_time
@@ -72,16 +72,16 @@ class TestReport:
 task_id = uuid.uuid4()
 
 params = [
-    pytest.param(Report(taskid=task_id, first=True, last=False), {}, 10.0, True),
-    pytest.param(Report(taskid=task_id, first=False, last=True), {}, 10.0, True),
+    pytest.param(Report(task_id=task_id, first=True, last=False), {}, 10.0, True),
+    pytest.param(Report(task_id=task_id, first=False, last=True), {}, 10.0, True),
     pytest.param(
-        Report(taskid=task_id, first=True, last=False), {task_id: 10.0}, 10.0, True
+        Report(task_id=task_id, first=True, last=False), {task_id: 10.0}, 10.0, True
     ),
     pytest.param(
-        Report(taskid=task_id, first=False, last=False), {task_id: 10.0}, 30.0, True
+        Report(task_id=task_id, first=False, last=False), {task_id: 10.0}, 30.0, True
     ),
     pytest.param(
-        Report(taskid=task_id, first=False, last=False), {task_id: 10.0}, 15.0, False
+        Report(task_id=task_id, first=False, last=False), {task_id: 10.0}, 15.0, False
     ),
 ]
 param_names = 'report, last_time, current_time, expected'

@@ -30,8 +30,8 @@ class ProgressBarJupyter(Presentation):
             self.container_widget = widgets.VBox()
             display(self.container_widget)
 
-        for taskid in self._new_task_ids:
-            report = self._report_dict[taskid]
+        for task_id in self._new_task_ids:
+            report = self._report_dict[task_id]
             self._create_widget(report)
 
     def _create_widget(self, report: Report) -> None:
@@ -50,13 +50,13 @@ class ProgressBarJupyter(Presentation):
             self.container_widget.children = (
                 self.complete_box_list + self.active_box_list
             )
-        self.widget_dict[report['taskid']] = (box, bar, label)
+        self.widget_dict[report['task_id']] = (box, bar, label)
 
     def _update_widgets(self) -> None:
-        for taskid in (
+        for task_id in (
             self._finishing_task_ids + self._active_task_ids + self._new_task_ids
         ):
-            report = self._report_dict[taskid]
+            report = self._report_dict[task_id]
             self._update_widget(report)
 
         self._reorder_widgets(report)
@@ -73,17 +73,17 @@ class ProgressBarJupyter(Presentation):
         percent = round(percent * 100, 2)
         percent_fmt = '{:6.2f}%'.format(percent)
 
-        box = self.widget_dict[report['taskid']][0]
+        box = self.widget_dict[report['task_id']][0]
         box  # to silence not-used warning
 
-        bar = self.widget_dict[report['taskid']][1]
+        bar = self.widget_dict[report['task_id']][1]
         bar.value = report['done']
         bar.max = report['total']
         bar.description = percent_fmt
         if report['last']:
             bar.bar_style = 'success'
 
-        label = self.widget_dict[report['taskid']][2]
+        label = self.widget_dict[report['task_id']][2]
         name_field_length = 32
         percent = float(report['done']) / report['total'] if report['total'] > 0 else 1
         bar = (':' * int(percent * 40)).ljust(40, ' ')
@@ -94,8 +94,8 @@ class ProgressBarJupyter(Presentation):
         )
 
     def _reorder_widgets(self, report: Report) -> None:
-        for taskid in self._finishing_task_ids:
-            box, bar, label = self.widget_dict[taskid]
+        for task_id in self._finishing_task_ids:
+            box, bar, label = self.widget_dict[task_id]
             if box in self.active_box_list:
                 self.active_box_list.remove(box)
                 self.complete_box_list.append(box)

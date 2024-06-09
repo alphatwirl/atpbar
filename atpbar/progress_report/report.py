@@ -7,7 +7,7 @@ class Report(TypedDict, total=False):
 
     Parameters
     ----------
-    taskid : immutable
+    task_id : immutable
         The unique task ID.
     done : int
         The number of the iterations done so far
@@ -30,7 +30,7 @@ class Report(TypedDict, total=False):
     TODO: Use typing.Required for Python 3.11 and above
     '''
 
-    taskid: UUID
+    task_id: UUID
     done: int
     total: int
     name: str

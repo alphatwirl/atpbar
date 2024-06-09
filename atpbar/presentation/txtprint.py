@@ -23,7 +23,7 @@ class ProgressPrint(Presentation):
 
         self._present(report)
 
-        self.last_time_map[report['taskid']] = self._time()
+        self.last_time_map[report['task_id']] = self._time()
 
     def _present(self, report: Report) -> None:
         time_ = time.strftime('%m/%d %H:%M', time.localtime(time.time()))
@@ -48,10 +48,10 @@ class ProgressPrint(Presentation):
         if report['last']:
             return True
 
-        if report['taskid'] not in self.last_time_map:
+        if report['task_id'] not in self.last_time_map:
             return True
 
-        if self._time() - self.last_time_map[report['taskid']] > self.interval:
+        if self._time() - self.last_time_map[report['task_id']] > self.interval:
             return True
 
         return False

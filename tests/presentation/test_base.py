@@ -35,33 +35,33 @@ def test_repr(obj: MockProgressBar) -> None:
 def test_present(obj: Presentation) -> None:
     i = uuid.uuid4()
     j = uuid.uuid4()
-    obj.present(dict(taskid=i, last=False))
+    obj.present(dict(task_id=i, last=False))
     assert obj.active()
-    obj.present(dict(taskid=i, last=False))
+    obj.present(dict(task_id=i, last=False))
     assert obj.active()
-    obj.present(dict(taskid=j, last=False))
+    obj.present(dict(task_id=j, last=False))
     assert obj.active()
-    obj.present(dict(taskid=j, last=False))
+    obj.present(dict(task_id=j, last=False))
     assert obj.active()
-    obj.present(dict(taskid=i, last=True))
+    obj.present(dict(task_id=i, last=True))
     assert obj.active()
-    obj.present(dict(taskid=j, last=True))
+    obj.present(dict(task_id=j, last=True))
     assert not obj.active()
 
 
 params = [
     ##
-    pytest.param(dict(taskid=1, last=False), [], [], [], [], [1], [], [], [], True),
-    pytest.param(dict(taskid=1, last=False), [1], [], [], [], [1], [], [], [], True),
-    pytest.param(dict(taskid=1, last=False), [], [1], [], [], [], [1], [], [], True),
-    pytest.param(dict(taskid=1, last=False), [], [], [1], [], [], [], [1], [], True),
-    pytest.param(dict(taskid=1, last=False), [], [], [], [1], [], [], [], [1], False),
+    pytest.param(dict(task_id=1, last=False), [], [], [], [], [1], [], [], [], True),
+    pytest.param(dict(task_id=1, last=False), [1], [], [], [], [1], [], [], [], True),
+    pytest.param(dict(task_id=1, last=False), [], [1], [], [], [], [1], [], [], True),
+    pytest.param(dict(task_id=1, last=False), [], [], [1], [], [], [], [1], [], True),
+    pytest.param(dict(task_id=1, last=False), [], [], [], [1], [], [], [], [1], False),
     ##
-    pytest.param(dict(taskid=1, last=True), [], [], [], [], [], [], [1], [], True),
-    pytest.param(dict(taskid=1, last=True), [1], [], [], [], [], [], [1], [], True),
-    pytest.param(dict(taskid=1, last=True), [], [1], [], [], [], [], [1], [], True),
-    pytest.param(dict(taskid=1, last=True), [], [], [1], [], [], [], [1], [], True),
-    pytest.param(dict(taskid=1, last=True), [], [], [], [1], [], [], [], [1], False),
+    pytest.param(dict(task_id=1, last=True), [], [], [], [], [], [], [1], [], True),
+    pytest.param(dict(task_id=1, last=True), [1], [], [], [], [], [], [1], [], True),
+    pytest.param(dict(task_id=1, last=True), [], [1], [], [], [], [], [1], [], True),
+    pytest.param(dict(task_id=1, last=True), [], [], [1], [], [], [], [1], [], True),
+    pytest.param(dict(task_id=1, last=True), [], [], [], [1], [], [], [], [1], False),
 ]
 param_names = (
     'report, '

@@ -53,38 +53,38 @@ class Presentation(ABC):
 
     def _register_report(self, report: Report) -> bool:
 
-        taskid = report['taskid']
+        task_id = report['task_id']
 
-        if taskid in self._complete_task_ids:
+        if task_id in self._complete_task_ids:
             return False
 
-        self._report_dict[taskid] = report
+        self._report_dict[task_id] = report
 
-        if taskid in self._finishing_task_ids:
+        if task_id in self._finishing_task_ids:
             return True
 
         if report['last']:
             try:
-                self._active_task_ids.remove(taskid)
+                self._active_task_ids.remove(task_id)
             except ValueError:
                 pass
 
             try:
-                self._new_task_ids.remove(taskid)
+                self._new_task_ids.remove(task_id)
             except ValueError:
                 pass
 
-            self._finishing_task_ids.append(taskid)
+            self._finishing_task_ids.append(task_id)
 
             return True
 
-        if taskid in self._active_task_ids:
+        if task_id in self._active_task_ids:
             return True
 
-        if taskid in self._new_task_ids:
+        if task_id in self._new_task_ids:
             return True
 
-        self._new_task_ids.append(taskid)
+        self._new_task_ids.append(task_id)
         return True
 
     def _update_registry(self) -> None:
