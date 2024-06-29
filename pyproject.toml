@@ -52,6 +52,18 @@ addopts = """
 # doctest_optionflags = ["ELLIPSIS", "NORMALIZE_WHITESPACE",]
 doctest_optionflags = ["ELLIPSIS"]
 
+[tool.coverage.run]
+branch = true
+source = ["atpbar", "tests"]
+concurrency = ["multiprocessing"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    'if __name__ == "__main__":',
+    "if TYPE_CHECKING:",
+]
+
 [tool.black]
 # Doesn't appear to be effective with VSCode extension Black Formatter
 skip-string-normalization = true
