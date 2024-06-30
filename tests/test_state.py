@@ -140,12 +140,11 @@ class StatefulTest:
         prev = self.state
         self.callback.reset_mock()
         self.state = prev.shutdown()
+        assert isinstance(self.state, Initial)
         match prev:
             case Active():
-                assert isinstance(self.state, Initial)
                 assert self.callback.mock_calls == [call.shutdown_in_active()]
             case _:
-                assert self.state is prev
                 assert self.callback.mock_calls == []
 
 

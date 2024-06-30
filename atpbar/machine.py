@@ -138,7 +138,7 @@ class State(abc.ABC):
         return self
 
     def shutdown(self) -> 'State':
-        return self
+        return Initial(callback=self._callback)
 
 
 class Initial(State):
