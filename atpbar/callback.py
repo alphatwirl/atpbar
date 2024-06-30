@@ -14,6 +14,7 @@ class CallbackImp:
     def __init__(self) -> None:
         self.reporter: ProgressReporter | None = None
         self._machine: StateMachine  # to be set by the StateMachine
+        self._lock: Lock  # to be set by the StateMachine
 
     def on_active(self) -> None:
 
@@ -25,8 +26,6 @@ class CallbackImp:
             notices_from_sub_processes=self.notices_from_sub_processes,
             stream_queue=self.stream_queue,
         )
-
-        self.reporter_yielded = False
 
         self._start_pickup()
 
@@ -52,7 +51,7 @@ class CallbackImp:
         self._start_pickup()
 
     @contextmanager
-    def fetch_reporter_in_active(self, lock: Lock) -> Iterator[ProgressReporter | None]:
+    def fetch_reporter_in_active(self) -> Iterator[ProgressReporter | None]:
 
         if not in_main_thread():
             self.to_restart_pickup = False
@@ -78,7 +77,7 @@ class CallbackImp:
             if not self.to_restart_pickup:
                 return
 
-            with lock:
+            with self._lock:
                 self._restart_pickup()
 
     def flush_in_active(self) -> None:
@@ -88,9 +87,7 @@ class CallbackImp:
         self._end_pickup()
 
     @contextmanager
-    def fetch_reporter_in_yielded(
-        self, lock: Lock
-    ) -> Iterator[ProgressReporter | None]:
+    def fetch_reporter_in_yielded(self) -> Iterator[ProgressReporter | None]:
 
         if not in_main_thread():
             self.to_restart_pickup = False
@@ -107,9 +104,7 @@ class CallbackImp:
             register_stream_queue(reporter.stream_queue)
 
     @contextmanager
-    def fetch_reporter_in_registered(
-        self, lock: Lock
-    ) -> Iterator[ProgressReporter | None]:
+    def fetch_reporter_in_registered(self) -> Iterator[ProgressReporter | None]:
         if self.reporter is None:
             yield self.reporter
             return
@@ -121,7 +116,7 @@ class CallbackImp:
         self.reporter = None
 
     @contextmanager
-    def fetch_reporter_in_disabled(self, lock: Lock) -> Iterator[None]:
+    def fetch_reporter_in_disabled(self) -> Iterator[None]:
         yield None
 
 

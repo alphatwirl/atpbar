@@ -8,7 +8,6 @@ from atpbar.machine import (
     Callback,
     Disabled,
     Initial,
-    Lock,
     ProgressReporter,
     Registered,
     State,
@@ -54,14 +53,12 @@ class StatefulTest:
         prev = self.state
         self.callback.reset_mock()
 
-        lock = Lock()
-
-        with prev.fetch_reporter(lock=lock) as reporter:
+        with prev.fetch_reporter() as reporter:
             match prev:
                 case Active():
                     assert self.callback.mock_calls == [
-                        call.fetch_reporter_in_active(lock=lock),
-                        call.fetch_reporter_in_active(lock=lock).__enter__(),
+                        call.fetch_reporter_in_active(),
+                        call.fetch_reporter_in_active().__enter__(),
                     ]
                     assert (
                         reporter
@@ -69,8 +66,8 @@ class StatefulTest:
                     )
                 case Yielded():
                     assert self.callback.mock_calls == [
-                        call.fetch_reporter_in_yielded(lock=lock),
-                        call.fetch_reporter_in_yielded(lock=lock).__enter__(),
+                        call.fetch_reporter_in_yielded(),
+                        call.fetch_reporter_in_yielded().__enter__(),
                     ]
                     assert (
                         reporter
@@ -78,8 +75,8 @@ class StatefulTest:
                     )
                 case Registered():
                     assert self.callback.mock_calls == [
-                        call.fetch_reporter_in_registered(lock=lock),
-                        call.fetch_reporter_in_registered(lock=lock).__enter__(),
+                        call.fetch_reporter_in_registered(),
+                        call.fetch_reporter_in_registered().__enter__(),
                     ]
                     assert (
                         reporter
@@ -87,8 +84,8 @@ class StatefulTest:
                     )
                 case Disabled():
                     assert self.callback.mock_calls == [
-                        call.fetch_reporter_in_disabled(lock=lock),
-                        call.fetch_reporter_in_disabled(lock=lock).__enter__(),
+                        call.fetch_reporter_in_disabled(),
+                        call.fetch_reporter_in_disabled().__enter__(),
                     ]
                     assert (
                         reporter
