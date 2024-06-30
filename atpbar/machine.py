@@ -37,17 +37,18 @@ NOTE: In a forked sub-process, the state starts from the same state as the paren
 class Callback(Protocol):
     reporter: ProgressReporter | None
     _machine: 'StateMachine'
+    _lock: Lock
 
     def __init__(self) -> None: ...
 
     def on_active(self) -> None: ...
 
     def fetch_reporter_in_active(
-        self, lock: Lock
+        self,
     ) -> AbstractContextManager[ProgressReporter | None]: ...
 
     def fetch_reporter_in_yielded(
-        self, lock: Lock
+        self,
     ) -> AbstractContextManager[ProgressReporter | None]: ...
 
     def flush_in_active(self) -> None: ...
@@ -57,20 +58,20 @@ class Callback(Protocol):
     def on_registered(self, reporter: ProgressReporter | None) -> None: ...
 
     def fetch_reporter_in_registered(
-        self, lock: Lock
+        self,
     ) -> AbstractContextManager[ProgressReporter | None]: ...
 
     def on_disabled(self) -> None: ...
 
     def fetch_reporter_in_disabled(
-        self, lock: Lock
+        self,
     ) -> AbstractContextManager[ProgressReporter | None]: ...
 
 
 class StateMachine:
     def __init__(self, callback: Callback) -> None:
         callback._machine = self
-        self.lock = Lock()
+        self.lock = callback._lock = Lock()
         self.state: State = Initial(callback=callback)
 
     def find_reporter(self) -> ProgressReporter | None:
@@ -95,7 +96,7 @@ class StateMachine:
     def fetch_reporter(self) -> AbstractContextManager[ProgressReporter | None]:
         with self.lock:
             self.state = self.state.prepare_reporter()
-        return self.state.fetch_reporter(lock=self.lock)
+        return self.state.fetch_reporter()
 
     def on_yielded(self) -> None:
         self.state = self.state.on_yielded()
@@ -124,9 +125,7 @@ class State(abc.ABC):
         return Disabled(callback=self._callback)
 
     @abc.abstractmethod
-    def fetch_reporter(
-        self, lock: Lock
-    ) -> AbstractContextManager[ProgressReporter | None]: ...
+    def fetch_reporter(self) -> AbstractContextManager[ProgressReporter | None]: ...
 
     def on_yielded(self) -> 'State':
         return self
@@ -154,7 +153,7 @@ class Initial(State):
         return Active(callback=self._callback)
 
     @contextmanager
-    def fetch_reporter(self, lock: Lock) -> Iterator[ProgressReporter | None]:
+    def fetch_reporter(self) -> Iterator[ProgressReporter | None]:
         yield self.reporter
 
     def flush(self) -> State:
@@ -171,10 +170,8 @@ class Active(State):
         super().__init__(callback)
         self._callback.on_active()
 
-    def fetch_reporter(
-        self, lock: Lock
-    ) -> AbstractContextManager[ProgressReporter | None]:
-        return self._callback.fetch_reporter_in_active(lock=lock)
+    def fetch_reporter(self) -> AbstractContextManager[ProgressReporter | None]:
+        return self._callback.fetch_reporter_in_active()
 
     def on_yielded(self) -> State:
         return Yielded(callback=self._callback, active=self)
@@ -198,10 +195,8 @@ class Yielded(State):
         super().__init__(callback)
         self._active = active
 
-    def fetch_reporter(
-        self, lock: Lock
-    ) -> AbstractContextManager[ProgressReporter | None]:
-        return self._callback.fetch_reporter_in_yielded(lock=lock)
+    def fetch_reporter(self) -> AbstractContextManager[ProgressReporter | None]:
+        return self._callback.fetch_reporter_in_yielded()
 
     def on_resumed(self) -> State:
         return self._active
@@ -218,10 +213,8 @@ class Registered(State):
         super().__init__(callback)
         self._callback.on_registered(reporter)
 
-    def fetch_reporter(
-        self, lock: Lock
-    ) -> AbstractContextManager[ProgressReporter | None]:
-        return self._callback.fetch_reporter_in_registered(lock=lock)
+    def fetch_reporter(self) -> AbstractContextManager[ProgressReporter | None]:
+        return self._callback.fetch_reporter_in_registered()
 
 
 class Disabled(State):
@@ -231,7 +224,5 @@ class Disabled(State):
         super().__init__(callback)
         self._callback.on_disabled()
 
-    def fetch_reporter(
-        self, lock: Lock
-    ) -> AbstractContextManager[ProgressReporter | None]:
-        return self._callback.fetch_reporter_in_disabled(lock=lock)
+    def fetch_reporter(self) -> AbstractContextManager[ProgressReporter | None]:
+        return self._callback.fetch_reporter_in_disabled()
