@@ -1,12 +1,11 @@
 from collections.abc import Iterator
 from contextlib import contextmanager
-from multiprocessing import Queue
 from threading import Lock, current_thread, main_thread
 
 from .machine import StateMachine
 from .presentation import create_presentation
-from .progress_report import ProgressReporter, ProgressReportPickup, Report
-from .stream import StreamQueue, StreamRedirection, register_stream_queue
+from .progress_report import ProgressReporter, ProgressReportPickup
+from .stream import StreamRedirection, register_stream_queue
 
 
 class CallbackImp:
@@ -18,14 +17,10 @@ class CallbackImp:
 
     def on_active(self) -> None:
 
-        self.queue: Queue[Report] = Queue()
-        self.notices_from_sub_processes: Queue[bool] = Queue()
-        self.stream_queue: StreamQueue = Queue()
-        self.reporter = ProgressReporter(
-            queue=self.queue,
-            notices_from_sub_processes=self.notices_from_sub_processes,
-            stream_queue=self.stream_queue,
-        )
+        self.reporter = ProgressReporter()
+        self.queue = self.reporter.queue
+        self.notices_from_sub_processes = self.reporter.notices_from_sub_processes
+        self.stream_queue = self.reporter.stream_queue
 
         self._start_pickup()
 
