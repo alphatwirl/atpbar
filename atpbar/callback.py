@@ -3,9 +3,7 @@ from contextlib import contextmanager
 from threading import Lock, current_thread, main_thread
 
 from .machine import StateMachine
-from .presentation import create_presentation
-from .progress_report import ProgressReporter, ProgressReportPickup
-from .stream import StreamRedirection, register_stream_queue
+from .progress_report import ProgressReporter
 
 
 class CallbackImp:
@@ -16,37 +14,12 @@ class CallbackImp:
         self._lock: Lock  # to be set by the StateMachine
 
     def on_active(self) -> None:
-
         self.reporter = ProgressReporter()
-        self.queue = self.reporter.queue
-        self.notices_from_sub_processes = self.reporter.notices_from_sub_processes
-        self.stream_queue = self.reporter.stream_queue
-
-        self._start_pickup()
-
-        if self.stream_redirection.disabled:
-            self.reporter.stream_redirection_enabled = False
-
-    def _start_pickup(self) -> None:
-        presentation = create_presentation()
-        self.pickup = ProgressReportPickup(self.queue, presentation)
-
-        self.stream_redirection = StreamRedirection(
-            queue=self.stream_queue, presentation=presentation
-        )
-        self.stream_redirection.start()
-
-    def _end_pickup(self) -> None:
-        self.pickup.end()
-
-        self.stream_redirection.end()
-
-    def _restart_pickup(self) -> None:
-        self._end_pickup()
-        self._start_pickup()
+        self.reporter.start_pickup()
 
     @contextmanager
     def fetch_reporter_in_active(self) -> Iterator[ProgressReporter | None]:
+        assert self.reporter
 
         if not in_main_thread():
             self.to_restart_pickup = False
@@ -54,10 +27,7 @@ class CallbackImp:
             return
 
         self.to_restart_pickup = True
-
-        while not self.notices_from_sub_processes.empty():
-            _ = self.notices_from_sub_processes.get()
-
+        self.reporter.empty_notices()
         self._machine.on_yielded()
 
         try:
@@ -65,21 +35,22 @@ class CallbackImp:
         finally:
             self._machine.on_resumed()
 
-            while not self.notices_from_sub_processes.empty():
-                _ = self.notices_from_sub_processes.get()
+            if self.reporter.empty_notices():
                 self.to_restart_pickup = False
 
             if not self.to_restart_pickup:
                 return
 
             with self._lock:
-                self._restart_pickup()
+                self.reporter.restart_pickup()
 
     def flush_in_active(self) -> None:
-        self._restart_pickup()
+        assert self.reporter
+        self.reporter.restart_pickup()
 
     def shutdown_in_active(self) -> None:
-        self._end_pickup()
+        assert self.reporter
+        self.reporter.end_pickup()
 
     @contextmanager
     def fetch_reporter_in_yielded(self) -> Iterator[ProgressReporter | None]:
@@ -95,8 +66,7 @@ class CallbackImp:
         self.reporter = reporter
         if reporter is None:
             return
-        if reporter.stream_redirection_enabled:
-            register_stream_queue(reporter.stream_queue)
+        reporter.register()
 
     @contextmanager
     def fetch_reporter_in_registered(self) -> Iterator[ProgressReporter | None]:
@@ -104,7 +74,7 @@ class CallbackImp:
             yield self.reporter
             return
 
-        self.reporter.notices_from_sub_processes.put(True)
+        self.reporter.notice()
         yield self.reporter
 
     def on_disabled(self) -> None:

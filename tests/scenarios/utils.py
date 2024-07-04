@@ -88,7 +88,7 @@ def monkeypatch_reporter_interval() -> Iterator[None]:
 def mock_create_presentation() -> Iterator[MockCreatePresentation]:
     y = MockCreatePresentation()
     with MonkeyPatch.context() as m:
-        m.setattr(callback, 'create_presentation', y)
+        m.setattr(reporter, 'create_presentation', y)
         yield y
 
 
