@@ -41,7 +41,7 @@ class CallbackImp:
             if not self.to_restart_pickup:
                 return
 
-            with self._lock:
+            with self._lock:  # NOTE: This lock is probably unnecessary
                 self.reporter.restart_pickup()
 
     def flush_in_active(self) -> None:
