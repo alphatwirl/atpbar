@@ -1,19 +1,21 @@
 import time
 from multiprocessing import Queue
-from typing import TYPE_CHECKING
 from uuid import UUID
 
-from .complement import ProgressReportComplementer
-from .report import Report
+from atpbar.presentation import create_presentation
+from atpbar.stream import StreamQueue, StreamRedirection, register_stream_queue
 
-if TYPE_CHECKING:
-    from atpbar.stream import StreamQueue
+from .complement import ProgressReportComplementer
+from .pickup import ProgressReportPickup
+from .report import Report
 
 DEFAULT_INTERVAL = 0.1  # [second]
 
 
 class ProgressReporter:
-    '''A progress reporter
+    '''A progress reporter.
+
+    NOTE: This docstring is outdated.
 
     This class sends progress reports. The reports will be picked up
     by the pickup (`ProgressReportPickup`), which uses the reports,
@@ -45,24 +47,49 @@ class ProgressReporter:
         The queue through which this class sends progress reports.
     '''
 
-    def __init__(
-        self,
-        queue: 'Queue[Report]',
-        notices_from_sub_processes: 'Queue[bool]',
-        stream_queue: 'StreamQueue',
-    ) -> None:
-        self.queue = queue
+    def __init__(self) -> None:
+        self.queue: Queue[Report] = Queue()
+        self.notices_from_sub_processes: Queue[bool] = Queue()
+        self.stream_queue: StreamQueue = Queue()
         self.interval = DEFAULT_INTERVAL  # [second]
         self.last_time = dict[UUID, float]()
         self.complete_report = ProgressReportComplementer()
-        self.notices_from_sub_processes = notices_from_sub_processes
-        self.stream_queue = stream_queue
         self.stream_redirection_enabled = True
 
     def __repr__(self) -> str:
-        return '{}(queue={!r}, interval={!r})'.format(
-            self.__class__.__name__, self.queue, self.interval
+        return f'{self.__class__.__name__}(queue={self.queue!r}, interval={self.interval!r})'
+
+    def start_pickup(self) -> None:
+        presentation = create_presentation()
+        self.pickup = ProgressReportPickup(self.queue, presentation)
+
+        self.stream_redirection = StreamRedirection(
+            queue=self.stream_queue, presentation=presentation
         )
+        self.stream_redirection.start()
+        self.stream_redirection_enabled = not self.stream_redirection.disabled
+
+    def end_pickup(self) -> None:
+        self.pickup.end()
+        self.stream_redirection.end()
+
+    def restart_pickup(self) -> None:
+        self.end_pickup()
+        self.start_pickup()
+
+    def notice(self) -> None:
+        self.notices_from_sub_processes.put(True)
+
+    def empty_notices(self) -> bool:
+        ret = False
+        while not self.notices_from_sub_processes.empty():
+            _ = self.notices_from_sub_processes.get()
+            ret = True
+        return ret
+
+    def register(self) -> None:
+        if self.stream_redirection_enabled:
+            register_stream_queue(self.stream_queue)
 
     def report(self, report: Report) -> None:
         '''send ``report`` to a progress monitor

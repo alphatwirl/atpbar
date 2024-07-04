@@ -24,9 +24,8 @@ def mock_time(monkeypatch: pytest.MonkeyPatch) -> mock.Mock:
 
 @pytest.fixture()
 def obj(mock_queue: mock.Mock, mock_time: mock.Mock) -> ProgressReporter:
-    ret = ProgressReporter(
-        mock_queue, notices_from_sub_processes=mock.Mock(), stream_queue=mock.Mock()
-    )
+    ret = ProgressReporter()
+    ret.queue = mock_queue
     return ret
 
 
