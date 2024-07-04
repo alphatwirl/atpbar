@@ -60,9 +60,7 @@ class ProgressReporter:
         self.stream_redirection_enabled = True
 
     def __repr__(self) -> str:
-        return '{}(queue={!r}, interval={!r})'.format(
-            self.__class__.__name__, self.queue, self.interval
-        )
+        return f'{self.__class__.__name__}(queue={self.queue!r}, interval={self.interval!r})'
 
     def report(self, report: Report) -> None:
         '''send ``report`` to a progress monitor
