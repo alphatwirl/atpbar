@@ -7,8 +7,7 @@ from hypothesis import strategies as st
 from pytest import MonkeyPatch
 
 from atpbar.stream import FD, OutputStream
-
-from .st import st_text
+from tests.stream.st import st_text
 
 
 def st_end() -> st.SearchStrategy[str | None]:

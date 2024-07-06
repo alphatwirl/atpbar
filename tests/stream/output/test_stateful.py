@@ -4,8 +4,7 @@ from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from atpbar.stream import OutputStream, Queue, StreamQueue
-
-from .st import st_text
+from tests.stream.st import st_text
 
 
 class StatefulTest:
@@ -41,7 +40,7 @@ class StatefulTest:
 
 @settings(max_examples=200)
 @given(data=st.data())
-def test_stream(data: st.DataObject) -> None:
+def test_stateful(data: st.DataObject) -> None:
     test = StatefulTest(data=data)
     METHODS = [test.write, test.write_with_newline, test.flush]
     methods = data.draw(st.lists(st.sampled_from(METHODS)))
