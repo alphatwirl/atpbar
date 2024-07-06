@@ -6,7 +6,7 @@ from io import TextIOBase
 from multiprocessing import Queue
 from typing import Any, TypeAlias
 
-from .presentation import Presentation
+from atpbar.presentation import Presentation
 
 
 class FD(Enum):
