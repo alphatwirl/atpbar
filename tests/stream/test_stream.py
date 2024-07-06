@@ -3,7 +3,7 @@ from unittest.mock import sentinel
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
-from atpbar.stream import Queue, Stream, StreamQueue
+from atpbar.stream import OutputStream, Queue, StreamQueue
 
 from .st import st_text
 
@@ -13,7 +13,7 @@ class StatefulTest:
         self.draw = data.draw
         self.queue: StreamQueue = Queue()
         self.fd = sentinel.fd
-        self.stream = Stream(self.queue, self.fd)
+        self.stream = OutputStream(self.queue, self.fd)
         self.written = list[str]()
 
     def write(self) -> None:

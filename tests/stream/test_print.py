@@ -6,7 +6,7 @@ from hypothesis import given, settings
 from hypothesis import strategies as st
 from pytest import MonkeyPatch
 
-from atpbar.stream import FD, Stream
+from atpbar.stream import FD, OutputStream
 
 from .st import st_text
 
@@ -27,8 +27,8 @@ def test_print(
     texts: list[str], end: str | None, flush: bool, fd_name: Literal['stdout', 'stderr']
 ) -> None:
     queue = Mock()
-    stdout = Stream(queue, fd=FD.STDOUT)
-    stderr = Stream(queue, fd=FD.STDERR)
+    stdout = OutputStream(queue, fd=FD.STDOUT)
+    stderr = OutputStream(queue, fd=FD.STDERR)
 
     with MonkeyPatch.context() as m:
         m.setattr(sys, 'stdout', stdout)

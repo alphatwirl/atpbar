@@ -26,8 +26,8 @@ class StreamRedirection:
         self.queue = queue
         self.presentation = presentation
 
-        self.stdout = Stream(self.queue, FD.STDOUT)
-        self.stderr = Stream(self.queue, FD.STDERR)
+        self.stdout = OutputStream(self.queue, FD.STDOUT)
+        self.stderr = OutputStream(self.queue, FD.STDERR)
 
     def start(self) -> None:
         if self.disabled:
@@ -57,11 +57,11 @@ class StreamRedirection:
 def register_stream_queue(queue: StreamQueue) -> None:
     if queue is None:
         return
-    sys.stdout = Stream(queue, FD.STDOUT)  # type: ignore
-    sys.stderr = Stream(queue, FD.STDERR)  # type: ignore
+    sys.stdout = OutputStream(queue, FD.STDOUT)  # type: ignore
+    sys.stderr = OutputStream(queue, FD.STDERR)  # type: ignore
 
 
-class Stream(TextIOBase):
+class OutputStream(TextIOBase):
     def __init__(self, queue: StreamQueue, fd: FD) -> None:
         self.fd = fd
         self.queue = queue
