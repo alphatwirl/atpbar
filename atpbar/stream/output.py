@@ -22,12 +22,9 @@ class OutputStream(TextIOBase):
             # The same error message as `sys.stdout.write()`
             raise TypeError(f'write() argument must be str, not {type(s).__name__}')
 
-        if s.endswith('\n'):
-            self.buffer += s
-            self.flush()
-            return len(s)
-
         self.buffer += s
+        if s.endswith('\n'):
+            self.flush()
         return len(s)
 
     def flush(self) -> None:

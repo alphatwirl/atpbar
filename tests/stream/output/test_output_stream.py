@@ -24,13 +24,13 @@ class StatefulTest:
 
     def write(self) -> None:
         text = self.draw(st_text())
-        self.stream.write(text)
+        assert self.stream.write(text) == len(text)
         self.written.append(text)
 
     def write_with_newline(self) -> None:
         text = self.draw(st_text())
         text += '\n'
-        self.stream.write(text)
+        assert self.stream.write(text) == len(text)
         self.written.append(text)
         expected = ''.join(self.written)
         assert self.queue.get() == (expected, self.fd)
