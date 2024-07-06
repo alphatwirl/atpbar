@@ -3,7 +3,7 @@ from unittest.mock import Mock, call
 
 from pytest import MonkeyPatch, fixture
 
-from atpbar.stream import FD, Stream
+from atpbar.stream import FD, OutputStream
 
 
 @fixture()
@@ -12,11 +12,11 @@ def mock_queue() -> Mock:
 
 
 @fixture()
-def obj(mock_queue: Mock) -> Stream:
-    return Stream(mock_queue, FD.STDOUT)
+def obj(mock_queue: Mock) -> OutputStream:
+    return OutputStream(mock_queue, FD.STDOUT)
 
 
-def test_print(mock_queue: Mock, obj: Stream, monkeypatch: MonkeyPatch) -> None:
+def test_print(mock_queue: Mock, obj: OutputStream, monkeypatch: MonkeyPatch) -> None:
     with monkeypatch.context() as m:
         m.setattr(sys, 'stdout', obj)
 
@@ -53,7 +53,9 @@ def test_print(mock_queue: Mock, obj: Stream, monkeypatch: MonkeyPatch) -> None:
         assert [call(('abc', FD.STDOUT))] == mock_queue.put.call_args_list
 
 
-def test_print_bytes(mock_queue: Mock, obj: Stream, monkeypatch: MonkeyPatch) -> None:
+def test_print_bytes(
+    mock_queue: Mock, obj: OutputStream, monkeypatch: MonkeyPatch
+) -> None:
     with monkeypatch.context() as m:
         m.setattr(sys, 'stdout', obj)
 
@@ -61,7 +63,7 @@ def test_print_bytes(mock_queue: Mock, obj: Stream, monkeypatch: MonkeyPatch) ->
         assert [call(("b'abc'\n", FD.STDOUT))] == mock_queue.put.call_args_list
 
 
-def test_stdout(mock_queue: Mock, obj: Stream, monkeypatch: MonkeyPatch) -> None:
+def test_stdout(mock_queue: Mock, obj: OutputStream, monkeypatch: MonkeyPatch) -> None:
     with monkeypatch.context() as m:
         m.setattr(sys, 'stdout', obj)
 

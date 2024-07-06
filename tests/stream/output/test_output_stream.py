@@ -1,11 +1,17 @@
 from unittest.mock import sentinel
 
+import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
-from atpbar.stream import Queue, Stream, StreamQueue
+from atpbar.stream import OutputStream, Queue, StreamQueue
+from tests.stream.st import st_text
 
-from .st import st_text
+
+def test_type_error() -> None:
+    stream = OutputStream(Queue(), sentinel.fd)
+    with pytest.raises(TypeError):
+        stream.write(123)  # type: ignore
 
 
 class StatefulTest:
@@ -13,18 +19,18 @@ class StatefulTest:
         self.draw = data.draw
         self.queue: StreamQueue = Queue()
         self.fd = sentinel.fd
-        self.stream = Stream(self.queue, self.fd)
+        self.stream = OutputStream(self.queue, self.fd)
         self.written = list[str]()
 
     def write(self) -> None:
         text = self.draw(st_text())
-        self.stream.write(text)
+        assert self.stream.write(text) == len(text)
         self.written.append(text)
 
     def write_with_newline(self) -> None:
         text = self.draw(st_text())
         text += '\n'
-        self.stream.write(text)
+        assert self.stream.write(text) == len(text)
         self.written.append(text)
         expected = ''.join(self.written)
         assert self.queue.get() == (expected, self.fd)
@@ -41,7 +47,7 @@ class StatefulTest:
 
 @settings(max_examples=200)
 @given(data=st.data())
-def test_stream(data: st.DataObject) -> None:
+def test_stateful(data: st.DataObject) -> None:
     test = StatefulTest(data=data)
     METHODS = [test.write, test.write_with_newline, test.flush]
     methods = data.draw(st.lists(st.sampled_from(METHODS)))
