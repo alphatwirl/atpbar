@@ -1,10 +1,17 @@
 from unittest.mock import sentinel
 
+import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from atpbar.stream import OutputStream, Queue, StreamQueue
 from tests.stream.st import st_text
+
+
+def test_type_error() -> None:
+    stream = OutputStream(Queue(), sentinel.fd)
+    with pytest.raises(TypeError):
+        stream.write(123)  # type: ignore
 
 
 class StatefulTest:

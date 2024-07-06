@@ -18,17 +18,11 @@ class OutputStream(TextIOBase):
         self.buffer = ''
 
     def write(self, s: str) -> int:
-        # sys.__stdout__.write(repr(s))
-        # sys.__stdout__.write('\n')
+        if not isinstance(s, str):
+            # The same error message as `sys.stdout.write()`
+            raise TypeError(f'write() argument must be str, not {type(s).__name__}')
 
-        try:
-            endswith_n = s.endswith('\n')
-        except:
-            self.flush()
-            self.queue.put((s, self.fd))
-            return len(s)
-
-        if endswith_n:
+        if s.endswith('\n'):
             self.buffer += s
             self.flush()
             return len(s)
