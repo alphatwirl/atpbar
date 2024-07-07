@@ -35,17 +35,17 @@ def test_repr(obj: MockProgressBar) -> None:
 def test_present(obj: Presentation) -> None:
     i = uuid.uuid4()
     j = uuid.uuid4()
-    obj.present(dict(task_id=i, last=False))
+    obj.present(dict(task_id=i, last=False))  # type: ignore
     assert obj.active()
-    obj.present(dict(task_id=i, last=False))
+    obj.present(dict(task_id=i, last=False))  # type: ignore
     assert obj.active()
-    obj.present(dict(task_id=j, last=False))
+    obj.present(dict(task_id=j, last=False))  # type: ignore
     assert obj.active()
-    obj.present(dict(task_id=j, last=False))
+    obj.present(dict(task_id=j, last=False))  # type: ignore
     assert obj.active()
-    obj.present(dict(task_id=i, last=True))
+    obj.present(dict(task_id=i, last=True))  # type: ignore
     assert obj.active()
-    obj.present(dict(task_id=j, last=True))
+    obj.present(dict(task_id=j, last=True))  # type: ignore
     assert not obj.active()
 
 
