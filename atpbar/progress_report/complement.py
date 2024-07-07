@@ -1,5 +1,3 @@
-from uuid import UUID
-
 from .report import Report
 
 
@@ -19,20 +17,20 @@ class ProgressReportComplementer:
     '''
 
     def __init__(self) -> None:
-        self.previous_reports = dict[UUID, Report]()
+        self._prev: Report | None = None
 
     def __call__(self, report: Report) -> None:
-        task_id = report['task_id']
-        if task_id in self.previous_reports:
-            self._complement(task_id, report)
+        self._complement(report)
         self._first(report)
         self._last(report)
-        self._store(task_id, report.copy())
+        self._store(report.copy())
 
-    def _complement(self, task_id: UUID, report: Report) -> None:
+    def _complement(self, report: Report) -> None:
+        if self._prev is None:
+            return
         report_copy = report.copy()
-        report.update(Report(task_id=task_id))
-        report.update(self.previous_reports[task_id])
+        report.update(Report(task_id=report['task_id']))
+        report.update(self._prev)
         report.update(report_copy)
 
     def _first(self, report: Report) -> None:
@@ -45,7 +43,7 @@ class ProgressReportComplementer:
             return
         report['last'] = report['done'] >= report['total']
 
-    def _store(self, task_id: UUID, report: Report) -> None:
+    def _store(self, report: Report) -> None:
         report.pop('first', None)
         report.pop('last', None)
-        self.previous_reports[task_id] = report
+        self._prev = report
