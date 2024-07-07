@@ -6,6 +6,7 @@ from typing import Generic, Optional, TypeVar
 
 from .funcs import fetch_reporter
 from .progress_report import Report
+from .progress_report.complement import ProgressReportComplementer
 
 T = TypeVar('T')
 
@@ -64,6 +65,7 @@ class Atpbar(Generic[T]):
         self.name = name
         self.len_ = len_
         self.id_ = uuid.uuid4()
+        self._complete_report = ProgressReportComplementer()
 
     def __iter__(self) -> Iterator[T]:
         with fetch_reporter() as reporter:
@@ -107,6 +109,7 @@ class Atpbar(Generic[T]):
 
     def _submit(self, report: Report) -> None:
         try:
+            self._complete_report(report)
             self.reporter.report(report)
         except BaseException:
             pass
