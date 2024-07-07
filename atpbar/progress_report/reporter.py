@@ -5,7 +5,6 @@ from uuid import UUID
 from atpbar.presentation import create_presentation
 from atpbar.stream import StreamQueue, StreamRedirection, register_stream_queue
 
-from .complement import ProgressReportComplementer
 from .pickup import ProgressReportPickup
 from .report import Report
 
@@ -53,7 +52,6 @@ class ProgressReporter:
         self.stream_queue: StreamQueue = Queue()
         self.interval = DEFAULT_INTERVAL  # [second]
         self.last_time = dict[UUID, float]()
-        self.complete_report = ProgressReportComplementer()
         self.stream_redirection_enabled = True
 
     def __repr__(self) -> str:
@@ -100,8 +98,6 @@ class ProgressReporter:
             a progress report
 
         '''
-
-        self.complete_report(report)
 
         if not self._need_to_report(report):
             return

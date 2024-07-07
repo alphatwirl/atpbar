@@ -64,6 +64,7 @@ class Atpbar(Generic[T]):
         self.name = name
         self.len_ = len_
         self.id_ = uuid.uuid4()
+        self._done = 0
 
     def __iter__(self) -> Iterator[T]:
         with fetch_reporter() as reporter:
@@ -76,16 +77,31 @@ class Atpbar(Generic[T]):
             with self._report_last():
                 for i, e in enumerate(self.iterable):
                     yield e
-                    self._report_progress(i)
+                    self._done = i + 1
+                    self._report_progress()
                 else:
                     self.loop_complete = True
 
     def _report_start(self) -> None:
-        report = Report(task_id=self.id_, name=self.name, done=0, total=self.len_)
+        report = Report(
+            task_id=self.id_,
+            name=self.name,
+            done=0,
+            total=self.len_,
+            first=True,
+            last=self._done == self.len_,
+        )
         self._submit(report)
 
-    def _report_progress(self, i: int) -> None:
-        report = Report(task_id=self.id_, done=(i + 1))
+    def _report_progress(self) -> None:
+        report = Report(
+            task_id=self.id_,
+            name=self.name,
+            done=self._done,
+            total=self.len_,
+            first=self._done == 0,
+            last=self._done == self.len_,
+        )
         self._submit(report)
 
     @contextlib.contextmanager
@@ -102,7 +118,14 @@ class Atpbar(Generic[T]):
         finally:
             if self.loop_complete:
                 return
-            report = Report(task_id=self.id_, first=False, last=True)
+            report = Report(
+                task_id=self.id_,
+                name=self.name,
+                done=self._done,
+                total=self.len_,
+                first=False,
+                last=True,
+            )
             self._submit(report)
 
     def _submit(self, report: Report) -> None:

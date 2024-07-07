@@ -5,7 +5,7 @@ from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from atpbar.stream import OutputStream, Queue, StreamQueue
-from tests.stream.st import st_text
+from tests.test_utils.st import st_text
 
 
 def test_type_error() -> None:
