@@ -7,10 +7,9 @@
   },
   "prettier.printWidth": 79,
   "rewrap.wrappingColumn": 79,
-  "python.testing.pytestArgs": ["tests"],
+  "python.testing.pytestArgs": ["atpbar", "tests"],
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
-  "isort.check": true,
   "markdownlint.config": {
     "MD033": false,
     "MD036": false,
