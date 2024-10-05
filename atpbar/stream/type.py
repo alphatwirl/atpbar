@@ -7,6 +7,7 @@ if sys.version_info >= (3, 10):
 else:
     from typing_extensions import TypeAlias
 
+
 class FD(Enum):
     STDOUT = 1
     STDERR = 2

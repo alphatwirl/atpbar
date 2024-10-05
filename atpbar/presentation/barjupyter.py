@@ -68,7 +68,6 @@ class ProgressBarJupyter(Presentation):
             self.widget_dict.clear()
 
     def _update_widget(self, report: Report) -> None:
-
         percent = float(report['done']) / report['total'] if report['total'] > 0 else 1
         percent = round(percent * 100, 2)
         percent_fmt = '{:6.2f}%'.format(percent)

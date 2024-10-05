@@ -21,9 +21,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-dependencies = [
-    "typing_extensions>=4.12; python_version < '3.10'",
-]
+dependencies = ["typing_extensions>=4.12; python_version < '3.10'"]
 [project.optional-dependencies]
 jupyter = ["ipywidgets>=8.1"]
 tests = [
@@ -55,6 +53,32 @@ addopts = """
 # doctest_optionflags = ["ELLIPSIS", "NORMALIZE_WHITESPACE",]
 doctest_optionflags = ["ELLIPSIS"]
 
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.format]
+quote-style = "preserve"
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle errors
+    "F", # pyflakes
+    "I", # isort
+]
+ignore = [
+    "E203", # Whitespace before '{symbol}'
+    "E265", # Block comment should start with #
+    "E266", # Too many leading # before block comment
+    "E501", # Line too long ({width} > {limit})
+    "E741", # Ambiguous variable name '{name}'
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 20
+
+[tool.ruff.lint.isort]
+#
+
 [tool.coverage.run]
 branch = true
 source = ["atpbar", "tests"]
@@ -66,14 +90,6 @@ exclude_lines = [
     'if __name__ == "__main__":',
     "if TYPE_CHECKING:",
 ]
-
-[tool.black]
-# Doesn't appear to be effective with VSCode extension Black Formatter
-skip-string-normalization = true
-
-[tool.isort]
-profile = "black"
-
 
 [[tool.mypy.overrides]]
 module = ["ipywidgets"]

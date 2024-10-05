@@ -34,7 +34,6 @@ def test_repr(obj: ProgressReporter) -> None:
 
 
 class TestReport:
-
     def test_report_need_to_report(
         self,
         obj: ProgressReporter,

@@ -107,7 +107,6 @@ class ProgressReporter:
         self.last_time[report['task_id']] = time.time()
 
     def _need_to_report(self, report: Report) -> bool:
-
         if report['first']:
             return True
 

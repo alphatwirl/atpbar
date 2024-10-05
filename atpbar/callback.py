@@ -9,7 +9,6 @@ from .progress_report import ProgressReporter
 
 
 class CallbackImp:
-
     def __init__(self) -> None:
         self.reporter: ProgressReporter | None = None
         self._machine: StateMachine  # to be set by the StateMachine
@@ -56,7 +55,6 @@ class CallbackImp:
 
     @contextmanager
     def fetch_reporter_in_yielded(self) -> Iterator[ProgressReporter | None]:
-
         if not in_main_thread():
             self.to_restart_pickup = False
             yield self.reporter

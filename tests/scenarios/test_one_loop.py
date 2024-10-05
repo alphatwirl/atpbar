@@ -8,9 +8,7 @@ from .utils import mock_presentations
 
 @given(n_iterations=st.integers(min_value=0, max_value=10), to_disable=st.booleans())
 def test_one_loop(n_iterations: int, to_disable: bool) -> None:
-
     with mock_presentations() as presentations:
-
         if to_disable:
             disable()
 

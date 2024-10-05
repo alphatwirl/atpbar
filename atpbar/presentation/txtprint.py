@@ -14,7 +14,6 @@ class ProgressPrint(Presentation):
         return '{}()'.format(self.__class__.__name__)
 
     def present(self, report: Report) -> None:
-
         if not self._register_report(report):
             return
 
@@ -41,7 +40,6 @@ class ProgressPrint(Presentation):
         self.out.flush()
 
     def _need_to_present_(self, report: Report) -> bool:
-
         if report['first']:
             return True
 

@@ -21,7 +21,6 @@ def func(n: int, name: str) -> None:
     ),
 )
 def test_thread_pool_executor(n_workers: int, n_iterations: list[int]) -> None:
-
     with mock_presentations() as presentations:
         with flushing(), ThreadPoolExecutor(max_workers=n_workers) as executor:
             for n in n_iterations:

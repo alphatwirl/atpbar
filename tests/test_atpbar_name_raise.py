@@ -63,7 +63,6 @@ def test_atpbar_name_repr(
     mock_reporter: mock.Mock,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-
     iterable = Iter(content)
     returned = [e for e in atpbar.atpbar(iterable)]
 
@@ -86,7 +85,6 @@ def test_atpbar_name_given(
     mock_reporter: mock.Mock,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-
     iterable = Iter(content)
     returned = [e for e in atpbar.atpbar(iterable, name='given')]
 
@@ -109,7 +107,6 @@ def test_atpbar_raise(
     mock_reporter: mock.Mock,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-
     iterable = Iter(content)
     returned = [e for e in atpbar.atpbar(iterable, name='given')]
 

@@ -1,6 +1,4 @@
-'''Test if example scripts run
-
-'''
+'''Test if example scripts run'''
 
 from pathlib import Path
 

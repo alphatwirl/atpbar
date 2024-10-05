@@ -17,7 +17,6 @@ class Presentation(ABC):
     stdout_stderr_redirection = False
 
     def __init__(self) -> None:
-
         self.out = sys.stdout
         self.err = sys.stderr
 
@@ -52,7 +51,6 @@ class Presentation(ABC):
         pass
 
     def _register_report(self, report: Report) -> bool:
-
         task_id = report['task_id']
 
         if task_id in self._complete_task_ids:
@@ -95,7 +93,6 @@ class Presentation(ABC):
         del self._finishing_task_ids[:]
 
     def _need_to_present(self) -> bool:
-
         if self._new_task_ids:
             return True
 

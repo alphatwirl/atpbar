@@ -75,7 +75,6 @@ class ProgressBar(Presentation):
         return self._compose_bar_from_report(report)
 
     def _compose_bar_from_report(self, report: Report) -> str:
-
         percent = float(report['done']) / report['total'] if report['total'] > 0 else 1
         # e.g., 0.7143369818769065
 
