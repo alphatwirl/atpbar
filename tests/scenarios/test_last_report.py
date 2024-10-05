@@ -36,7 +36,6 @@ def test_multiprocessing_process(
     n_done = min(n_done, n_iterations)
 
     with mock_presentations() as presentations:
-
         if method == 'break':
             func_break(n_done, n_iterations)
         else:

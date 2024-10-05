@@ -12,16 +12,14 @@ from .utils import mock_presentations
     to_disable=st.booleans(),
 )
 def test_nested_loop(n_outer: int, n_inner: int, to_disable: bool) -> None:
-
     with mock_presentations() as presentations:
-
         if to_disable:
             disable()
 
         for _ in atpbar(range(n_outer)):
             for _ in atpbar(range(n_inner)):
                 pass
-        
+
         if to_disable:
             assert len(presentations) == 0
             return

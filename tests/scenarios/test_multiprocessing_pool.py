@@ -26,7 +26,6 @@ def func(n: int, name: str) -> None:
     ),
 )
 def test_multiprocessing_pool(n_processes: int, n_iterations: list[int]) -> None:
-
     with mock_presentations() as presentations:
         reporter = find_reporter()
         with (

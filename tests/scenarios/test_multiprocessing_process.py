@@ -25,9 +25,7 @@ def func(n: int, name: str, reporter: ProgressReporter) -> None:
     to_disable=st.booleans(),
 )
 def test_multiprocessing_process(n_iterations: list[int], to_disable: bool) -> None:
-
     with mock_presentations() as presentations:
-
         if to_disable:
             disable()
 

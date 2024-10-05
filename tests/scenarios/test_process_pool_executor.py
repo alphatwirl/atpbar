@@ -24,7 +24,6 @@ def func(n: int, name: str) -> None:
     ),
 )
 def test_process_pool_executor(n_workers: int, n_iterations: list[int]) -> None:
-
     with mock_presentations() as presentations:
         reporter = find_reporter()
         assert reporter is not None

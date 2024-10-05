@@ -8,7 +8,6 @@ from atpbar.progress_report.pickup import ProgressReportPickup
 
 
 class TestStart:
-
     @pytest.fixture()
     def presentation(self) -> mock.Mock:
         return mock.Mock()
@@ -43,7 +42,6 @@ class TestStart:
 
 
 class TestRunUntilTheEndOrderArrives:
-
     @pytest.fixture()
     def mock_thread_start(self, monkeypatch: pytest.MonkeyPatch) -> Iterator[mock.Mock]:
         y = mock.Mock()
@@ -142,7 +140,6 @@ class TestRunUntilTheEndOrderArrives:
 
 
 class TestRunUntilReportsStopComing:
-
     @pytest.fixture()
     def mock_thread_start(self, monkeypatch: pytest.MonkeyPatch) -> Iterator[mock.Mock]:
         y = mock.Mock()

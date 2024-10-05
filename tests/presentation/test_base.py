@@ -87,7 +87,6 @@ def test_register_report(  # type: ignore
     expected_complete_task_ids,
     expected_return,
 ):
-
     obj._new_task_ids[:] = initial_new_task_ids
     obj._active_task_ids[:] = initial_active_task_ids
     obj._finishing_task_ids[:] = initial_finishing_task_ids
@@ -153,7 +152,6 @@ def test_update_registry(  # type: ignore
     expected_finishing_task_ids,
     expected_complete_task_ids,
 ):
-
     obj._new_task_ids[:] = initial_new_task_ids
     obj._active_task_ids[:] = initial_active_task_ids
     obj._finishing_task_ids[:] = initial_finishing_task_ids
@@ -189,7 +187,6 @@ def test_need_to_present(  # type: ignore
     interval,
     expected,
 ):
-
     obj._new_task_ids[:] = new_task_ids
     obj._finishing_task_ids[:] = finishing_task_ids
 

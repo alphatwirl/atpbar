@@ -5,7 +5,6 @@ from .utils import mock_presentations
 
 
 def test_mock_presentations() -> None:
-
     class MockException(Exception):
         pass
 
