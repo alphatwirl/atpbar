@@ -84,7 +84,7 @@ class ProgressBar(Presentation):
         percent = round(percent * 100, 2)
         # e.g., 71.43
 
-        format = ' {percent:6.2f}% {bar:s} | {done:8d} / {total:8d} |:  {name} '
+        format = '{percent:6.2f}% {bar:s} | {done:8d} / {total:8d} |:  {name} '
 
         ret = format.format(
             percent=percent,
