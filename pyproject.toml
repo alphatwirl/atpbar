@@ -7,7 +7,7 @@ name = "atpbar"
 dynamic = ["version"]
 description = "Progress bars for threading and multiprocessing tasks"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = "MIT"
 authors = [{ name = "Tai Sakuma", email = "tai.sakuma@gmail.com" }]
 classifiers = [
@@ -16,7 +16,6 @@ classifiers = [
     "Intended Audience :: End Users/Desktop",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
