@@ -19,7 +19,7 @@ You can try the examples in this tutorial in the Python interactive shell.
 
 ```bash
 $ python
-Python 3.10.13 (...)
+Python 3.13.9 (...)
 ...
 ...
 >>>

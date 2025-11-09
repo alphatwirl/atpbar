@@ -34,3 +34,7 @@ To install with Jupyter Notebook support, use the following command:
 ```bash
 pip install -U atpbar[jupyter]
 ```
+
+## Next
+
+- [Quick start](quick.md)
