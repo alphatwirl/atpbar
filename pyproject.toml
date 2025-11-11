@@ -9,7 +9,7 @@ description = "Progress bars for threading and multiprocessing tasks"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
-authors = [{ name = "Tai Sakuma", email = "tai.sakuma@gmail.com" }]
+authors = [{ name = "Tai Sakuma" }]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
