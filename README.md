@@ -23,13 +23,14 @@ Notebook](https://jupyter.org/).
 
 ## Quick Start
 
+This short tutorial shows the basic usage of _atpbar_ with simple examples.
+
 ### Installation
 
-If `atpbar` is not installed, you can install it with the `pip` command on the
-terminal.
+You can use `pip` to install `atpbar`:
 
 ```bash
-pip install -U atpbar
+pip install atpbar
 ```
 
 ### How to use
@@ -61,7 +62,7 @@ from atpbar import atpbar
 The `atpbar` can wrap an iterable to show a progress bar for the iterations.
 
 ```python
-n = randint(1000, 10000)
+n = randint(1000, 10000)  # Random number of iterations
 for _ in atpbar(range(n)):
     sleep(0.001)
 ```
@@ -100,7 +101,7 @@ loops are shown.
   34.42% :::::::::::::                            |     1559 /     4529 |:  Inner 2
 ```
 
-In the snapshot of the progress bars above, the outer loop is in its 3rd
+In the snapshot of the progress bars above, the outer loop is in its third
 iteration. The inner loop has been completed twice and is running the third.
 The progress bars for the completed tasks move up. The progress bars for the
 active tasks are growing at the bottom.
@@ -138,7 +139,7 @@ n_jobs = 10
 with flushing(), ThreadPoolExecutor(max_workers=n_workers) as executor:
     for i in range(n_jobs):
         n = randint(1000, 10000)
-        f = executor.submit(func, n, name=f'Job {i}')
+        executor.submit(func, n, name=f'Job {i}')
 
 ```
 
