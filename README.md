@@ -161,6 +161,16 @@ The progress bars will be simultaneously updated for concurrent jobs.
   29.11% :::::::::::                              |      414 /     1422 |:  Job 9
 ```
 
+#### Jupyter Notebook
+
+On Jupyter Notebook, progress bars based on
+[ipywidgets](https://pypi.org/project/ipywidgets/) are displayed.
+
+<img src="https://raw.githubusercontent.com/alphatwirl/notebook-atpbar-001/v1.0.1/images/20190304_01_atpbar_jupyter.gif" width="800">
+
+You can try interactively online:
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/alphatwirl/notebook-atpbar-001/master?filepath=atpbar.ipynb)
+
 ### For more information
 
 This is the end of the quick start tutorial. For more information, see
