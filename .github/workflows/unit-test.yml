@@ -9,7 +9,7 @@ on:
       - main
 
 concurrency:
-  group: unit-test-${{ github.head_ref }}
+  group: unit-test-${{ github.ref }}
   cancel-in-progress: true
 
 env:
@@ -39,7 +39,7 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -e '.[tests]'
-          if "$JUPYTER"; then
+          if [ "$JUPYTER" = "true" ]; then
             pip install -e '.[jupyter]';
           fi
           pip list
