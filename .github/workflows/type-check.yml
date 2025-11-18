@@ -9,7 +9,7 @@ on:
       - main
 
 concurrency:
-  group: type-check-${{ github.head_ref }}
+  group: type-check-${{ github.ref }}
   cancel-in-progress: true
 
 env:
@@ -33,7 +33,7 @@ jobs:
           pip install --upgrade pip
           pip install -e '.[jupyter]'
           pip install -e . --group tests
-          pip install --upgrade mypy
+          pip install -e . --group type-check
 
       - name: Run mypy
         run: mypy --show-traceback atpbar/ tests/

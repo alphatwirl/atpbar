@@ -34,6 +34,7 @@ tests = [
     "pytest>=8.2",
     "hypothesis>=6.102.6",
 ]
+type-check = ["mypy>=1.0"]
 doc = ["mkdocs-material>=9.5", "pymdown-extensions>=10.8"]
 
 [project.urls]
