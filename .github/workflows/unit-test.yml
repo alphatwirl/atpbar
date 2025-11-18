@@ -38,10 +38,10 @@ jobs:
           JUPYTER: ${{ matrix.jupyter }}
         run: |
           pip install --upgrade pip
-          pip install -e '.[tests]'
           if [ "$JUPYTER" = "true" ]; then
             pip install -e '.[jupyter]';
           fi
+          pip install -e . --group tests
           pip list
 
       - name: Run tests

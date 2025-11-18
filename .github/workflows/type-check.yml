@@ -31,7 +31,8 @@ jobs:
       - name: Install packages
         run: |
           pip install --upgrade pip
-          pip install -e '.[tests,jupyter]'
+          pip install -e '.[jupyter]'
+          pip install -e . --group tests
           pip install --upgrade mypy
 
       - name: Run mypy
