@@ -47,13 +47,13 @@ tag_sign = false
 [tool.hatch.build.targets.sdist]
 include = ["/atpbar"]
 
-[tool.pytest.ini_options]
-addopts = """
---doctest-modules
---doctest-glob='*.md'
---ignore=examples/
---ignore=atpbar/presentation/
-"""
+[tool.pytest]
+addopts = [
+    "--doctest-modules",
+    "--doctest-glob='*.md'",
+    "--ignore=examples/",
+    "--ignore=atpbar/presentation/",
+]
 # doctest_optionflags = ["ELLIPSIS", "NORMALIZE_WHITESPACE",]
 doctest_optionflags = ["ELLIPSIS"]
 
