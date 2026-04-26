@@ -1,13 +1,11 @@
 name: Upload to PyPI
 
-# Build and publish to PyPI after "Release a new version" succeeds.
-# Triggered via workflow_run because the v-tag is pushed by GITHUB_TOKEN
-# in the changelog workflow, which does not trigger downstream `push tags`
-# or `release` events.
+# Publish to PyPI after the "Generate changelog" workflow succeeds.
+# This is part of the two-tag release flow (see changelog.yml).
 
 on:
   workflow_run:
-    workflows: ["Release a new version"]
+    workflows: ["Generate changelog"]
     types: [completed]
 
 jobs:
@@ -17,9 +15,10 @@ jobs:
     environment: pypi
     permissions:
       id-token: write
-      contents: read
+
     steps:
       - name: Checkout release tag
+        id: version
         uses: TaiSakuma/checkout-version-tag@v1
         with:
           trigger-tag: ${{ github.event.workflow_run.head_branch }}
