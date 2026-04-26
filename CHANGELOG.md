@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [2.0.10] - 2026-04-26
+
+### Bug Fixes
+
+- Chain `pypi.yml` from changelog workflow ([#80](https://github.com/alphatwirl/atpbar/pull/80))
+
+### Documentation
+
+- Backfill `CHANGELOG.md` with entries for v0.9.0–v2.0.8 ([#81](https://github.com/alphatwirl/atpbar/pull/81))
+
 ## [2.0.9] - 2026-04-26
 
 ### Build & CI
