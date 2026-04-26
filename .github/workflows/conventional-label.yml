@@ -1,0 +1,39 @@
+name: Label PR by convention
+
+# Automatically label PRs based on the Conventional Commits type in the title
+# (https://www.conventionalcommits.org/).
+# e.g., a PR titled "feat: ..." gets the "feature" label.
+
+on:
+  pull_request_target:
+    types: [opened, edited]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: bcoe/conventional-release-labels@v1
+        with:
+          # The "breaking" key is applied when the PR title carries the "!"
+          # Conventional Commits breaking-change marker (e.g., "feat!: ...").
+          # Without it, the action tries to apply a nil label and the GitHub
+          # API rejects the request.
+          type_labels: |
+            {
+              "feat": "feature",
+              "fix": "fix",
+              "docs": "documentation",
+              "style": "style",
+              "refactor": "refactor",
+              "perf": "performance",
+              "test": "test",
+              "build": "build",
+              "ci": "ci",
+              "chore": "chore",
+              "revert": "revert",
+              "breaking": "breaking"
+            }
+          ignored_types: "[]"

@@ -1,0 +1,26 @@
+name: Generate changelog
+
+# Generate CHANGELOG.md with git-cliff (https://git-cliff.org/) when a
+# version-bump tag (u*.*.*) is pushed, then commit the result, create the
+# corresponding v-prefixed tag, and push both to main.
+#
+# This is the first half of the two-tag release flow:
+#   1. hatch version <rule> → commit → push tag u<version>
+#   2. (this workflow) generates CHANGELOG.md → commits → pushes tag v<version>
+#   3. The "Release a new version" workflow creates a GitHub Release
+
+on:
+  push:
+    tags:
+      - "u*.*.*"
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: TaiSakuma/changelog-commit@v1
+        with:
+          trigger-tag: ${{ github.ref_name }}

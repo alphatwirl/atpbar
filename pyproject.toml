@@ -42,6 +42,7 @@ Homepage = "https://github.com/alphatwirl/atpbar"
 [tool.hatch.version]
 source = "regex_commit"
 path = "atpbar/__about__.py"
+tag_name = "u{new_version}"
 tag_sign = false
 
 [tool.hatch.build.targets.sdist]
